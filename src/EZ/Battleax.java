@@ -8,5 +8,6 @@ public class Battleax {
 		BattleaxAi AI=new BattleaxAi();
 		AI.run();
 		this.actions=AI.actions.substring(0,AI.actions.length()-2);
+		System.out.println(this.actions);
 	}
 }
