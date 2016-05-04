@@ -10,10 +10,10 @@ import java.io.InputStreamReader;
  *游戏回合信息获取， 根据提示一行一行读
  */
 public class TurnInformationReceive {		
-		public static int []turnInformation=new int[20];
-		public static int [][]battleField=new int[GameIniInformation.widthOfBf][GameIniInformation.heightOfBf];
+	private int []turnInformation=new int[20];
+	private int [][]battleField=new int[GameIniInformation.widthOfBf][GameIniInformation.heightOfBf];
 		
-	public static void tuReceive() {
+	public void tuReceive() {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		try {
 			String tip1=br.readLine();
@@ -53,5 +53,14 @@ public class TurnInformationReceive {
 		}
 		
 	}
-
+	
+	public int[]getTurnInformation(){
+		return turnInformation;
+		
+	}
+	
+	public int[][]getBattleField(){
+		return battleField;
+		
+	}
 }

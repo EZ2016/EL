@@ -8,10 +8,10 @@ import java.io.InputStreamReader;
  */
 
 public class InformationReceive {
-
-	public int[] inReceive(){
+	private int [] information = new int[30];
+	
+	public void inReceive(){
 		// TODO Auto-generated method stub
-		int [] information = new int[30];
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		try {
 			
@@ -48,12 +48,14 @@ public class InformationReceive {
 		}
 		
 		
-//		GameIniInformation gif=new GameIniInformation(information);
 		System.out.println(0);
-		return information;
 		
 		
 		
 	}
 
+	public int[]getInformation(){
+		return information;
+		
+	}
 }

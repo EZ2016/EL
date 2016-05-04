@@ -1,6 +1,5 @@
 package EZ;
 
-
 public class AiMain {
 
 	public static void main(String[] args) {
@@ -8,27 +7,34 @@ public class AiMain {
 		
 		InformationReceive IR=new InformationReceive();
 		IR.inReceive();		
-		GameIniInformation GII=new GameIniInformation();
+		GameIniInformation GII=new GameIniInformation(IR.getInformation());
+		
 		if(GII.samuraiID==0||GII.samuraiID==3){
 			for(int i=1;i<GII.totalRounds;i++){
 				Spear spear=new Spear();
-//				spear.	
+				spear.spearAiRun();
 			}
 			
 			
 		}else if(GII.samuraiID==1||GII.samuraiID==4){
 			
 			for(int i=1;i<GII.totalRounds;i++){
+				TurnInformationReceive TIR=new TurnInformationReceive();
+				TIR.tuReceive();
+				TurnInformation TI=new TurnInformation(TIR.getTurnInformation(),TIR.getBattleField());				
 				Sword sword=new Sword();
-//				sword.
+//				
 				
 			}
 			
 		}else if(GII.samuraiID==2||GII.samuraiID==5){
 			
 			for(int i=1;i<GII.totalRounds;i++){
+				TurnInformationReceive TIR=new TurnInformationReceive();
+				TIR.tuReceive();
+				TurnInformation TI=new TurnInformation(TIR.getTurnInformation(),TIR.getBattleField());					
 				Battleax battleax=new Battleax();
-//				battleax.
+				battleax.battleaxAiRun();
 				
 			}
 			
