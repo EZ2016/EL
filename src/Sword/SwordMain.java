@@ -7,6 +7,7 @@ public class SwordMain {
 		if(nAct.MustKill()==0){
 				if(!nAct.Escape()){
 					nAct.ShouldOccupy();
+					System.out.println(nAct.action);
 				}
 			}
 			

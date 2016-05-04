@@ -6,5 +6,8 @@ public class cell {
 	public int row;
 	public int col;
 	public int value = TurnInformation.battleField[col][row];
+	public cell(){
+		assert row >=0 && row <=14 && col >=0 && col <=14;
+	}
 
 }
