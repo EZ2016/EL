@@ -1,20 +1,8 @@
 package Sword;
 
 import java.util.ArrayList;
-
-import javafx.scene.control.Cell;
-
-import javax.swing.text.StyledEditorKit.ForegroundAction;
-
-
-
-
-
 import EZ.Samurai;
 import EZ.TurnInformation;
-
-import com.sun.corba.se.spi.orbutil.fsm.Action;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 //对攻击距离分析，当剑无法攻击到时，只有敌方矛有可能攻击到剑，因此逃离方法中只分析矛的情况
 //方向即是示例中的指令，1~4表示占领方向，5~8表示移动方向

@@ -12,7 +12,7 @@ import EZ.TurnInformation;
 public class BattleaxAi extends AI {
 	public  BattleaxAi() {
 		samuraiID=2;
-		Samurai me=TurnInformation.nowAllSamurai.get(samuraiID);
+		me=TurnInformation.nowAllSamurai.get(samuraiID);
 	}
 	
 	public void run(){                     //Battleax的AI开始计算
