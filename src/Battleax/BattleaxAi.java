@@ -3,6 +3,7 @@ package Battleax;
 import java.util.ArrayList;
 import java.util.Arrays;
 import EZ.AI;
+import EZ.Samurai;
 import EZ.TurnInformation;
 /*斧头武士AI
  * v1.0
@@ -11,6 +12,7 @@ import EZ.TurnInformation;
 public class BattleaxAi extends AI {
 	public  BattleaxAi() {
 		samuraiID=2;
+		Samurai me=TurnInformation.nowAllSamurai.get(samuraiID);
 	}
 	
 	public void run(){                     //Battleax的AI开始计算
@@ -19,6 +21,10 @@ public class BattleaxAi extends AI {
 				show();
 			}
 			for(int[] position:enemyPosition()){  //找到enemyPosition中第一个能杀的杀掉
+				if(attact(position[0], position[1])){
+					hide();
+					break;
+				}
 				if(moveThenAttact(position[0], position[1])){
 					hide();
 					break;

@@ -14,7 +14,7 @@ public class AI {
 	}
 	
 	protected static int samuraiID;//武士ID                                //1.2版本修改的部分
-	protected Samurai me=TurnInformation.nowAllSamurai.get(samuraiID);
+	protected Samurai me;
 	protected String actions="";//最终的武士行为
 	protected int leftPoint=7;  //剩余行动力
 	
