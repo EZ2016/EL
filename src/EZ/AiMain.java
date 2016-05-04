@@ -1,5 +1,7 @@
 package EZ;
 
+import Sword.SwordMain;
+
 public class AiMain {
 
 	public static void main(String[] args) {
@@ -21,8 +23,8 @@ public class AiMain {
 			for(int i=1;i<GII.totalRounds;i++){
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
-				TurnInformation TI=new TurnInformation(TIR.getTurnInformation(),TIR.getBattleField());				
-				Sword sword=new Sword();
+				TurnInformation TI=new TurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
+				SwordMain swordMain=new SwordMain();
 //				
 				
 			}

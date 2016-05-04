@@ -15,10 +15,6 @@ public class TurnInformation {
 	public static List<Samurai> nowAllSamurai=new ArrayList<>();//武士状态
 	public static int [][] battleField=new int[GameIniInformation.widthOfBf][GameIniInformation.heightOfBf];//战场状态
 	
-	public TurnInformation(){
-		
-	}
-	
 	public TurnInformation(int[]a,int[][]b){//信息均以数组方式传递，地图以二位数组传递
 		turnNum=a[0];
 		myRecoverRound=a[1];
