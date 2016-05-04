@@ -1,8 +1,8 @@
 package EZ;
 
+import Spear.SpearAi;
+
 public class Spear {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	private SpearAi spearAi;
 	
 	public Spear(){
@@ -20,13 +20,5 @@ public class Spear {
 		}
 	}
 
-=======
-=======
->>>>>>> parent of 7933982... 改了spear的缩进
-	
-//	TurnInformationReceive TIR=new TurnInformationReceive();
-//	TIR.tuReceive();
-//	TurnInformation TI=new TurnInformation(TIR.turnInformation,TIR.battleField);
->>>>>>> parent of 7933982... 改了spear的缩进
 	
 }

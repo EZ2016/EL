@@ -1,7 +1,6 @@
 package EZ;
 
 import java.util.ArrayList;
-import EZ.TurnInformationReceive;
 /* 3个武士AI的父类，包括了一些通用的方法
  * 放在EZ包里
  * Ver1.1:  补上了不能在非自己领地隐身的考虑
@@ -156,8 +155,8 @@ public class AI {
 	}
 	
 	public boolean existEnemy(){         //己方武士视野中有敌人就返回true，否则false，恢复中的敌人（turnInformation[i]==-1）当成没看见
-		for(int i=13;i<=19;i=i+3){
-			if(TurnInformationReceive.turnInformation[i]==0){
+		for(Samurai enemy:TurnInformation.nowAllSamurai){
+			if(enemy.state==0){
 				return true;
 			}
 		}
@@ -174,9 +173,9 @@ public class AI {
 	
 	public ArrayList<int[]> enemyPosition(){ //将看见的敌人的位置放进positions里传回，int[0]是row，int[1]是col
 		ArrayList<int[]> positions=new ArrayList<int[]>();
-		for(int i=13;i<=19;i=i+3){
-			if(TurnInformationReceive.turnInformation[i]==0){ //恢复中的敌人（turnInformation[i]==-1）当成没看见
-				int[] position ={TurnInformationReceive.turnInformation[i-2]};
+		for(Samurai enemy:TurnInformation.nowAllSamurai){
+			if(enemy.state==0){               //恢复中的敌人（turnInformation[i]==-1）当成没看见
+				int[] position ={enemy.row,enemy.col};
 				positions.add(position);
 			}
 		}
