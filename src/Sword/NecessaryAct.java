@@ -179,56 +179,74 @@ public class NecessaryAct {
 			}
 			
 		}
-		return -1;
+		return 0;
 	}
-	public boolean MustKill(){  //必杀方法，尝试行动一步或者不动的击杀，若能返回true，不能返回false
+	public int MustKill(){//必杀方法，尝试行动一步或者不动的击杀，若能返回true，不能返回false
+		int energy = 0;
 		if(Kill()!=-1){  //原地能击杀
+			
 			Occupy(Kill());
 			action = action+Kill();
-			return true;
+			energy = energy + 4;
+			
+			return energy;
 		}
 		else{  //行动后击杀
 		for(int i=5;i<=8;i++){ 
 				Move(i);  //尝试移动
 				if(Kill()!=-1){
+					energy = energy + Move(i)+4;
+					if(Sword.state == 1) //若隐身，首先现身
+						energy = energy+Show();
 					Occupy(Kill());
 					action = action+Kill();
 					action = action + i;
-					return true;
+					return energy;
 				
 			}
 			Sword.col = intiCol; //恢复初始位置，重新尝试
 			Sword.row = intiRow;
 		}
 		}
-		return false;
+		return 0;
 		
 	}
 	public boolean MustEscape(){  //判断是否会被敌方矛击杀
 		int colDis = Math.abs(Sword.col-emSpear.col);//与敌方矛之间的距离
 		int rowDis = Math.abs(Sword.row-emSpear.row);
-		if((colDis == 5 && rowDis ==0) || (rowDis == 5 && colDis == 0) || (rowDis == 4 && colDis == 1) || (rowDis == 1 && colDis == 4)){
+		if((colDis==4 && rowDis<=1) || (rowDis==4 && colDis<=1)||(colDis == 5 && rowDis==0)||(rowDis==5 && colDis==0) || (rowDis == 3 || colDis==1) ||(rowDis ==1 || colDis==3)){
 			return true;
 		}
 		else {
 			return false;
 		}
 	}
-	public void Escape(){  //逃跑方法
+	public boolean Escape(){  //逃跑方法
 		if(MustEscape()){
 			int i;
+			int j;
+			int k;
 			for(;;){
-				i = (int)(4+Math.random()*4);  //随机产生一个方向逃跑，具体逃跑路径和方法可后续设置
+				j = (int)(4+Math.random()*5);//随机产生三个4——8的整数，4表示不走，4——8表示方向，从而达到走一到三步的目的。
+				k = (int)(4+Math.random()*5);
+				i = (int)(4+Math.random()*5); 
+				if(i!=4)
 				Move(i);
+				if(j!=4)
+					Move(j);
+				if(k!=4)
+					Move(k);
+				
 				if(!MustEscape()){
 					action = action+i;
 					Hide();   //建议逃跑后隐藏
-					break;
+					return true;
 				}
 				Sword.col=intiCol;
 				Sword.row=intiRow;
 			}
 		}
+		return false;
 	}
 	public void ShouldOccupy(){  //在不需要逃跑和击杀时，发育的方法
 		int [][]Va =new int[5][4];  //Va储存不同行动后的收益，共20种
