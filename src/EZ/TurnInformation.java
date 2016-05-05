@@ -15,17 +15,17 @@ public class TurnInformation {
 	public static List<Samurai> nowAllSamurai=new ArrayList<>();//武士状态
 	public static int [][] battleField=new int[GameIniInformation.widthOfBf][GameIniInformation.heightOfBf];//战场状态
 	
-	public TurnInformation(int[]a,int[][]b){//信息均以数组方式传递，地图以二位数组传递
+	public static void SetTurnInformation(int[]a,int[][]b){//信息均以数组方式传递，地图以二位数组传递
 		turnNum=a[0];
 		myRecoverRound=a[1];
 		
 		Samurai[] allSamurai={
-				new Samurai(a[2],a[3],a[4]),
-				new Samurai(a[5],a[6],a[7]),
-				new Samurai(a[8],a[9],a[10]),
-				new Samurai(a[11],a[12],a[13]),
-				new Samurai(a[14],a[15],a[16]),
-				new Samurai(a[17],a[18],a[19]),
+				new Samurai(a[2],a[3],a[4],0),
+				new Samurai(a[5],a[6],a[7],1),
+				new Samurai(a[8],a[9],a[10],2),
+				new Samurai(a[11],a[12],a[13],3),
+				new Samurai(a[14],a[15],a[16],4),
+				new Samurai(a[17],a[18],a[19],5),
 		};
 		nowAllSamurai.addAll(Arrays.asList(allSamurai));	
 		

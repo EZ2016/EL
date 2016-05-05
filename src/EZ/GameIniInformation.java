@@ -24,7 +24,7 @@ public class GameIniInformation {
 		
 	}
 	
-	 public GameIniInformation(int[] a){//所有信息均以数组传递
+	 public static void SetGameIniInformation(int[] a){//所有信息均以数组传递
 		 totalRounds=a[0];
 		 teamID=a[1];
 		 samuraiID=a[2];

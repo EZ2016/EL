@@ -1,22 +1,23 @@
-package EZ;
+package Spear;
+
+import EZ.Samurai;
+import EZ.TurnInformation;
+
 //关于武士矛的命令分析
 //返回的String order是完整的命令
 //ZHU YINGSHAN
 public class SpearAi {
-	
-	TurnInformationReceive tir=new TurnInformationReceive();
-	TurnInformation ti=new TurnInformation();//获取战场信息
-	
-	Samurai me=ti.nowAllSamurai.get(0);//对象我
-	Samurai enspear=ti.nowAllSamurai.get(3);//敌方矛
-	Samurai enbattleax=ti.nowAllSamurai.get(5);//敌方斧
-	Samurai ensword=ti.nowAllSamurai.get(4);//敌方剑
+
+	Samurai me=TurnInformation.nowAllSamurai.get(0);//对象我
+	Samurai enspear=TurnInformation.nowAllSamurai.get(3);//敌方矛
+	Samurai enbattleax=TurnInformation.nowAllSamurai.get(5);//敌方斧
+	Samurai ensword=TurnInformation.nowAllSamurai.get(4);//敌方剑
 	
     public String order=null;//最终输出的命令
 	int col=me.col;//列
 	int row=me.row;//行
 	int energy=7;//行动力为7
-	public int recover=ti.myRecoverRound;//如果武士没有受伤，恢复周期的数值就是0，这个武士可以执行自己的行动。 
+	public int recover=TurnInformation.myRecoverRound;//如果武士没有受伤，恢复周期的数值就是0，这个武士可以执行自己的行动。 
 	int state=me.state;/* 对于敌方来说，无法判断他们是隐⾝身了还是在己方视野之 外，这两种情况下状态都会表示为1*/
 
 
@@ -49,7 +50,7 @@ public class SpearAi {
 	}
 	        //判断是否能隐身
          boolean canHide(){
-	         if (ti.battleField[me.row][me.col]>2) {
+	         if (TurnInformation.battleField[me.row][me.col]>2) {
 		         return false;
 	          }
 	             return true;

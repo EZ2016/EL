@@ -3,11 +3,11 @@ package Battleax;
 import java.util.ArrayList;
 import java.util.Arrays;
 import EZ.AI;
-import EZ.Samurai;
 import EZ.TurnInformation;
 /*斧头武士AI
  * v1.0
  * by 俊毅
+ * 备注：尚未考虑有关大本营的所有情况
  */
 public class BattleaxAi extends AI {
 	public  BattleaxAi() {

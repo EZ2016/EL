@@ -14,7 +14,7 @@ public class Battleax {
 		}
 		else{
 			battleaxAi.run();
-			this.actions=battleaxAi.actions.substring(0,battleaxAi.actions.length()-2);
+			this.actions=battleaxAi.actions.trim();
 			System.out.println(this.actions);
 		}
 	}

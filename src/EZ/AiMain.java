@@ -9,32 +9,32 @@ public class AiMain {
 		
 		InformationReceive IR=new InformationReceive();
 		IR.inReceive();		
-		GameIniInformation GII=new GameIniInformation(IR.getInformation());
+		GameIniInformation.SetGameIniInformation(IR.getInformation());
 		
-		if(GII.samuraiID==0||GII.samuraiID==3){
-			for(int i=1;i<GII.totalRounds;i++){
+		if(GameIniInformation.samuraiID==0||GameIniInformation.samuraiID==3){
+			for(int i=1;i<GameIniInformation.totalRounds;i++){
 				Spear spear=new Spear();
 				spear.spearAiRun();
 			}
 			
 			
-		}else if(GII.samuraiID==1||GII.samuraiID==4){
+		}else if(GameIniInformation.samuraiID==1||GameIniInformation.samuraiID==4){
 			
-			for(int i=1;i<GII.totalRounds;i++){
+			for(int i=1;i<GameIniInformation.totalRounds;i++){
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
-				TurnInformation TI=new TurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
+				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
 				SwordMain swordMain=new SwordMain();
 //				
 				
 			}
 			
-		}else if(GII.samuraiID==2||GII.samuraiID==5){
+		}else if(GameIniInformation.samuraiID==2||GameIniInformation.samuraiID==5){
 			
-			for(int i=1;i<GII.totalRounds;i++){
+			for(int i=1;i<GameIniInformation.totalRounds;i++){
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
-				TurnInformation TI=new TurnInformation(TIR.getTurnInformation(),TIR.getBattleField());					
+				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());					
 				Battleax battleax=new Battleax();
 				battleax.battleaxAiRun();
 				

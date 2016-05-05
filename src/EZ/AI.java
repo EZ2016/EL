@@ -13,7 +13,7 @@ public class AI {
 		
 	}
 	
-	protected static int samuraiID;//武士ID                                //1.2版本修改的部分
+	protected int samuraiID;//武士ID                                //1.2版本修改的部分
 	protected Samurai me;
 	protected String actions="";//最终的武士行为
 	protected int leftPoint=7;  //剩余行动力
@@ -88,7 +88,7 @@ public class AI {
 			return false;
 		}
 		if((direction.equals("southward"))&&(me.row!=14)&&(!existEnemy(me.row+1,me.col))){//1.2版修改的部分
-			if((TurnInformation.battleField[me.row+1][me.col]<=2)&&(me.state==1)){        //1.2版修改的部分
+			if((TurnInformation.battleField[me.row+1][me.col]>2)&&(me.state==1)){        //1.2版修改的部分
 				return false;
 			}
 			actions=actions+"5 ";
@@ -133,7 +133,7 @@ public class AI {
 			return false;
 		}
 		if(TurnInformation.battleField[me.row][me.col]<=2 && !existEnemy(me.row,me.col)){  //1.2.1版修改的部分
-			actions=actions+" 9";
+			actions=actions+"9 ";
 			leftPoint=leftPoint-1;
 			return true;
 		}
@@ -144,7 +144,7 @@ public class AI {
 		if(leftPoint<1){
 			return false;
 		}
-		actions=actions+" 10";
+		actions=actions+"10 ";
 		leftPoint=leftPoint-1;
 		return true;
 	}
@@ -174,7 +174,7 @@ public class AI {
 	public ArrayList<int[]> enemyPosition(){ //将看见的敌人的位置放进positions里传回，int[0]是row，int[1]是col
 		ArrayList<int[]> positions=new ArrayList<int[]>();
 		for(Samurai enemy:TurnInformation.nowAllSamurai){
-			if(enemy.state==0){               //恢复中的敌人（turnInformation[i]==-1）当成没看见
+			if(enemy.state==0 && enemy.ID>=3){               //恢复中的敌人（turnInformation[i]==-1）当成没看见
 				int[] position ={enemy.row,enemy.col};
 				positions.add(position);
 			}
