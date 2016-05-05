@@ -1,8 +1,20 @@
 package Sword;
 
 import java.util.ArrayList;
+
+import javafx.scene.control.Cell;
+
+import javax.swing.text.StyledEditorKit.ForegroundAction;
+
+
+
+
+
 import EZ.Samurai;
 import EZ.TurnInformation;
+
+import com.sun.corba.se.spi.orbutil.fsm.Action;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 //对攻击距离分析，当剑无法攻击到时，只有敌方矛有可能攻击到剑，因此逃离方法中只分析矛的情况
 //方向即是示例中的指令，1~4表示占领方向，5~8表示移动方向
@@ -12,9 +24,8 @@ public class NecessaryAct {
 	public static String action;  //行动指令
 	public static int strength;   //体力限制
 	Samurai Sword,emSpear; //剑，敌方矛
-	int intiCol = Sword.col;  //保存回合开始时的位置
-	int intiRow = Sword.row;
-	
+	int intiCol;
+	int intiRow;
 	public NecessaryAct(){ //构造方法，开始时得到剑和敌方矛的信息
 		for(Samurai samurai:TurnInformation.nowAllSamurai){
 			if(samurai.ID == 1){  //我自行在Samurai里添加的ID，便于区分武士
@@ -24,6 +35,8 @@ public class NecessaryAct {
 				emSpear = samurai;
 			}
 		}
+		 intiCol = Sword.col;  //保存回合开始时的位置
+		 intiRow = Sword.row;
 	}
 	
 	public ArrayList<cell> Occupy(int direction){ //传入方向，返回占领的棋盘数组
