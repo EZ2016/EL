@@ -50,8 +50,10 @@ public class BattleaxAi extends AI {
 
 	public boolean canAttactEnemy(){                          //如果视野中有能攻击到的敌人，则返回true，否则false
 		for(int[] position:enemyPosition()){
-			if(distantFromMe(position[0], position[1])<=2){
-				return true;
+			if(distantFromMe(position[0], position[1])<=3){  //position[0]是敌人的row，position[1]是敌人的col
+				if(!(Math.abs(position[0]-me.row)==3 || Math.abs(position[1]-me.col)==3)){
+					return true;
+				}
 			}
 		}
 		return false;
@@ -103,7 +105,7 @@ public class BattleaxAi extends AI {
 	
 	public boolean mustEscape() {    //如果下一步会被杀，就返回true，否则false
 		int[] fromEnemySpear=minusMyCoordinate(TurnInformation.nowAllSamurai.get(3).row,TurnInformation.nowAllSamurai.get(3).col);
-		int[] fromEnemySword=minusMyCoordinate(TurnInformation.nowAllSamurai.get(3).row,TurnInformation.nowAllSamurai.get(4).col);
+		int[] fromEnemySword=minusMyCoordinate(TurnInformation.nowAllSamurai.get(4).row,TurnInformation.nowAllSamurai.get(4).col);
 		    //逃离矛的攻击
 			if(fromEnemySpear[0]==0){
 				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=5) || (fromEnemySpear[1]>=-5 && fromEnemySpear[1]<=-3)){
