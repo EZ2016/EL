@@ -37,11 +37,7 @@ public class SimulateActions {
                                                                 //执行占领+隐形的情况
 			action[1]=9;
 			steps.add(new StepAndScore(action,GA.getScore(action)));
-			for(int j=5;j<=9;j++){ 
-				action[2]=j;
-				steps.add(new StepAndScore(action,GA.getScore(action)));
-			}
-			action[2]=0;
+
 			action[1]=0;
 			action[0]=0;
 		}
@@ -49,10 +45,10 @@ public class SimulateActions {
 		for(int i=5;i<=8;i++){                                  //首先执行移动的情况
 			action[0]=i;
 			steps.add(new StepAndScore(action,GA.getScore(action)));
-			for(int a=5;a<=8;a++){                              //
+			for(int a=5;a<=8;a++){                              //首先执行移动+移动的情况
 				action[1]=a;
 				steps.add(new StepAndScore(action,GA.getScore(action)));
-				for(int b=5;b<=8;b++){
+				for(int b=5;b<=8;b++){                          //首先执行移动+移动+移动的情况
 					action[2]=b;
 					steps.add(new StepAndScore(action,GA.getScore(action)));
 					action[3]=9;
@@ -78,67 +74,57 @@ public class SimulateActions {
 				action[1]=0;
 			}
 			
-			for(int j=9;j<=10;j++){                              //先执行移动+显（隐）形的情况
-				action[1]=j;
+			action[1]=9;                                        //执行移动+隐形的情况
+			steps.add(new StepAndScore(action,GA.getScore(action)));
+			action[1]=0;
+			
+            action[0]=0;
+		}
+		
+		for(int i=10;i<=10;i++){                                //首先执行显形的情况
+			action[0]=i;
+			steps.add(new StepAndScore(action,GA.getScore(action)));
+			for(int a=5;a<=8;a++){                              //首先执行显形+移动的情况
+				action[1]=a;
 				steps.add(new StepAndScore(action,GA.getScore(action)));
-				for(int a=1;a<=4;a++){                                //执行移动+显形+占领的情况
-					action[2]=a;
+				for(int j=1;j<=4;j++){                          //首先执行显形+移动+占领的情况
+					action[2]=j;
 					steps.add(new StepAndScore(action,GA.getScore(action)));
+					action[2]=0;
+				}
+				for(int b=5;b<=8;b++){                          //首先执行显形+移动+移动的情况
+					action[2]=b;
+					steps.add(new StepAndScore(action,GA.getScore(action)));
+					for(int c=5;c<=8;c++){                      //执行显形+移动+移动+移动的情况
+						action[3]=c;
+						steps.add(new StepAndScore(action,GA.getScore(action)));
+						action[3]=0;
+					}
+					
+					action[3]=9;                                 //执行显形+移动+移动+隐形的情况
+					steps.add(new StepAndScore(action,GA.getScore(action)));
+					action[3]=0;
+					
 					action[2]=0;
 				}
 				
 				action[1]=0;
 			}
 			
-            action[0]=0;
-		}
-		
-		for(int i=9;i<=9;i++){                                     //首先执行隐形的情况
-			action[0]=i;
-			steps.add(new StepAndScore(action,GA.getScore(action)));
-			for(int a=5;a<=8;a++){                              //
+			for(int a=1;a<=4;a++){                               //首先执行显形+占领的情况
 				action[1]=a;
 				steps.add(new StepAndScore(action,GA.getScore(action)));
-				for(int b=5;b<=8;b++){
+				for(int b=5;b<=8;b++){                           //执行显形+占领+移动的情况
 					action[2]=b;
 					steps.add(new StepAndScore(action,GA.getScore(action)));
-					for(int c=5;c<=8;c++){
-						action[3]=c;
-						steps.add(new StepAndScore(action,GA.getScore(action)));
-						action[3]=0;
-					}
 					action[2]=0;
 				}
+				action[2]=9;                                     //执行显形+占领+隐形的情况
+				steps.add(new StepAndScore(action,GA.getScore(action)));
+				action[2]=0;
 				
 				action[1]=0;
 			}
-			action[0]=0;
-		}
-		
-		for(int i=10;i<=10;i++){                                     //首先执行显形的情况
-			action[0]=i;
-			steps.add(new StepAndScore(action,GA.getScore(action)));
-			for(int a=5;a<=8;a++){                              //
-				action[1]=a;
-				steps.add(new StepAndScore(action,GA.getScore(action)));
-				for(int j=1;j<=4;j++){
-					action[2]=j;
-					steps.add(new StepAndScore(action,GA.getScore(action)));
-					action[2]=10;
-				}
-				for(int b=5;b<=8;b++){
-					action[2]=b;
-					steps.add(new StepAndScore(action,GA.getScore(action)));
-					for(int c=5;c<=8;c++){
-						action[3]=c;
-						steps.add(new StepAndScore(action,GA.getScore(action)));
-						action[3]=0;
-					}
-					action[2]=0;
-				}
-				
-				action[1]=0;
-			}	
 			action[0]=0;
 		}
 		

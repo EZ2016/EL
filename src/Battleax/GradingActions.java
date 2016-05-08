@@ -1,4 +1,6 @@
 package Battleax;
+import EZ.GameIniInformation;
+import EZ.Home;
 import EZ.Samurai;
 import EZ.TurnInformation;
 /*斧头武士的评分系统
@@ -16,11 +18,19 @@ public class GradingActions{
 		int myRow=TurnInformation.nowAllSamurai.get(samuraiID).row;
 		int myCol=TurnInformation.nowAllSamurai.get(samuraiID).col;
 		int myState=TurnInformation.nowAllSamurai.get(samuraiID).state;
-		int battleField[][]=TurnInformation.battleField;
+		int battleField[][]=new int[TurnInformation.battleField.length][TurnInformation.battleField[0].length];
 		int turnNum=TurnInformation.turnNum;
 		int myRecoverRound=TurnInformation.myRecoverRound;
+		for(int i=0;i<TurnInformation.battleField.length;i++){
+			for(int j=0;j<TurnInformation.battleField[0].length;j++){
+				battleField[i][j]=TurnInformation.battleField[i][j];
+			}
+		}
 		
 		for(int action:actions){
+			if(action==0){
+				continue;
+			}
 			if(action==1){       //南占领
 				if(myState==1){
 					return 0;
@@ -33,13 +43,17 @@ public class GradingActions{
 						if((i==myRow-1)&&(j==myCol)){
 							continue;
 						}
-						battleField[i][j]=samuraiID;
+						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+							if(!(home.rowOfHome==i && home.colOfHome==j)){
+								battleField[i][j]=samuraiID;
+							}
+						}
 						isKill(i,j);                                         //看看有没有敌人在这一格被剁死
 					}
 				}
 			}
 
-			if(action==2){       //东占领
+			else if(action==2){       //东占领
 				if(myState==1){
 					return 0;
 				}
@@ -51,13 +65,17 @@ public class GradingActions{
 						if((i==myRow)&&(j==myCol-1)){
 							continue;
 						}
-						battleField[i][j]=samuraiID;
+						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+							if(!(home.rowOfHome==i && home.colOfHome==j)){
+								battleField[i][j]=samuraiID;
+							}
+						}
 						isKill(i,j);
 					}
 				}
 			}
 			
-			if(action==3){      //北占领
+			else if(action==3){      //北占领
 				if(myState==1){
 					return 0;
 				}
@@ -69,13 +87,17 @@ public class GradingActions{
 						if((i==myRow+1)&&(j==myCol)){
 							continue;
 						}
-						battleField[i][j]=samuraiID;
+						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+							if(!(home.rowOfHome==i && home.colOfHome==j)){
+								battleField[i][j]=samuraiID;
+							}
+						}
 						isKill(i,j);
 					}
 				}
 			}
 			
-			if(action==4){    //西占领
+			else if(action==4){    //西占领
 				if(myState==1){
 					return 0;
 				}
@@ -87,13 +109,17 @@ public class GradingActions{
 						if((i==myRow)&&(j==myCol+1)){
 							continue;
 						}
-						battleField[i][j]=samuraiID;
+						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+							if(!(home.rowOfHome==i && home.colOfHome==j)){
+								battleField[i][j]=samuraiID;
+							}
+						}
 						isKill(i,j);
 					}
 				}
 			}
 			
-			if(action==5){   //南移动
+			else if(action==5){   //南移动
 				if(myRow==14 || existEnemy(myRow+1, myCol)){    //不能移动到棋盘外，或者敌人所在的格子
 					return 0;
 				}
@@ -103,7 +129,7 @@ public class GradingActions{
 				}
 			}
 			
-			if(action==6){   //东移动
+			else if(action==6){   //东移动
 				if(myCol==0 || existEnemy(myRow, myCol-1)){
 					return 0;
 				}
@@ -113,7 +139,7 @@ public class GradingActions{
 				}
 			}
 			
-			if(action==7){  //北移动
+			else if(action==7){  //北移动
 				if(myRow==0 || existEnemy(myRow-1, myCol)){
 					return 0;
 				}
@@ -123,7 +149,7 @@ public class GradingActions{
 				}
 			}
 			
-			if(action==8){   //西移动
+			else if(action==8){   //西移动
 				if(myCol==14 || existEnemy(myRow, myCol+1)){
 					return 0;
 				}
@@ -133,15 +159,19 @@ public class GradingActions{
 				}
 			}
 			
-			if(action==9){   //隐身
+			else if(action==9){   //隐身
 				if(battleField[myRow][myCol]>2){   //不能在非己方的格子隐身
 					return 0;
 				}
 				myState=1;
 			}
 			
-			if(action==10){  //现身
+			else if(action==10){  //现身
 				myState=0;
+			}
+			
+			else{
+				return 0;
 			}
 			
 		}
