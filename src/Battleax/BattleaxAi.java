@@ -3,6 +3,7 @@ package Battleax;
 import java.util.ArrayList;
 import java.util.Arrays;
 import EZ.AI;
+import EZ.GameIniInformation;
 import EZ.TurnInformation;
 /*斧头武士AI
  * v1.0
@@ -11,7 +12,7 @@ import EZ.TurnInformation;
  */
 public class BattleaxAi extends AI {
 	public  BattleaxAi() {
-		samuraiID=2;
+		samuraiID=GameIniInformation.samuraiID;
 		me=TurnInformation.nowAllSamurai.get(samuraiID);
 	}
 	

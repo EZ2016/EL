@@ -156,7 +156,7 @@ public class AI {
 	
 	public boolean existEnemy(){         //己方武士视野中有敌人就返回true，否则false，恢复中的敌人（turnInformation[i]==-1）当成没看见
 		for(Samurai enemy:TurnInformation.nowAllSamurai){
-			if(enemy.state==0){
+			if(enemy.state==0 && enemy.team!=me.team){
 				return true;
 			}
 		}
@@ -164,7 +164,7 @@ public class AI {
 	}
 	public boolean existEnemy (int row,int col) {             //1.2版本添加，(row,col)中有敌人就返回true，否则false
 		for(Samurai enemy:TurnInformation.nowAllSamurai){
-			if(enemy.ID>=3 && enemy.row==row && enemy.col==col && (enemy.state==0||enemy.state==-1)){
+			if(enemy.team!=me.team && enemy.row==row && enemy.col==col && (enemy.state==0||enemy.state==-1)){
 				return true;
 			}
 		}
@@ -174,7 +174,7 @@ public class AI {
 	public ArrayList<int[]> enemyPosition(){ //将看见的敌人的位置放进positions里传回，int[0]是row，int[1]是col
 		ArrayList<int[]> positions=new ArrayList<int[]>();
 		for(Samurai enemy:TurnInformation.nowAllSamurai){
-			if(enemy.state==0 && enemy.ID>=3){               //恢复中的敌人（turnInformation[i]==-1）当成没看见
+			if(enemy.state==0 && enemy.team!=me.team){   //恢复中的敌人（turnInformation[i]==-1）当成没看见
 				int[] position ={enemy.row,enemy.col};
 				positions.add(position);
 			}

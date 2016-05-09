@@ -11,6 +11,14 @@ public class AiMain {
 		IR.inReceive();		
 		GameIniInformation.SetGameIniInformation(IR.getInformation());
 		
+/*		while(true){
+			TurnInformationReceive TIR=new TurnInformationReceive();
+			TIR.tuReceive();
+			TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());
+			System.out.println("# Turn "+TurnInformation.turnNum);
+			System.out.println(GameIniInformation.samuraiID+" 0");
+		}
+*/
 		if(GameIniInformation.samuraiID==0||GameIniInformation.samuraiID==3){
 			for(int i=1;i<GameIniInformation.totalRounds;i++){
 				Spear spear=new Spear();
@@ -37,10 +45,17 @@ public class AiMain {
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());					
 				Battleax battleax=new Battleax();
 				battleax.battleaxAiRun();
-				
+				System.out.println("# Turn "+TurnInformation.turnNum);
+				System.out.println(battleax.actions);
 			}
 			
-		}	
+		}
+		
+		else{
+			for(int i=1;i<GameIniInformation.totalRounds;i++){
+				System.out.println(GameIniInformation.samuraiID);
+			}
+		}
 
 	}
 

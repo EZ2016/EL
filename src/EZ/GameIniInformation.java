@@ -12,9 +12,10 @@ import java.util.List;
 public class GameIniInformation {
 	public static int totalRounds;//回合总数
 	public static int teamID;//队伍ID
-	public static int samuraiID;//武士ID	
+	public static int weapon;//注意：这个是武器，不是samuraiID！武器是0-2，ID是0-6！
 	public static int widthOfBf;//战场大小
-	public static int heightOfBf;	
+	public static int heightOfBf;
+	public static int samuraiID;
 	
 	public static int recoverRound;//恢复周期
 	public static List<Home> home=new ArrayList<>();//大本营位置
@@ -27,7 +28,8 @@ public class GameIniInformation {
 	 public static void SetGameIniInformation(int[] a){//所有信息均以数组传递
 		 totalRounds=a[0];
 		 teamID=a[1];
-		 samuraiID=a[2];
+		 weapon=a[2];
+		 samuraiID=weapon+(teamID-1)*3;
 		 widthOfBf=a[3];
 		 heightOfBf=a[4];
 		 recoverRound=a[5];
@@ -49,7 +51,7 @@ public class GameIniInformation {
 				 new Samurai(a[26],a[27]),
 				 new Samurai(a[28],a[29]),
 		 };
-		 SOT.addAll(Arrays.asList(allSamurai));
+		 SOT.addAll(Arrays.asList(allSamurai));  //这个构造方法得改！具体见Samurai类
 		  
 		 
 		 

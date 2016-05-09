@@ -16,7 +16,7 @@ public class InformationReceive {
 		try {
 			
 			String tip1=br.readLine();
-			if(tip1.equals("# Game Info")){
+			if(tip1.startsWith("#")){
 				String line1=br.readLine();
 				String[]a=line1.split(" ");
 				for(int i=0;i<6;i++){
@@ -25,7 +25,7 @@ public class InformationReceive {
 			}
 			
 			String tip2=br.readLine();
-			if(tip2.equals("# Home positions")){
+			if(tip2.startsWith("#")){
 				for(int i=0;i<6;i++){
 					String[] a=br.readLine().split(" ");
 					information[6+2*i]=Integer.parseInt(a[0]);
@@ -34,7 +34,7 @@ public class InformationReceive {
 			}
 			
 			String tip3=br.readLine();
-			if(tip3.equals("# Ranks and scores of samurai")){
+			if(tip3.startsWith("#")){
 				for(int i=0;i<6;i++){
 					String[] a=br.readLine().split(" ");
 					information[18+2*i]=Integer.parseInt(a[0]);

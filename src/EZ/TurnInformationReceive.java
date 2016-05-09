@@ -18,17 +18,17 @@ public class TurnInformationReceive {
 		try {
 			String tip1=br.readLine();
 			String tip2=br.readLine();
-			if(tip1.equals("# Turn information")&&tip2.equals("# <turn>")){
+			if(tip1.startsWith("#")&&tip2.startsWith("#")){
 				turnInformation[0]=Integer.parseInt(br.readLine());		
 			}
 			
 			String tip3=br.readLine();
-			if(tip3.equals("# <cure period>")){
+			if(tip3.startsWith("#")){
 				turnInformation[1]=Integer.parseInt(br.readLine());	
 			}
 			
 			String tip4=br.readLine();
-			if(tip4.equals("# Samurai states")){
+			if(tip4.startsWith("#")){
 				for(int i=0;i<6;i++){
 					String[]a=br.readLine().split(" ");
 					turnInformation[2+3*i]=Integer.parseInt(a[0]);
@@ -38,9 +38,9 @@ public class TurnInformationReceive {
 			}
 			
 			String tip5=br.readLine();
-			if(tip5.equals("# Battle field states")){
+			if(tip5.startsWith("#")){
 				for(int i=0;i<GameIniInformation.heightOfBf;i++){
-					String []b=br.readLine().split(" ");
+					String []b=br.readLine().trim().split(" ");
 					for(int j=0;j<GameIniInformation.widthOfBf;j++){
 						battleField[i][j]=Integer.parseInt(b[j]);						
 					}
@@ -50,6 +50,7 @@ public class TurnInformationReceive {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		
 	}

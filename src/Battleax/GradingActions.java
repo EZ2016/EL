@@ -11,7 +11,8 @@ import EZ.TurnInformation;
 public class GradingActions{
 	
 	private int score=0;
-	private static final int samuraiID=2;            //斧头武士的评分系统
+	private static final int samuraiID=GameIniInformation.samuraiID;       //斧头武士的评分系统
+	private int myTeam=GameIniInformation.teamID;
 	private int kill=0;
 	
 	public int getScore(int[] actions) {
@@ -192,7 +193,7 @@ public class GradingActions{
 	
 	public boolean isKill(int i,int j) {                 //若(i,j)有敌人且能被杀死，则杀敌数+1且返回true，否则false
 		for(Samurai enemy:TurnInformation.nowAllSamurai){
-			if(enemy.ID>=3 && enemy.row==i && enemy.col==j && enemy.state==0){ //恢复中的敌人（enemy.state==-1）当成没看见
+			if(enemy.team!=myTeam && enemy.row==i && enemy.col==j && enemy.state==0){ //恢复中的敌人（enemy.state==-1）当成没看见
 				kill++;
 				return true;
 			}
@@ -202,7 +203,7 @@ public class GradingActions{
 	
 	public boolean existEnemy (int row,int col) {       //若(i,j)有敌人，则返回true，否则false
 		for(Samurai enemy:TurnInformation.nowAllSamurai){
-			if(enemy.ID>=3 && enemy.row==row && enemy.col==col && (enemy.state==0||enemy.state==-1)){
+			if(enemy.team!=myTeam && enemy.row==row && enemy.col==col ){
 				return true;
 			}
 		}
