@@ -14,10 +14,19 @@ public class TurnInformation {
 	public static int myRecoverRound;//恢复周期
 	public static List<Samurai> nowAllSamurai=new ArrayList<>();//武士状态
 	public static int [][] battleField=new int[GameIniInformation.widthOfBf][GameIniInformation.heightOfBf];//战场状态
+	public static void initi(){
+		Samurai s=new Samurai(0, 0);
+		for(int i=0;i<6;i++){
+			nowAllSamurai.add(s);
+		}
+		
+	}
 	
 	public static void SetTurnInformation(int[]a,int[][]b){//信息均以数组方式传递，地图以二位数组传递
 		turnNum=a[0];
-		myRecoverRound=a[1];
+		myRecoverRound=a[1];	
+		
+			
 		
 		Samurai[] allSamurai={
 				new Samurai(a[2],a[3],a[4],0,1),
@@ -27,7 +36,11 @@ public class TurnInformation {
 				new Samurai(a[14],a[15],a[16],4,2),
 				new Samurai(a[17],a[18],a[19],5,2),
 		};
-		nowAllSamurai.addAll(Arrays.asList(allSamurai));	
+		
+		for(int i=0;i<6;i++){
+			nowAllSamurai.set(i,allSamurai[i]);	
+		}
+		
 		
 		for(int i=0;i<battleField.length;i++){
 			for(int j=0;j<battleField[i].length;j++){
