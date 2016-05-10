@@ -40,7 +40,6 @@ public class AiMain {
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
 				SwordMain swordMain=new SwordMain();
-
 			}
 			
 		}else if(GameIniInformation.samuraiID==2||GameIniInformation.samuraiID==5){
