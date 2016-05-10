@@ -32,9 +32,9 @@ public class TurnInformation {
 				new Samurai(a[2],a[3],a[4],0,GameIniInformation.teamID),
 				new Samurai(a[5],a[6],a[7],1,GameIniInformation.teamID),
 				new Samurai(a[8],a[9],a[10],2,GameIniInformation.teamID),
-				new Samurai(a[11],a[12],a[13],0,GameIniInformation.teamID==1?1:2),
-				new Samurai(a[14],a[15],a[16],1,GameIniInformation.teamID==1?1:2),
-				new Samurai(a[17],a[18],a[19],2,GameIniInformation.teamID==1?1:2),
+				new Samurai(a[11],a[12],a[13],0,GameIniInformation.teamID==0?0:1),
+				new Samurai(a[14],a[15],a[16],1,GameIniInformation.teamID==0?0:1),
+				new Samurai(a[17],a[18],a[19],2,GameIniInformation.teamID==0?0:1),
 		};
 		
 		for(int i=0;i<6;i++){

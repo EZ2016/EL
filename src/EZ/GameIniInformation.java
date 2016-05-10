@@ -29,7 +29,7 @@ public class GameIniInformation {
 		 totalRounds=a[0];
 		 teamID=a[1];
 		 weapon=a[2];
-		 samuraiID=weapon+(teamID-1)*3;
+		 samuraiID=weapon+teamID*3;
 		 widthOfBf=a[3];
 		 heightOfBf=a[4];
 		 recoverRound=a[5];

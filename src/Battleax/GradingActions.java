@@ -182,14 +182,14 @@ public class GradingActions{
 		score=score+kill*10000;                            //暂定杀人加10000分
 		for(int[] i:battleField){
 			for(int j:i){
-				if(j>=(GameIniInformation.teamID-1)*3 && j<=GameIniInformation.teamID*3-1){
+				if(j>=myTeam*3 && j<=myTeam*3+2){
 					score=score+500;                      //暂定每有一块地加500分
 				}
 			}
 		}
 		for(int i=Math.max(myRow-1, 0);i<=Math.min(myRow+1, 14);i++){
 			for(int j=Math.max(myCol-1, 0);j<=Math.min(myCol+1, 14);j++){
-				if(battleField[i][j]<(GameIniInformation.teamID-1)*3 || battleField[i][j]>GameIniInformation.teamID*3-1){
+				if(battleField[i][j]<myTeam*3 || battleField[i][j]>myTeam*3+2){
 					score=score+400;                   //暂定周围格子中每有一块不是自己的地盘就加400分
 				}
 			}

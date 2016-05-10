@@ -26,14 +26,14 @@ public class AiMain {
 			System.out.println(GameIniInformation.samuraiID+" 0");
 		}
 */
-		if(GameIniInformation.samuraiID==0||GameIniInformation.samuraiID==3){
+		if(GameIniInformation.weapon==0){
 			for(int i=1;i<GameIniInformation.totalRounds;i++){
 				Spear spear=new Spear();
 				spear.spearAiRun();
 			}
 			
 			
-		}else if(GameIniInformation.samuraiID==1||GameIniInformation.samuraiID==4){
+		}else if(GameIniInformation.weapon==1){
 			
 			for(int i=1;i<GameIniInformation.totalRounds;i++){
 				TurnInformationReceive TIR=new TurnInformationReceive();
@@ -42,7 +42,7 @@ public class AiMain {
 				SwordMain swordMain=new SwordMain();
 			}
 			
-		}else if(GameIniInformation.samuraiID==2||GameIniInformation.samuraiID==5){
+		}else if(GameIniInformation.weapon==2){
 				FileWriter fw=new FileWriter(file);
 				BufferedWriter bw=new BufferedWriter(fw);
 				TurnInformation.initi();
