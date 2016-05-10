@@ -14,6 +14,7 @@ public class AI {
 	}
 	
 	protected int samuraiID;//武士ID                                //1.2版本修改的部分
+	protected int weapon;
 	protected Samurai me;
 	protected String actions="";//最终的武士行为
 	protected int leftPoint=7;  //剩余行动力
@@ -91,6 +92,11 @@ public class AI {
 			if((TurnInformation.battleField[me.row+1][me.col]>2)&&(me.state==1)){        //1.2版修改的部分
 				return false;
 			}
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
+				if((me.row+1)==home.rowOfHome && me.col==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
+					return false;
+				}
+			}
 			actions=actions+"5 ";
 			me.row++;
 			leftPoint=leftPoint-2;
@@ -99,6 +105,11 @@ public class AI {
 		else if((direction.equals("eastward"))&&(me.col!=14)&&(!existEnemy(me.row,me.col+1))){//1.2版修改的部分
 			if((TurnInformation.battleField[me.row][me.col+1]<=2)&&(me.state==1)){            //1.2版修改的部分
 				return false;
+			}
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
+				if(me.row==home.rowOfHome && (me.col+1)==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
+					return false;
+				}
 			}
 			actions=actions+"6 ";
 			me.col++;
@@ -109,6 +120,11 @@ public class AI {
 			if((TurnInformation.battleField[me.row-1][me.col]<=2)&&(me.state==1)){            //1.2版修改的部分
 				return false;
 			}
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
+				if((me.row-1)==home.rowOfHome && me.col==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
+					return false;
+				}
+			}
 			actions=actions+"7 ";
 			me.row--;
 			leftPoint=leftPoint-2;
@@ -117,6 +133,11 @@ public class AI {
 		else if((direction.equals("westward"))&&(me.col!=0)&&(!existEnemy(me.row,me.col-1))){//1.2版修改的部分
 			if((TurnInformation.battleField[me.row][me.col-1]<=2)&&(me.state==1)){           //1.2版修改的部分
 				return false;
+			}
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
+				if(me.row==home.rowOfHome && (me.col-1)==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
+					return false;
+				}
 			}
 			actions=actions+"8 ";
 			me.col--;

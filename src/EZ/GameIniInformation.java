@@ -34,12 +34,12 @@ public class GameIniInformation {
 		 heightOfBf=a[4];
 		 recoverRound=a[5];
 		 Home[] allHome={
-				 new Home(a[6],a[7]),
-				 new Home(a[8],a[9]),
-				 new Home(a[10],a[11]),
-				 new Home(a[12],a[13]),
-				 new Home(a[14],a[15]),
-				 new Home(a[16],a[17]),		 
+				 new Home(a[6],a[7],0,1),
+				 new Home(a[8],a[9],1,1),
+				 new Home(a[10],a[11],2,1),
+				 new Home(a[12],a[13],0,2),
+				 new Home(a[14],a[15],1,2),
+				 new Home(a[16],a[17],2,2),		 
 		 };
 		 home.addAll(Arrays.asList(allHome));
 		 	

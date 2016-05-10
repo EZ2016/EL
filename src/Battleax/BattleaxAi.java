@@ -12,8 +12,8 @@ import EZ.TurnInformation;
  */
 public class BattleaxAi extends AI {
 	public  BattleaxAi() {
-		samuraiID=GameIniInformation.samuraiID;
-		me=TurnInformation.nowAllSamurai.get(samuraiID);
+		weapon=GameIniInformation.weapon;
+		me=TurnInformation.nowAllSamurai.get(weapon);
 	}
 	
 	public void run(){                     //Battleax的AI开始计算
@@ -107,6 +107,7 @@ public class BattleaxAi extends AI {
 	public boolean mustEscape() {    //如果下一步会被杀，就返回true，否则false
 		int[] fromEnemySpear=minusMyCoordinate(TurnInformation.nowAllSamurai.get(3).row,TurnInformation.nowAllSamurai.get(3).col);
 		int[] fromEnemySword=minusMyCoordinate(TurnInformation.nowAllSamurai.get(4).row,TurnInformation.nowAllSamurai.get(4).col);
+		if(fromEnemySpear[0]>=0 || fromEnemySpear[1]>=0){
 		    //逃离矛的攻击
 			if(fromEnemySpear[0]==0){
 				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=5) || (fromEnemySpear[1]>=-5 && fromEnemySpear[1]<=-3)){
@@ -127,7 +128,9 @@ public class BattleaxAi extends AI {
 				if(fromEnemySpear[1]==0){
 					return true;
 				}
-			}			
+			}
+		}
+		if(fromEnemySword[0]>=0 || fromEnemySword[1]>=0){
              //逃离剑的攻击
 			if(fromEnemySword[0]>=-1 && fromEnemySword[0]<=1){
 				if(fromEnemySword[1]==-3 || fromEnemySword[1]<=-4 || fromEnemySword[1]<=3 || fromEnemySword[1]<=4){
@@ -139,7 +142,7 @@ public class BattleaxAi extends AI {
 					return true;
 				}
 			}
-		
+		}
 		return false;
 	}
 	

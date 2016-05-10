@@ -12,13 +12,14 @@ public class GradingActions{
 	
 	private int score=0;
 	private static final int samuraiID=GameIniInformation.samuraiID;       //斧头武士的评分系统
+	private static final int weapon=GameIniInformation.weapon;
 	private int myTeam=GameIniInformation.teamID;
 	private int kill=0;
 	
 	public int getScore(int[] actions) {
-		int myRow=TurnInformation.nowAllSamurai.get(samuraiID).row;
-		int myCol=TurnInformation.nowAllSamurai.get(samuraiID).col;
-		int myState=TurnInformation.nowAllSamurai.get(samuraiID).state;
+		int myRow=TurnInformation.nowAllSamurai.get(weapon).row;
+		int myCol=TurnInformation.nowAllSamurai.get(weapon).col;
+		int myState=TurnInformation.nowAllSamurai.get(weapon).state;
 		int battleField[][]=new int[TurnInformation.battleField.length][TurnInformation.battleField[0].length];
 		int turnNum=TurnInformation.turnNum;
 		int myRecoverRound=TurnInformation.myRecoverRound;
@@ -27,6 +28,7 @@ public class GradingActions{
 				battleField[i][j]=TurnInformation.battleField[i][j];
 			}
 		}
+		score=0;
 		
 		for(int action:actions){
 			if(action==0){
@@ -180,8 +182,15 @@ public class GradingActions{
 		score=score+kill*10000;                            //暂定杀人加10000分
 		for(int[] i:battleField){
 			for(int j:i){
-				if((j==0)||(j==1)||(j==2)){
+				if(j>=(GameIniInformation.teamID-1)*3 && j<=GameIniInformation.teamID*3-1){
 					score=score+500;                      //暂定每有一块地加500分
+				}
+			}
+		}
+		for(int i=Math.max(myRow-1, 0);i<=Math.min(myRow+1, 14);i++){
+			for(int j=Math.max(myCol-1, 0);j<=Math.min(myCol+1, 14);j++){
+				if(battleField[i][j]<(GameIniInformation.teamID-1)*3 || battleField[i][j]>GameIniInformation.teamID*3-1){
+					score=score+400;                   //暂定周围格子中每有一块不是自己的地盘就加400分
 				}
 			}
 		}

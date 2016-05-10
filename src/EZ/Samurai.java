@@ -2,7 +2,7 @@ package EZ;
 
 public class Samurai {
 	public int team;
-	public int ID;
+	public int weapon;
 	public int row;//行
 	public int col;//列
 	public int rank;//排名
@@ -20,11 +20,11 @@ public class Samurai {
 		this.col=col;
 		this.state=state;		
 	}
-	public Samurai(int row,int col,int state,int ID,int team){  //注意：以后全部用这个构造方法  by：俊毅
+	public Samurai(int row,int col,int state,int weapon,int team){  //注意：以后全部用这个构造方法  by：俊毅
 		this.row=row;
 		this.col=col;
 		this.state=state;
-		this.ID=ID;
+		this.weapon=weapon;
 		this.team=team;
 	}
 

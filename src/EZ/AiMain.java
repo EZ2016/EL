@@ -9,7 +9,7 @@ import Sword.SwordMain;
 
 
 public class AiMain {
-	static File file = new File("/Users/zhujing/Desktop/log.text");
+	static File file = new File("managerLog.txt");
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
@@ -46,7 +46,7 @@ public class AiMain {
 				FileWriter fw=new FileWriter(file);
 				BufferedWriter bw=new BufferedWriter(fw);
 				TurnInformation.initi();
-			for(int i=1;i<GameIniInformation.totalRounds;i++){
+			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
 			
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();

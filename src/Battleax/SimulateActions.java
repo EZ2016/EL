@@ -1,6 +1,9 @@
 package Battleax;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import EZ.GameIniInformation;
+import EZ.TurnInformation;
 /*斧头武士的action模拟系统
 * v1.0
 * by 俊毅
@@ -81,7 +84,8 @@ public class SimulateActions {
             action[0]=0;
 		}
 		
-		for(int i=10;i<=10;i++){                                //首先执行显形的情况
+		if(TurnInformation.nowAllSamurai.get(GameIniInformation.weapon).state==1){ //首先执行显形的情况
+			int i=10;
 			action[0]=i;
 			steps.add(new StepAndScore(action,GA.getScore(action)));
 			for(int a=5;a<=8;a++){                              //首先执行显形+移动的情况

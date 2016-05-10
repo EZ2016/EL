@@ -1,6 +1,8 @@
 package Sword;
 
 import java.util.ArrayList;
+
+import EZ.GameIniInformation;
 import EZ.Samurai;
 import EZ.TurnInformation;
 
@@ -14,12 +16,13 @@ public class NecessaryAct {
 	Samurai Sword,emSpear; //剑，敌方矛
 	int intiCol;
 	int intiRow;
+	int myTeam=GameIniInformation.teamID;
 	public NecessaryAct(){ //构造方法，开始时得到剑和敌方矛的信息
 		for(Samurai samurai:TurnInformation.nowAllSamurai){
-			if(samurai.ID == 1){  //我自行在Samurai里添加的ID，便于区分武士
+			if(samurai.weapon == 1 && samurai.team==myTeam){  //我自行在Samurai里添加的ID，便于区分武士
 				Sword = samurai;
 			}
-			if(samurai.ID == 3){
+			if(samurai.weapon == 0 && samurai.team!=myTeam){
 				emSpear = samurai;
 			}
 		}
