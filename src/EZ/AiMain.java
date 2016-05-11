@@ -9,7 +9,6 @@ import Sword.SwordMain;
 
 
 public class AiMain {
-	static File file = new File("managerLog.txt");
 	static File file2 = new File("Swordlog.txt");
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
@@ -91,6 +90,7 @@ public class AiMain {
 			}
 			
 		}else if(GameIniInformation.weapon==2){
+				File file = new File("samurai"+GameIniInformation.samuraiID+"Log.txt");  //5月11日修改
 				FileWriter fw=new FileWriter(file);
 				BufferedWriter bw=new BufferedWriter(fw);
 				TurnInformation.initi();

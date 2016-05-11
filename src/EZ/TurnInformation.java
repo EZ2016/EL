@@ -29,12 +29,12 @@ public class TurnInformation {
 			
 		
 		Samurai[] allSamurai={
-				new Samurai(a[2],a[3],a[4],0,GameIniInformation.teamID),
-				new Samurai(a[5],a[6],a[7],1,GameIniInformation.teamID),
-				new Samurai(a[8],a[9],a[10],2,GameIniInformation.teamID),
-				new Samurai(a[11],a[12],a[13],0,GameIniInformation.teamID==0?1:0),
-				new Samurai(a[14],a[15],a[16],1,GameIniInformation.teamID==0?1:0),
-				new Samurai(a[17],a[18],a[19],2,GameIniInformation.teamID==0?1:0),
+				new Samurai(a[3],a[2],a[4],0,GameIniInformation.teamID),
+				new Samurai(a[6],a[5],a[7],1,GameIniInformation.teamID),
+				new Samurai(a[9],a[8],a[10],2,GameIniInformation.teamID),
+				new Samurai(a[12],a[11],a[13],0,GameIniInformation.teamID==0?1:0),
+				new Samurai(a[15],a[14],a[16],1,GameIniInformation.teamID==0?1:0),
+				new Samurai(a[18],a[17],a[19],2,GameIniInformation.teamID==0?1:0),
 		};
 		
 		for(int i=0;i<6;i++){
@@ -44,7 +44,7 @@ public class TurnInformation {
 		
 		for(int i=0;i<battleField.length;i++){
 			for(int j=0;j<battleField[i].length;j++){
-				battleField[i][j]=b[i][j];
+				battleField[j][i]=b[i][j];   //manager给的列是我们认为的行，manager给的行是我们认为的列
 				
 			}
 		}

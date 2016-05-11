@@ -1,7 +1,5 @@
 package Sword;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-
 import EZ.TurnInformation;
 //此类用来保存棋盘中的每个格子的坐标以及值。
 public class cell {
