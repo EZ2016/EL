@@ -44,7 +44,7 @@ public class TurnInformation {
 		
 		for(int i=0;i<battleField.length;i++){
 			for(int j=0;j<battleField[i].length;j++){
-				battleField[j][i]=b[i][j];   //manager给的列是我们认为的行，manager给的行是我们认为的列
+				battleField[i][j]=b[i][j];   
 				
 			}
 		}
