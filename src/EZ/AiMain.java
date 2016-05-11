@@ -10,6 +10,7 @@ import Sword.SwordMain;
 
 public class AiMain {
 	static File file = new File("managerLog.txt");
+	static File file2 = new File("Swordlog.txt");
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
@@ -34,12 +35,54 @@ public class AiMain {
 			
 			
 		}else if(GameIniInformation.weapon==1){
-			
-			for(int i=1;i<GameIniInformation.totalRounds;i++){
+			FileWriter fWriter = new FileWriter(file2);
+			BufferedWriter bw = new BufferedWriter(fWriter);
+			TurnInformation.initi();
+			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
 				SwordMain swordMain=new SwordMain();
+				bw.write("manager的操作:");
+				bw.newLine();
+				bw.write("回合数:"+TurnInformation.turnNum+" ");
+				bw.newLine();
+				bw.write("恢复期:"+TurnInformation.myRecoverRound+" ");
+				bw.newLine();
+				bw.write(TurnInformation.nowAllSamurai.get(0).row+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(0).col+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(0).state+" ");
+				bw.newLine();
+				bw.write(TurnInformation.nowAllSamurai.get(1).row+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(1).col+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(1).state+" ");
+				bw.newLine();
+				bw.write(TurnInformation.nowAllSamurai.get(2).row+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(2).col+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(2).state+" ");
+				bw.newLine();
+				bw.write(TurnInformation.nowAllSamurai.get(3).row+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(3).col+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(3).state+" ");
+				bw.newLine();
+				bw.write(TurnInformation.nowAllSamurai.get(4).row+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(4).col+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(4).state+" ");
+				bw.newLine();
+				bw.write(TurnInformation.nowAllSamurai.get(5).row+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(5).col+" ");
+				bw.write(TurnInformation.nowAllSamurai.get(5).state+" ");
+				bw.newLine();
+				bw.write("战场:");
+				bw.newLine();
+				for(int m=0;m<GameIniInformation.heightOfBf;m++){
+					for(int n=0;n<GameIniInformation.widthOfBf;n++){
+						bw.write(TurnInformation.battleField[m][n]+" ");
+					}
+					bw.newLine();
+				}
+				bw.write("你的操作是:"+swordMain.act);
+				bw.newLine();
 			}
 			
 		}else if(GameIniInformation.weapon==2){

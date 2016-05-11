@@ -11,7 +11,7 @@ import EZ.TurnInformation;
 //个人认为体力限制可通过执行完之后分析action或者在分析方法中实现，以下方法中没有具体的实现
 //对于棋盘边界对于移动和占领的限制，只使用了if语句进行部分处理，还没有想出很完美的方法
 public class NecessaryAct {
-	public static String action;  //行动指令
+	public  String action="";  //行动指令
 	public static int strength;   //体力限制
 	Samurai Sword,emSpear; //剑，敌方矛
 	int intiCol;
@@ -21,6 +21,7 @@ public class NecessaryAct {
 		for(Samurai samurai:TurnInformation.nowAllSamurai){
 			if(samurai.weapon == 1 && samurai.team==myTeam){  //我自行在Samurai里添加的ID，便于区分武士
 				Sword = samurai;
+			    
 			}
 			if(samurai.weapon == 0 && samurai.team!=myTeam){
 				emSpear = samurai;
@@ -150,12 +151,12 @@ public class NecessaryAct {
 		return 2;
 	}
 	public int Hide(){  //隐身方法
-		action = action + "9";
+		action = action + "9 ";
 		Sword.state = 1;
 		return 1;
 	}
 	public int Show(){  //现身方法
-		action = action + "10";
+		action = action + "10 ";
 		Sword.state = 0;
 		return 1;
 	}
@@ -175,10 +176,10 @@ public class NecessaryAct {
 	}
 	public int MustKill(){//必杀方法，尝试行动一步或者不动的击杀，若能返回true，不能返回false
 		int energy = 0;
-		if(Kill()!=-1){  //原地能击杀
+		if(Kill()!=0){  //原地能击杀
 			
 			Occupy(Kill());
-			action = action+Kill();
+			action = action+Kill()+" ";
 			energy = energy + 4;
 			
 			return energy;
@@ -186,13 +187,14 @@ public class NecessaryAct {
 		else{  //行动后击杀
 		for(int i=5;i<=8;i++){ 
 				Move(i);  //尝试移动
-				if(Kill()!=-1){
+				if(Kill()!=0){
 					energy = energy + Move(i)+4;
 					if(Sword.state == 1) //若隐身，首先现身
 						energy = energy+Show();
 					Occupy(Kill());
-					action = action+Kill();
-					action = action + i;
+					action = action + i+" ";
+					action = action+Kill()+" ";
+					
 					return energy;
 				
 			}
@@ -206,7 +208,8 @@ public class NecessaryAct {
 	public boolean MustEscape(){  //判断是否会被敌方矛击杀
 		int colDis = Math.abs(Sword.col-emSpear.col);//与敌方矛之间的距离
 		int rowDis = Math.abs(Sword.row-emSpear.row);
-		if((colDis==4 && rowDis<=1) || (rowDis==4 && colDis<=1)||(colDis == 5 && rowDis==0)||(rowDis==5 && colDis==0) || (rowDis == 3 || colDis==1) ||(rowDis ==1 || colDis==3)){
+
+		if((colDis==4 && rowDis<=1) || (rowDis==4 && colDis<=1)||(colDis == 5 && rowDis==0)||(rowDis==5 && colDis==0) || (rowDis == 3 && colDis==1) ||(rowDis ==1 && colDis==3)){
 			return true;
 		}
 		else {
@@ -230,7 +233,12 @@ public class NecessaryAct {
 					Move(k);
 				
 				if(!MustEscape()){
-					action = action+i;
+					if(i!=4)
+					action = action+i+" ";
+					if(k!=4)
+						action = action+k+" ";
+					if(j!=4)
+						action = action +j+" ";
 					Hide();   //建议逃跑后隐藏
 					return true;
 				}
@@ -240,7 +248,9 @@ public class NecessaryAct {
 		}
 		return false;
 	}
-	public void ShouldOccupy(){  //在不需要逃跑和击杀时，发育的方法
+	public void ShouldOccupy(){  
+		if(Sword.state == 1) //若隐身，首先现身
+			Show();//在不需要逃跑和击杀时，发育的方法
 		int [][]Va =new int[5][4];  //Va储存不同行动后的收益，共20种
 		for(int i=0;i<=4;i++){
 			for(int j=0;j<=3;j++){
@@ -268,10 +278,10 @@ public class NecessaryAct {
 			}
 		}
 		if(Xmax ==0 ){
-			action = action + (Ymax+4);
+			action = action + (Ymax+4)+" ";
 		}
 		else {
-			action = action + Xmax + (Ymax+4);
+			action = action + (Xmax)+" " + (Ymax+4)+" ";
 		}
 		
 	}
