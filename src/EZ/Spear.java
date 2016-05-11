@@ -6,7 +6,8 @@ public class Spear {
 	private SpearAi spearAi;
 	
 	public Spear(){
-		this.spearAi=new SpearAi();//spear
+		int teamID=GameIniInformation.teamID;
+		this.spearAi=new SpearAi(teamID);//spear
 	}
 	
 	public void spearAiRun(){	
@@ -16,7 +17,12 @@ public class Spear {
         else {
 			spearAi.analyseEnemy();
 			spearAi.analyseMe();
-			System.out.println(spearAi.order);//输出指令到控制台，manager自己读取命令
+			if (spearAi.energy>1&&spearAi.state==0) {
+				spearAi.order=spearAi.order+"9 ";
+				spearAi.energy-=1;
+				
+			}
+			System.out.println(spearAi.order+"0");//输出指令到控制台，manager自己读取命令
 		}
 	}
 

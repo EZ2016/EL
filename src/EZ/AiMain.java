@@ -27,8 +27,13 @@ public class AiMain {
 			System.out.println(GameIniInformation.samuraiID+" 0");
 		}
 */
+		
 		if(GameIniInformation.weapon==0){
-			for(int i=1;i<GameIniInformation.totalRounds;i++){
+			TurnInformation.initi();
+			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
+				TurnInformationReceive TIR=new TurnInformationReceive();
+				TIR.tuReceive();
+				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());	
 				Spear spear=new Spear();
 				spear.spearAiRun();
 			}
