@@ -9,7 +9,7 @@ import Sword.SwordMain;
 
 
 public class AiMain {
-	static File file2 = new File("Swordlog.txt");
+
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
@@ -39,6 +39,7 @@ public class AiMain {
 			
 			
 		}else if(GameIniInformation.weapon==1){
+			File file2 = new File("Swordsamurai"+GameIniInformation.samuraiID+"Log.txt"); 
 			FileWriter fWriter = new FileWriter(file2);
 			BufferedWriter bw = new BufferedWriter(fWriter);
 			TurnInformation.initi();
