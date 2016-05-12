@@ -33,8 +33,8 @@ public class AiMain {
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());	
-				Spear spear=new Spear();
-				spear.spearAiRun();
+					Spear spear=new Spear();
+					spear.spearAiRun();
 			}
 			
 			

@@ -9,21 +9,23 @@ import EZ.TurnInformation;
 //ZHU YINGSHAN
 public class SpearAi {
 	public SpearAi(int teamID) {
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub  
+		teamId=GameIniInformation.teamID;
 	    me=TurnInformation.nowAllSamurai.get(teamID*3);
 	    enspearID=((teamId==0)?3:0);
-		enswordID=teamId==0?1:4;
-		enbattleaxID=teamId==0?2:5;
-        enspear=TurnInformation.nowAllSamurai.get(teamID==0?3:0);
-        ensword=TurnInformation.nowAllSamurai.get(teamID==0?4:1);
-        enbattleax=TurnInformation.nowAllSamurai.get(teamID==0?5:2);
+		enswordID=enspearID+1;
+		enbattleaxID=enswordID+1;
+        enspear=TurnInformation.nowAllSamurai.get(enspearID);
+        ensword=TurnInformation.nowAllSamurai.get(enswordID);
+        enbattleax=TurnInformation.nowAllSamurai.get(enbattleaxID);
         col=me.col;
         row=me.row;
         recover=TurnInformation.myRecoverRound;
         state=me.state;
         battlefield=TurnInformation.battleField;
-        }
-    int teamId=GameIniInformation.teamID;
+        
+     }
+    int teamId;
 	int enspearID,enswordID,enbattleaxID;
 	Samurai me;//对象我
 	Samurai enspear;//敌方矛
@@ -71,8 +73,8 @@ public class SpearAi {
 	
 	
 	        //判断是否能隐身
-         boolean canHide(){
-	         if (TurnInformation.battleField[me.row][me.col]>2) {
+         public boolean canHide(){
+	         if (battlefield[me.row][me.col]>2) {
 		         return false;
 	          }
 	             return true;
@@ -197,7 +199,7 @@ String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Au
 			state=0;
 			return;
 		}
-		if (order.length()==0) {//行动力为7
+		if (energy>4) {//行动力为7
 			easyOccupy();
 		}
 	}
@@ -212,7 +214,7 @@ String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Au
 		if (j>=0&&row-j>=0) {
 			grade++;
 		}
-		if (j<0&&row+j<15) {
+		if (j<0&&row-j<15) {
 			grade++;
 		}
 		if (grade>1) {
@@ -223,7 +225,7 @@ String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Au
 	}
 	
 	
-//简单的占领指令
+       //简单的占领指令
 	private void easyOccupy() {
 		// TODO Auto-generated method stub
 		if (state==1) {
@@ -236,26 +238,26 @@ String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Au
 		for (int i = 1; i < 5; i++) {//1234左右上下
 			for (int j = 1; j < 5; j++) {
 				switch (i) {
-				case 1:	if (inField(0, -j)) {
+				case 1:	if (inField(-j,0)) {
 					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
 						score[i-1]++;
 					}
 				}
 					break;
-				case 2:if (inField(0, j)) {
-					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
+				case 2:if (inField(j,0)) {
+					if (battlefield[row][col+j]==enbattleaxID||battlefield[row][col+j]==enspearID||battlefield[row][col+j]==enswordID||battlefield[row][col+j]==8) {
 						score[i-1]++;
 					}
 				}
 					break;
-				case 3:if (inField(j, 0)) {
-					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
+				case 3:if (inField(0,j)) {
+					if (battlefield[row-j][col]==enbattleaxID||battlefield[row-j][col]==enspearID||battlefield[row-j][col]==enswordID||battlefield[row-j][col]==8) {
 						score[i-1]++;
 					}
 				}
 					break;
-				case 4:if (inField(-j, col)) {
-					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
+				case 4:if (inField(0,-j)) {
+					if (battlefield[row+j][col]==enbattleaxID||battlefield[row+j][col]==enspearID||battlefield[row+j][col]==enswordID||battlefield[row+j][col]==8) {
 						score[i-1]++;
 						
 					}
@@ -269,15 +271,21 @@ String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Au
 				bestdirection=i;
 			}
 		}
-		loop:for (int i = 0; i < score.length; i++) {
-			if (score[i]>2||energy<6) {
-				order=bestdirection+" ";//随机占领
+		loop:
+			for (int i = 0; i < score.length; i++) {
+			if (score[i]>1||energy<=6) {
+				order=order+bestdirection+" ";//随机占领
 				energy-=4;
 				break loop;
 			}
-			if (i==3&&energy>4) {
-				move();
-				easyOccupy();
+			if (i==3&&energy>5) {
+				order=order+bestdirection+" ";//随机占领
+				if (teamId==0) {
+					order=order+"2 6 ";energy-=6;col++;
+				}else {
+					order=order+"1 5 ";energy-=6;row--;
+				}
+				
 			}
 		}
 		//移动后占领
@@ -294,25 +302,25 @@ String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Au
 			for (int j = 1; j < 5; j++) {
 				switch (i) {
 				case 5:	
-					if (inField(0, -j)&&inField(-1, 0)) {
+					if (inField(-j,0)&&inField(-1, 0)) {
 					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
 						score[0]++;
 					}
 				}
 					break;
-				case 6:if (inField(0, j)&&inField(1, 0)) {
+				case 6:if (inField(j,0)&&inField(1, 0)) {
 					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
 						score[1]++;
 					}
 				}
 					break;
-				case 7:if (inField(j, 0)&&inField(0, 1)) {
+				case 7:if (inField(0,j)&&inField(0, 1)) {
 					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
 						score[2]++;
 					}
 				}
 					break;
-				case 8:if (inField(-j, col)&&inField(0, -1)) {
+				case 8:if (inField(0,-j)&&inField(0, -1)) {
 					if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
 						score[3]++;		
 					}
@@ -320,7 +328,6 @@ String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Au
 					break;
 				}
 			}
-			
 			if(score[i-5]>maxscore){
 				maxscore=score[i-5];
 				bestdirection=i;
