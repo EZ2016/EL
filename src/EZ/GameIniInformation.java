@@ -39,7 +39,7 @@ public class GameIniInformation {
 				 new Home(a[11],a[10],2,0),
 				 new Home(a[13],a[12],0,1),
 				 new Home(a[15],a[14],1,1),
-				 new Home(a[17],a[16],2,1),		 
+				 new Home(a[17],a[16],2,1), 
 		 };
 		 home.addAll(Arrays.asList(allHome));
 		 	
