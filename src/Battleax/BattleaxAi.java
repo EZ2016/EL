@@ -4,16 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import EZ.AI;
 import EZ.GameIniInformation;
+import EZ.Home;
+import EZ.Samurai;
+import EZ.SimulateActions;
 import EZ.TurnInformation;
 /*斧头武士AI
  * v1.0
+ * v2.0： 修改了逃跑方法和评分系统的接口
  * by 俊毅
  * 备注：尚未考虑有关大本营的所有情况
  */
-public class BattleaxAi extends AI {
+public class BattleaxAi extends AI implements Cloneable {
 	public  BattleaxAi() {
+		samuraiID=GameIniInformation.samuraiID;
+		teamID=GameIniInformation.teamID;
 		weapon=GameIniInformation.weapon;
 		me=TurnInformation.nowAllSamurai.get(weapon);
+		
 	}
 	
 	public void run(){                     //Battleax的AI开始计算
@@ -39,11 +46,11 @@ public class BattleaxAi extends AI {
 		
 		else{                    //其他情况采用评分算法
 			SimulateActions SA=new SimulateActions();
-			SA.tryAllActions();
-			int[] i=SA.maxScore();
-			for(int j:i){
-				if(j!=0){
-					actions=actions+j+" ";
+			Grading grading=new Grading(this);
+			int[] step=grading.maxScore(SA.AllActions());
+			for(int i:step){
+				if(i!=0){
+					actions=actions+i+" ";
 				}
 			}
 		}
@@ -61,17 +68,114 @@ public class BattleaxAi extends AI {
 	}
 	
 	public boolean attact(int row,int col) {                  //攻击(row,col)，成功则返回true，否则false
-		if(minusMyCoordinate(row, col)[0]==1){
-			return occupy("southward");
+		if(minusMyCoordinate(row, col)[0]==1 && minusMyCoordinate(row, col)[1]>=-1 && minusMyCoordinate(row, col)[1]<=1){
+			return attact("southward");
 		}
-		else if(minusMyCoordinate(row, col)[0]==-1){
-			return occupy("northward");
+		else if(minusMyCoordinate(row, col)[0]==-1 && minusMyCoordinate(row, col)[1]>=-1 && minusMyCoordinate(row, col)[1]<=1){
+			return attact("northward");
 		}
-		else if(minusMyCoordinate(row, col)[1]==1){
-			return occupy("eastward");
+		else if(minusMyCoordinate(row, col)[1]==1 && minusMyCoordinate(row, col)[0]>=-1 && minusMyCoordinate(row, col)[0]<=1){
+			return attact("eastward");
 		}
-		else if(minusMyCoordinate(row, col)[1]==-1){
-			return occupy("westward");
+		else if(minusMyCoordinate(row, col)[1]==-1 && minusMyCoordinate(row, col)[0]>=-1 && minusMyCoordinate(row, col)[0]<=1){
+			return attact("westward");
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public boolean attact(int direction) {
+		if(direction==1){
+			return attact("southward");
+		}
+		else if (direction==2) {
+			return attact("eastward");
+		}
+		else if (direction==3) {
+			return attact("northward");
+		}
+		else if (direction==4) {
+			return attact("westward");
+		}
+		return false;
+	}
+	
+	public boolean attact(String direction) {
+		if(!occupy(direction)){
+			return false;
+		}
+		if(direction.equals("southward")){
+			for(int row=Math.max(me.row-1, 0);row<=Math.min(me.row+1, 14);row++){      //棋盘范围外的无法占领
+				for(int col=Math.max(me.col-1, 0);col<=Math.min(me.col+1, 14);col++){
+					if((row==me.row)&&(col==me.col)){
+						continue;
+					}
+					if((row==me.row-1)&&(col==me.col)){
+						continue;
+					}
+					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+						if(!(home.rowOfHome==row && home.colOfHome==col)){
+							battleField[row][col]=samuraiID;
+						}
+					}
+				}
+			}
+			return true;
+		}
+		else if(direction.equals("eastward")){
+			for(int row=Math.max(me.row-1, 0);row<=Math.min(me.row+1, 14);row++){      //棋盘范围外的无法占领
+				for(int col=Math.max(me.col-1, 0);col<=Math.min(me.col+1, 14);col++){
+					if((row==me.row)&&(col==me.col)){
+						continue;
+					}
+					if((row==me.row)&&(col==me.col-1)){
+						continue;
+					}
+					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+						if(!(home.rowOfHome==row && home.colOfHome==col)){
+							battleField[row][col]=samuraiID;
+						}
+					}
+				}
+			}
+			return true;
+		}
+		else if(direction.equals("northward")){
+			for(int row=Math.max(me.row-1, 0);row<=Math.min(me.row+1, 14);row++){      //棋盘范围外的无法占领
+				for(int col=Math.max(me.col-1, 0);col<=Math.min(me.col+1, 14);col++){
+					if((row==me.row)&&(col==me.col)){
+						continue;
+					}
+					if((row==me.row+1)&&(col==me.col)){
+						continue;
+					}
+					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+						if(!(home.rowOfHome==row && home.colOfHome==col)){
+							battleField[row][col]=samuraiID;
+						}
+					}
+				}
+			}
+			return true;
+		}
+		else if(direction.equals("westward")){
+			for(int row=Math.max(me.row-1, 0);row<=Math.min(me.row+1, 14);row++){      //棋盘范围外的无法占领
+				for(int col=Math.max(me.col-1, 0);col<=Math.min(me.col+1, 14);col++){
+					if((row==me.row)&&(col==me.col)){
+						continue;
+					}
+					if((row==me.row)&&(col==me.col+1)){
+						continue;
+					}
+					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+						if(!(home.rowOfHome==row && home.colOfHome==col)){
+							battleField[row][col]=samuraiID;
+						}
+					}
+				}
+			}
+			return true;
 		}
 		else{
 			return false;
@@ -105,40 +209,50 @@ public class BattleaxAi extends AI {
 	}
 	
 	public boolean mustEscape() {    //如果下一步会被杀，就返回true，否则false
-		int[] fromEnemySpear=minusMyCoordinate(TurnInformation.nowAllSamurai.get(3).row,TurnInformation.nowAllSamurai.get(3).col);
-		int[] fromEnemySword=minusMyCoordinate(TurnInformation.nowAllSamurai.get(4).row,TurnInformation.nowAllSamurai.get(4).col);
-		if(fromEnemySpear[0]>=0 || fromEnemySpear[1]>=0){
+		int[] fromEnemySpear=minusMyCoordinate(allSamurai.get(3).row,allSamurai.get(3).col);
+		int[] fromEnemySword=minusMyCoordinate(allSamurai.get(4).row,allSamurai.get(4).col);
+		if(allSamurai.get(3).row>=0 && allSamurai.get(3).col>=0){
 		    //逃离矛的攻击
 			if(fromEnemySpear[0]==0){
 				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=5) || (fromEnemySpear[1]>=-5 && fromEnemySpear[1]<=-3)){
 					return true;
 				}
 			}
-			if(fromEnemySpear[0]==-1 || fromEnemySpear[0]==1){
+			else if (fromEnemySpear[0]==-1 || fromEnemySpear[0]==1){
 				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=4) || (fromEnemySpear[1]>=-4 && fromEnemySpear[1]<=-3)){
 					return true;
 				}
 			}
-			if((fromEnemySpear[0]>=3 && fromEnemySpear[0]<=4) || (fromEnemySpear[0]>=-4 && fromEnemySpear[1]<=-3)){
+			else if((fromEnemySpear[0]>=3 && fromEnemySpear[0]<=4) || (fromEnemySpear[0]>=-4 && fromEnemySpear[1]<=-3)){
 				if(fromEnemySpear[1]>=-1 || fromEnemySpear[1]<=1){
 					return true;
 				}
 			}
-			if(fromEnemySpear[0]==5 || fromEnemySpear[0]==-5){
+			else if(fromEnemySpear[0]==5 || fromEnemySpear[0]==-5){
 				if(fromEnemySpear[1]==0){
 					return true;
 				}
 			}
 		}
-		if(fromEnemySword[0]>=0 || fromEnemySword[1]>=0){
+		if(allSamurai.get(4).row>=0 && allSamurai.get(4).col>=0){
              //逃离剑的攻击
-			if(fromEnemySword[0]>=-1 && fromEnemySword[0]<=1){
-				if(fromEnemySword[1]==-3 || fromEnemySword[1]<=-4 || fromEnemySword[1]<=3 || fromEnemySword[1]<=4){
+			if(fromEnemySword[0]==0){
+				if(fromEnemySword[1]==-3 || fromEnemySword[1]==-4 || fromEnemySword[1]==3 || fromEnemySword[1]==4){
 					return true;
 				}
 			}
-			if(fromEnemySword[0]==-3 || fromEnemySword[0]<=-4 || fromEnemySword[0]<=3 || fromEnemySword[0]<=4){
+			else if(fromEnemySword[0]==-1 || fromEnemySword[0]==1){
+				if(fromEnemySword[1]==-3 || fromEnemySword[1]<=3){
+					return true;
+				}
+			}
+			else if(fromEnemySword[0]==-3 || fromEnemySword[0]<=3){
 				if(fromEnemySword[1]>=-1 && fromEnemySword[1]<=1){
+					return true;
+				}
+			}
+			else if (fromEnemySword[0]==-4 || fromEnemySword[0]<=4) {
+				if(fromEnemySword[1]==0){
 					return true;
 				}
 			}
@@ -147,23 +261,39 @@ public class BattleaxAi extends AI {
 	}
 	
 	private void escape() {               //逃跑的方法
-		int i = (int)(Math.random()*4);  //随机产生一个方向逃跑，具体逃跑路径和方法可后续设置;
+		String direction;  //随机产生一个方向逃跑，具体逃跑路径和方法可后续设置;
 		ArrayList<String> directions=new ArrayList<String>();
 		directions.addAll(Arrays.asList("southward","eastward","northward","westward"));
 		while(directions.size()!=0){
-			i = (int)(Math.random()*directions.size());
-			move(directions.get(i));
-			move(directions.get(i));
-			move(directions.get(i));
-			if(!mustEscape()){
-				hide();                  //建议逃跑后隐藏
-				break;
+			int i=(int)(Math.random()*directions.size());
+			direction =directions.get(i);
+			if(move(direction) && move(direction) && move(direction)){
+				if(!mustEscape()){
+					hide();                  //建议逃跑后隐藏
+					break;
+				}
+				cancelLastMove();
+				cancelLastMove();
+				cancelLastMove();
 			}
-			cancelLastAction();
-			cancelLastAction();
-			cancelLastAction();
-			directions.remove(i);
-		}
-		
+			directions.remove(direction);
+		}	
 	}
+	
+	public void setBattleField(int[][]battleField) {
+		this.battleField=new int [battleField.length][battleField[0].length];
+		for(int row=0;row<battleField.length;row++){
+			for(int col=0;col<battleField[0].length;col++){
+				this.battleField[row][col]=battleField[row][col];
+			}
+		}
+	}
+	
+	public void setMe(Samurai me) {
+		this.me=new Samurai(me.row, me.col, me.state, me.weapon, me.team);
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
