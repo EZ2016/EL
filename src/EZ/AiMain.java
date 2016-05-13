@@ -29,17 +29,17 @@ public class AiMain {
 		
 		if(GameIniInformation.weapon==0){
 			TurnInformation.initi();
-			File file=new File("/Users/zhujing/Desktop/log.txt");
-			FileWriter fw=new FileWriter(file);
-			BufferedWriter bw=new BufferedWriter(fw);
-			for(int i=1;i<3;i++){
+			Log log=new Log("Spear"+GameIniInformation.samuraiID+"log.txt");
+			log.outputGameInformation();
+			
+			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());	
 					Spear spear=new Spear();
 					spear.spearAiRun();
-					
-					bw.write("manager的操作:");
+					log.outputTurnInformation(" ");
+					/*bw.write("manager的操作:");
 					bw.newLine();
 					bw.write("回合数:"+TurnInformation.turnNum+" ");
 					bw.newLine();
@@ -78,15 +78,15 @@ public class AiMain {
 						bw.newLine();
 					}
 					bw.write("你的操作是:");
-					bw.newLine();
+					bw.newLine();*/
 				
 			}
 			
 			
 		}else if(GameIniInformation.weapon==1){
-			File file2 = new File("/Users/zhujing/Desktop/log.txt"); 
-			FileWriter fWriter = new FileWriter(file2);
-			BufferedWriter bw = new BufferedWriter(fWriter);
+			Log log=new Log("Sword"+GameIniInformation.samuraiID+"log.txt");
+			log.outputGameInformation();
+			//BufferedWriter bw = new BufferedWriter(fWriter);
 			
 			TurnInformation.initi();
 			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
@@ -94,7 +94,8 @@ public class AiMain {
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
 				SwordMain swordMain=new SwordMain();
-				bw.write("manager的操作:");
+				log.outputTurnInformation(swordMain.act+swordMain.wAct);
+				/*bw.write("manager的操作:");
 				bw.newLine();
 				bw.write("回合数:"+TurnInformation.turnNum+" ");
 				bw.newLine();
@@ -133,18 +134,18 @@ public class AiMain {
 					bw.newLine();
 				}
 				bw.write("你的操作是:"+swordMain.act);
-				bw.newLine();
+				bw.newLine();*/
 			}
 			
 		}else if(GameIniInformation.weapon==2){
 //				File file = new File("/Users/zhujing/Desktop/log.txt");  //5月11日修改
 //				FileWriter fw=new FileWriter(file);
 //				BufferedWriter bw=new BufferedWriter(fw);
-			Log log=new Log("/Users/zhujing/Desktop/log.txt");
+			Log log=new Log("Battleax"+GameIniInformation.samuraiID+"log.txt");
 			log.outputGameInformation();
 			TurnInformation.initi();
 			
-			for(int i=1;i<3;i+=1){
+			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
 			
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
