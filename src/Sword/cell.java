@@ -7,7 +7,7 @@ import EZ.TurnInformation;
 public class cell {
 	public int row;
 	public int col;
-	public int value = -1;
+	public int value = 0;
 	
 	public void setValue(){
 		

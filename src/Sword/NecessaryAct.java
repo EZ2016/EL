@@ -3,6 +3,7 @@ package Sword;
 import java.util.ArrayList;
 
 import EZ.GameIniInformation;
+import EZ.Home;
 import EZ.Samurai;
 import EZ.TurnInformation;
 
@@ -37,7 +38,7 @@ public class NecessaryAct {
 		
 		ArrayList<cell> occupyList = new ArrayList<cell>();
 		
-			for(int i=1;i<=3;i++){
+			for(int i=1;i<=2;i++){
 				if(direction==4 || direction == 3){
 					cell C = new cell();
 					if(Sword.col-i>=0){
@@ -80,50 +81,50 @@ public class NecessaryAct {
 			}
 			
 				cell C1 = new cell();
-				cell C2 = new cell();
-				cell C3 = new cell();
+				/*cell C2 = new cell();
+				cell C3 = new cell();*/
 				if(direction == 4){
 					
 					C1.col = Sword.col-1;
 					C1.row = Sword.row+1;
-					C2.col = Sword.col-1;
+					/*C2.col = Sword.col-1;
 					C2.row = Sword.row+2;
 					C3.col = Sword.col-2;
-					C3.row = Sword.row+1;
+					C3.row = Sword.row+1;*/
 				}
 				else if(direction == 2){
 					C1.col = Sword.col+1;
 					C1.row = Sword.row-1;
-					C1.col = Sword.col+2;
+					/*C1.col = Sword.col+2;
 					C1.row = Sword.row-1;
 					C1.col = Sword.col+1;
-					C1.row = Sword.row-2;
+					C1.row = Sword.row-2;*/
 				}
 				else if(direction == 3){
 					C1.col = Sword.col-1;
 					C1.row = Sword.row-1;
-					C2.col = Sword.col-1;
+					/*C2.col = Sword.col-1;
 					C2.row = Sword.row-2;
 					C3.col = Sword.col-2;
-					C3.row = Sword.row-1;
+					C3.row = Sword.row-1;*/
 				}
 				else if(direction == 1){
 					C1.col = Sword.col+1;
 					C1.row = Sword.row+1;
-					C2.col = Sword.col+1;
+					/*C2.col = Sword.col+1;
 					C2.row = Sword.row+2;
 					C3.col = Sword.col+2;
-					C3.row = Sword.row+1;
+					C3.row = Sword.row+1;*/
 				}
 				C1.setValue();
-				C2.setValue();
-				C3.setValue();
+				/*C2.setValue();
+				C3.setValue();*/
 				if(C1.col>=0 && C1.row>=0 && C1.col <=14 && C1.row<=14)
 					occupyList.add(C1);
-				if(C2.col>=0 && C2.row>=0 && C2.col <=14 && C2.row<=14)
+				/*if(C2.col>=0 && C2.row>=0 && C2.col <=14 && C2.row<=14)
 					occupyList.add(C2);
 				if(C3.col>=0 && C3.row>=0 && C3.col <=14 && C3.row<=14)
-					occupyList.add(C3);
+					occupyList.add(C3);*/
 				
 			
 		
@@ -133,7 +134,7 @@ public class NecessaryAct {
 	public int ValueOfOccupy(ArrayList<cell> cells){ //占领的棋盘中可以加分的数目
 		int value = 0;
 		for(cell c:cells){
-			if(c.value == 8||c.value == 9||c.value == 5-myTeam || c.value == 4-myTeam || c.value == 3-myTeam){
+			if(c.value == 8||c.value == 9||c.value == 5 || c.value == 4 || c.value == 3){
 			value++;	
 			}
 		}
@@ -155,9 +156,17 @@ public class NecessaryAct {
 			break;
 		case 8:
 			Sword.col--;
+			break;
 
 		default:
 			break;
+		}
+		for(Home h:GameIniInformation.home){
+			if(Sword.row == h.rowOfHome && Sword.col == h.colOfHome){
+				Sword.row = intiRow;
+				Sword.col = intiCol;
+				break;
+			}
 		}
 		return 2;
 	}
@@ -296,7 +305,7 @@ public class NecessaryAct {
 			}
 		}
 		if(Va[Xmax][Ymax]==0){
-			action = action + (Math.random()*4+1)+" "+(Math.random()*4+1)+" "+(Math.random()*4+1);
+			action = action + ((int)(Math.random()*4+4))+" "+((int)(Math.random()*4+4))+" "+((int)(Math.random()*4+4))+" ";
 		}
 		else if(Xmax ==0 ){
 			action = action + (Ymax+1)+" ";
