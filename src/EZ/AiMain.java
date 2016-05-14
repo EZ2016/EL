@@ -1,8 +1,5 @@
 package EZ;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import Sword.SwordMain;
@@ -94,7 +91,7 @@ public class AiMain {
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
 				SwordMain swordMain=new SwordMain();
-				log.outputTurnInformation(swordMain.act+swordMain.wAct);
+				log.outputTurnInformation(swordMain.act+swordMain.waction);
 				/*bw.write("manager的操作:");
 				bw.newLine();
 				bw.write("回合数:"+TurnInformation.turnNum+" ");

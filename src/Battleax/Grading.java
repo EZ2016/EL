@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import EZ.GameIniInformation;
 import EZ.Home;
 import EZ.Samurai;
-import EZ.TurnInformation;
 /*斧头武士的评分系统
  * v1.0
  * v2.0: 调整了代码风格，不直接调用GameIniInformation类和TurnInformation类的数据
