@@ -33,10 +33,10 @@ ZHU YINGSHAN*/
 # <cure period>
 0
 # Samurai states
-6 5 0
+14 10 0
 1 4 1
 0 14 0
-1 5 0
+14 9 0
 12 12 0
 0 5 0
 # Battle field states
@@ -111,7 +111,6 @@ public class SpearAi {
 				order=order+str;
 				energy-=6;
 			}
-			
 		}
         else {//能杀人
 		order=order+str;
@@ -156,7 +155,7 @@ public class SpearAi {
 	
 	/**往killstring中加入指令*/	
 	String killTwo(Samurai samurai, String killString) {	//走一步杀死 TODO Auto-generated method stub
-		 if (samurai.state==1) {//当武士的状态未知时，不操作
+		 if (samurai.state==1||atHome(samurai)) {//当武士的状态未知时，不操作
 			 
 			}else if ((Math.abs(samurai.row-row)+Math.abs(samurai.col-col))>5||((Math.abs(samurai.row-row)>2)&&Math.abs(samurai.col-col)>2)) {
 				//在攻击范围之外，不操作
@@ -187,11 +186,11 @@ public class SpearAi {
 	private String  canKill() {//返回能杀死的字符串
 		String killString="";//用killstring表示杀人命令的集合
 		killString=kill(enspear, killString);
-		if (!killString.equals("")) {//先杀矛
+		if (!(killString.length()==0)){//先杀矛
 			if (state==1) {//假如隐身的话先现身再杀矛
 				showOrHide();
 				state=0;}
-			return killString;
+			return killString+" ";
 		}else {//如果不能杀矛，在判断其他的武士
 			killString=kill(ensword, killString);//分析斧子和剑
 			killString=kill(enbattleax, killString);
@@ -522,8 +521,7 @@ public class SpearAi {
 		int a=samurai.row;
 		int b=samurai.col;
 		int c=samurai.col-col;
-		
-	    if (samurai.state==1) {//当武士的状态未知时，返回原字符串
+	    if (samurai.state==1||atHome(samurai)) {//当武士的状态未知时，返回原字符串
 		return killString;}
 	    if (samurai.row==row&&(samurai.col-col)<5&&samurai.col-col>0) {//4231左右上下，一步杀死
 		   killString=killString+2;}
@@ -535,6 +533,23 @@ public class SpearAi {
 		   killString=killString+1;	}
 		return killString;
 
+	}
+	/**判断该武士是否在家中*/
+	private boolean atHome(Samurai samurai) {
+		int ID=0;
+		if (samurai==enspear) {
+			ID=3;
+		}else if(samurai==ensword) {
+			ID=4;
+		}else {
+			ID=5;
+		}
+	    int homerow=GameIniInformation.home.get(ID).rowOfHome;
+	    int homecol=GameIniInformation.home.get(ID).colOfHome;
+		if (samurai.col==homecol&&samurai.row==homerow) {
+			return true;
+		}
+		return false;
 	}
 }
 /*
