@@ -29,7 +29,7 @@ public class SpearAi {
 		// TODO Auto-generated constructor stub  
 		teamId=GameIniInformation.teamID;//0 or 1
 		me=TurnInformation.nowAllSamurai.get(GameIniInformation.weapon);//输入武士中的第一个
-	    enspearID=3;
+	    enspearID=((teamId==0)?3:0);
 		enswordID=enspearID+1;
 		enbattleaxID=enswordID+1;
         enspear=TurnInformation.nowAllSamurai.get(3);
@@ -52,7 +52,7 @@ public class SpearAi {
 		return 0;
 	}
 	
-	public void  action() {//返回所有行动的字符串
+	public String  actions() {//返回所有行动的字符串
 		String str=cankill();
 		if (str.length()==0) {
 			occupy();//不能杀人，占领
@@ -61,6 +61,7 @@ public class SpearAi {
 		order=order+str;
 		energy-=4;
 		}
+		return order;
 	}
 	
 	private void showOrHide() {
@@ -107,25 +108,18 @@ public class SpearAi {
 	
     public void occupy() {//能量为7
 		switch (type) {
-		case 1:
-			String s1=type1();
-			order=order+s1;
+		case 1:order=type1();
 			break;
-		case 2:
-			String s2=type2();
-			order=order+s2;
+		case 2:order=type2();
 			break;
-		case 3:
-			String s3=type3();
-			order=order+s3;
+		case 3:order=type3();
 			break;
-		case 4:
-			String s4=type4();
-			order=order+s4;
+		case 4:order=type4();
 			break;
 		default:
 			break;
 		}
+		
 	}
 	private String type1() {//在下边界的时候
 		String occuString="";
@@ -349,7 +343,6 @@ public class SpearAi {
 				return occuString;
 			}
 		}
-	    System.out.println(occuString);
 	    return occuString;
 	}
 
@@ -381,20 +374,16 @@ public class SpearAi {
 	
 	
 	String kill(Samurai samurai,String killString){//把杀一个武士的字符串加在killstring的后面
-		int a=samurai.row;
-		int b=samurai.col;
-		int c=samurai.col-col;
-		
 	    if (samurai.state==1) {//当武士的状态未知时，返回原字符串
 		return killString;}
-	    if (samurai.row==row&&(samurai.col-col)<5&&samurai.col-col>0) {//4231左右上下，一步杀死
+	    if (samurai.row==row&&(samurai.col-col)<5&&samurai.col-col>0) {//1234左右上下，一步杀死
 		   killString=killString+2+" ";}
 	    if (samurai.row==row&&(samurai.col-col)<0&&samurai.col-col>-5) {
-		   killString=killString+4+" ";}
-	    if (samurai.col==col&&samurai.row-row<0&&samurai.row-row>-5) {
+		   killString=killString+1+" ";}
+	    if (samurai.col==col&&samurai.row-row<0&&samurai.col-col>-5) {
 		   killString=killString+3+" ";}
-	    if (samurai.col==col&&samurai.row-row<5&&samurai.row-row>0) {
-		   killString=killString+1+" ";	}
+	    if (samurai.col==col&&samurai.row-row<5&&samurai.col-col>0) {
+		   killString=killString+4+" ";	}
 		return killString;
 
 	}
