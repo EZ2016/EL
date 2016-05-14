@@ -18,9 +18,9 @@ public class Grading {
 	
 	public Grading(BattleaxAi battleaxAi){
 		battleaxAi_backup=battleaxAi;
-		this.battleaxAi=cloneBattleaxAi(battleaxAi);
-		this.battleaxAi.setBattleField(battleaxAi.getBattleField());
-		this.battleaxAi.setMe(battleaxAi.getMe());
+		this.battleaxAi=cloneBattleaxAi(battleaxAi_backup);
+		this.battleaxAi.setBattleField(battleaxAi_backup.getBattleField());
+		this.battleaxAi.setMe(battleaxAi_backup.getMe());
 	}
 	
 	public BattleaxAi cloneBattleaxAi(BattleaxAi battleaxAi) {
@@ -39,8 +39,8 @@ public class Grading {
 		for(int[] action:allActions){
 			steps.add(new StepAndScore(action,getScore(action)));
 			this.battleaxAi=cloneBattleaxAi(battleaxAi_backup);
-			this.battleaxAi.setBattleField(battleaxAi.getBattleField());
-			this.battleaxAi.setMe(battleaxAi.getMe());
+			this.battleaxAi.setBattleField(battleaxAi_backup.getBattleField());
+			this.battleaxAi.setMe(battleaxAi_backup.getMe());
 		}
 		
 		StepAndScore maxStep=steps.get(0);
@@ -98,146 +98,7 @@ public class Grading {
 					return 0;
 				}
 			}
-/*			
-			if(action==1){       //南占领
-				if(myState==1){
-					return 0;
-				}
-				for(int i=Math.max(myRow-1, 0);i<=Math.min(myRow+1, 14);i++){      //棋盘范围外的无法占领
-					for(int j=Math.max(myCol-1, 0);j<=Math.min(myCol+1, 14);j++){
-						if((i==myRow)&&(j==myCol)){
-							continue;
-						}
-						if((i==myRow-1)&&(j==myCol)){
-							continue;
-						}
-						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-							if(!(home.rowOfHome==i && home.colOfHome==j)){
-								battleField[i][j]=samuraiID;
-							}
-						}
-						isKill(i,j);                                         //看看有没有敌人在这一格被剁死
-					}
-				}
-			}
-
-			else if(action==2){       //东占领
-				if(myState==1){
-					return 0;
-				}
-				for(int i=Math.max(myRow-1, 0);i<=Math.min(myRow+1, 14);i++){
-					for(int j=Math.max(myCol-1, 0);j<=Math.min(myCol+1, 14);j++){
-						if((i==myRow)&&(j==myCol)){
-							continue;
-						}
-						if((i==myRow)&&(j==myCol-1)){
-							continue;
-						}
-						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-							if(!(home.rowOfHome==i && home.colOfHome==j)){
-								battleField[i][j]=samuraiID;
-							}
-						}
-						isKill(i,j);
-					}
-				}
-			}
-			
-			else if(action==3){      //北占领
-				if(myState==1){
-					return 0;
-				}
-				for(int i=Math.max(myRow-1, 0);i<=Math.min(myRow+1, 14);i++){
-					for(int j=Math.max(myCol-1, 0);j<=Math.min(myCol+1, 14);j++){
-						if((i==myRow)&&(j==myCol)){
-							continue;
-						}
-						if((i==myRow+1)&&(j==myCol)){
-							continue;
-						}
-						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-							if(!(home.rowOfHome==i && home.colOfHome==j)){
-								battleField[i][j]=samuraiID;
-							}
-						}
-						isKill(i,j);
-					}
-				}
-			}
-			
-			else if(action==4){    //西占领
-				if(myState==1){
-					return 0;
-				}
-				for(int i=Math.max(myRow-1, 0);i<=Math.min(myRow+1, 14);i++){
-					for(int j=Math.max(myCol-1, 0);j<=Math.min(myCol+1, 14);j++){
-						if((i==myRow)&&(j==myCol)){
-							continue;
-						}
-						if((i==myRow)&&(j==myCol+1)){
-							continue;
-						}
-						for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-							if(!(home.rowOfHome==i && home.colOfHome==j)){
-								battleField[i][j]=samuraiID;
-							}
-						}
-						isKill(i,j);
-					}
-				}
-			}
-			
-			else if(action==5){   //南移动
-				if(myRow==14 || existEnemy(myRow+1, myCol)){    //不能移动到棋盘外，或者敌人所在的格子
-					return 0;
-				}
-				myRow++;
-				if(myState==1&&battleField[myRow][myCol]>2){   //不能在隐身时移动到非己方的格子
-					return 0;
-				}
-			}
-			
-			else if(action==6){   //东移动
-				if(myCol==0 || existEnemy(myRow, myCol-1)){
-					return 0;
-				}
-				myCol--;
-				if(myState==1&&battleField[myRow][myCol]>2){
-					return 0;
-				}
-			}
-			
-			else if(action==7){  //北移动
-				if(myRow==0 || existEnemy(myRow-1, myCol)){
-					return 0;
-				}
-				myRow--;
-				if(myState==1&&battleField[myRow][myCol]>2){
-					return 0;
-				}
-			}
-			
-			else if(action==8){   //西移动
-				if(myCol==14 || existEnemy(myRow, myCol+1)){
-					return 0;
-				}
-				myCol++;
-				if(myState==1&&battleField[myRow][myCol]>2){
-					return 0;
-				}
-			}
-			
-			else if(action==9){   //隐身
-				if(battleField[myRow][myCol]>2){   //不能在非己方的格子隐身
-					return 0;
-				}
-				myState=1;
-			}
-			
-			else if(action==10){  //现身
-				myState=0;
-			}
-*/			
+		
 			else{
 				return 0;
 			}
@@ -247,15 +108,14 @@ public class Grading {
 		score=score+kill*10000;                            //暂定杀人加10000分
 		for(int[] i:battleaxAi.getBattleField()){
 			for(int j:i){
-				if(j>=battleaxAi.getMe().team*3 && j<=battleaxAi.getMe().team*3+2){
+				if(j>=0 && j<=2){
 					score=score+500;                      //暂定每有一块地加500分
 				}
 			}
 		}
 		for(int i=Math.max(battleaxAi.getMyRow()-1, 0);i<=Math.min(battleaxAi.getMyRow()+1, 14);i++){
 			for(int j=Math.max(battleaxAi.getMyCol()-1, 0);j<=Math.min(battleaxAi.getMyCol()+1, 14);j++){
-				if(battleaxAi.getBattleField()[i][j]<battleaxAi.getMe().team*3 
-						|| battleaxAi.getBattleField()[i][j]>battleaxAi.getMe().team*3+2){
+				if(battleaxAi.getBattleField()[i][j]>2){
 					score=score+400;                   //暂定周围格子中每有一块不是自己的地盘就加400分
 				}
 			}
@@ -312,10 +172,11 @@ public class Grading {
 						continue;
 					}
 					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-						if(!(home.rowOfHome==row && home.colOfHome==col)){
-							field.add(new int[]{row,col});
+						if(home.rowOfHome==row && home.colOfHome==col){
+							continue;
 						}
 					}
+					field.add(new int[]{row,col});
 				}
 			}
 		}
@@ -329,10 +190,11 @@ public class Grading {
 						continue;
 					}
 					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-						if(!(home.rowOfHome==row && home.colOfHome==col)){
-							field.add(new int[]{row,col});
+						if(home.rowOfHome==row && home.colOfHome==col){
+							continue;
 						}
 					}
+					field.add(new int[]{row,col});
 				}
 			}
 		}
@@ -346,10 +208,11 @@ public class Grading {
 						continue;
 					}
 					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-						if(!(home.rowOfHome==row && home.colOfHome==col)){
-							field.add(new int[]{row,col});
+						if(home.rowOfHome==row && home.colOfHome==col){
+							continue;
 						}
 					}
+					field.add(new int[]{row,col});
 				}
 			}
 		}

@@ -120,7 +120,7 @@ public class AI {
 			return false;
 		}
 		if((direction.equals("southward"))&&(me.row!=14)&&(!existSamurai(me.row+1,me.col))){//2.0版修改的部分
-			if((battleField[me.row+1][me.col]>teamID*3+2 || battleField[me.row+1][me.col]<teamID*3)&&(me.state==1)){//不能隐身时移动到非己方格子
+			if((battleField[me.row+1][me.col]>2)&&(me.state==1)){//不能隐身时移动到非己方格子
 				return false;
 			}
 			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
@@ -134,7 +134,7 @@ public class AI {
 			return true;
 		}
 		else if((direction.equals("eastward"))&&(me.col!=14)&&(!existSamurai(me.row,me.col+1))){//2.0版修改的部分
-			if((battleField[me.row][me.col+1]>teamID*3+2 || battleField[me.row][me.col+1]<teamID*3)&&(me.state==1)){ //不能隐身时移动到非己方格子
+			if((battleField[me.row][me.col+1]>2)&&(me.state==1)){ //不能隐身时移动到非己方格子
 				return false;
 			}
 			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
@@ -148,7 +148,7 @@ public class AI {
 			return true;
 		}
 		else if((direction.equals("northward"))&&(me.row!=0)&&(!existSamurai(me.row-1,me.col))){//2.0版修改的部分
-			if((battleField[me.row-1][me.col]>teamID*3+2 || battleField[me.row-1][me.col]<teamID*3)&&(me.state==1)){//不能隐身时移动到非己方格子
+			if((battleField[me.row-1][me.col]>2)&&(me.state==1)){//不能隐身时移动到非己方格子
 				return false;
 			}
 			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
@@ -162,7 +162,7 @@ public class AI {
 			return true;
 		}
 		else if((direction.equals("westward"))&&(me.col!=0)&&(!existSamurai(me.row,me.col-1))){//2.0版修改的部分
-			if((battleField[me.row][me.col-1]>teamID*3+2 || battleField[me.row][me.col-1]<teamID*3)&&(me.state==1)){//不能隐身时移动到非己方格子
+			if((battleField[me.row][me.col-1]>2)&&(me.state==1)){//不能隐身时移动到非己方格子
 				return false;
 			}
 			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
@@ -184,7 +184,7 @@ public class AI {
 		if(leftPoint<1 || me.state!=0){
 			return false;
 		}
-		if(battleField[me.row][me.col]>=teamID*3 && battleField[me.row][me.col]<=teamID*3+2 && !existEnemy(me.row,me.col)){  //2.0版修改的部分
+		if(battleField[me.row][me.col]<=2 && !existEnemy(me.row,me.col)){  //2.0版修改的部分
 			actions=actions+"9 ";
 			me.state=1;
 			leftPoint=leftPoint-1;
@@ -194,7 +194,7 @@ public class AI {
 	}
 	
 	public boolean show(){                         //在行动中添加现身，成功就返回true，否则返回false
-		if(leftPoint<1 || me.state!=1){
+		if(leftPoint<1 || me.state!=1 || existSamurai(me.row,me.col)){
 			return false;
 		}
 		actions=actions+"10 ";
@@ -329,7 +329,7 @@ public class AI {
 		return false;
 	}
 	
-	public boolean cancelLastMove() {              //1.1版修改的部分  //删掉上一个步骤，成功返回true，否则false
+	public boolean cancelLastMove() {              //1.1版修改的部分  //删掉上一个move，成功返回true，否则false
 		if(actions=="" || actions==" "){
 			return false;
 		}
@@ -340,6 +340,7 @@ public class AI {
 				actions=actions+action+" ";
 			}
 		}
+		leftPoint=leftPoint+2;
 		return true;
 	}
 }

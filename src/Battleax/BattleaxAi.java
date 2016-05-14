@@ -80,6 +80,11 @@ public class BattleaxAi extends AI implements Cloneable {
 
 	public boolean canAttactEnemy(){                          //如果视野中有能攻击到的敌人，则返回true，否则false
 		for(int[] position:enemyPosition()){
+			for(Home home:allHome){              //如果这个格子是大本营，那么不可以杀人
+				if(home.rowOfHome==position[0] && home.colOfHome==position[1]){
+					return false;
+				}
+			}
 			if(distantFromMe(position[0], position[1])<=3){  //position[0]是敌人的row，position[1]是敌人的col
 				if(!(Math.abs(position[0]-me.row)==3 || Math.abs(position[1]-me.col)==3)){
 					return true;
@@ -136,8 +141,8 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row-1)&&(col==me.col)){
 						continue;
 					}
-					battleField[row][col]=samuraiID;
-					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+					battleField[row][col]=weapon;
+					for(Home home:allHome){              //如果这个格子是大本营，那么不可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							battleField[row][col]=8;
 						}
@@ -155,8 +160,8 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row)&&(col==me.col-1)){
 						continue;
 					}
-					battleField[row][col]=samuraiID;
-					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+					battleField[row][col]=weapon;
+					for(Home home:allHome){              //如果这个格子是大本营，那么不可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							battleField[row][col]=8;
 						}
@@ -174,8 +179,8 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row+1)&&(col==me.col)){
 						continue;
 					}
-					battleField[row][col]=samuraiID;
-					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+					battleField[row][col]=weapon;
+					for(Home home:allHome){              //如果这个格子是大本营，那么不可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							battleField[row][col]=8;
 						}
@@ -193,8 +198,8 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row)&&(col==me.col+1)){
 						continue;
 					}
-					battleField[row][col]=samuraiID;
-					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+					battleField[row][col]=weapon;
+					for(Home home:allHome){              //如果这个格子是大本营，那么不可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							battleField[row][col]=8;
 						}
@@ -268,16 +273,16 @@ public class BattleaxAi extends AI implements Cloneable {
 				}
 			}
 			else if(fromEnemySword[0]==-1 || fromEnemySword[0]==1){
-				if(fromEnemySword[1]==-3 || fromEnemySword[1]<=3){
+				if(fromEnemySword[1]==-3 || fromEnemySword[1]==3){
 					return true;
 				}
 			}
-			else if(fromEnemySword[0]==-3 || fromEnemySword[0]<=3){
+			else if(fromEnemySword[0]==-3 || fromEnemySword[0]==3){
 				if(fromEnemySword[1]>=-1 && fromEnemySword[1]<=1){
 					return true;
 				}
 			}
-			else if (fromEnemySword[0]==-4 || fromEnemySword[0]<=4) {
+			else if (fromEnemySword[0]==-4 || fromEnemySword[0]==4) {
 				if(fromEnemySword[1]==0){
 					return true;
 				}
@@ -315,7 +320,7 @@ public class BattleaxAi extends AI implements Cloneable {
 		for(int row=Math.max(me.row-3,0);row<=Math.min(me.row+3,14);row++){
 			for(int col=Math.max(me.col-3,0);col<=Math.min(me.col+3,14);col++){
 				if(distantFromMe(row, col)<=3 && !(Math.abs(row-me.row)==3 || Math.abs(col-me.col)==3)){
-					if(battleField[row][col]>=teamID*3 && battleField[row][col]<=teamID*3+2){
+					if(battleField[row][col]>=0 && battleField[row][col]<=2){
 						myField++;
 					}
 				}

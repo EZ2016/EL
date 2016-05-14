@@ -12,7 +12,6 @@ import EZ.TurnInformation;
 //对于棋盘边界对于移动和占领的限制，只使用了if语句进行部分处理，还没有想出很完美的方法
 public class NecessaryAct {
 	public  String action="";  //行动指令
-	public String whichAction = "";
 	public static int strength;   //体力限制
 	Samurai Sword,emSpear; //剑，敌方矛
 	int intiCol;
@@ -186,28 +185,27 @@ public class NecessaryAct {
 		return 0;
 	}
 	public int MustKill(){//必杀方法，尝试行动一步或者不动的击杀，若能返回true，不能返回false
-		
+		int energy = 0;
 		if(Kill()!=0){  //原地能击杀
 			
 			Occupy(Kill());
 			action = action+Kill()+" ";
-			whichAction = whichAction +"kill";
+			energy = energy + 4;
 			
-			
-			return 1;
+			return energy;
 		}
 		else{  //行动后击杀
 		for(int i=5;i<=8;i++){ 
 				Move(i);  //尝试移动
 				if(Kill()!=0){
-					//energy = energy + Move(i)+4;
+					energy = energy + Move(i)+4;
 					if(Sword.state == 1) //若隐身，首先现身
-						Show();
+						energy = energy+Show();
 					Occupy(Kill());
 					action = action + i+" ";
 					action = action+Kill()+" ";
-					whichAction = whichAction+"movekill";
-					return 1;
+					
+					return energy;
 				
 			}
 			Sword.col = intiCol; //恢复初始位置，重新尝试
@@ -245,18 +243,12 @@ public class NecessaryAct {
 					Move(k);
 				
 				if(!MustEscape()){
-					if(i!=4){
+					if(i!=4)
 					action = action+i+" ";
-					whichAction = whichAction + "escape";
-					}
-					if(k!=4){
+					if(k!=4)
 						action = action+k+" ";
-					    whichAction = whichAction + "escape";
-					}
-					if(j!=4){
+					if(j!=4)
 						action = action +j+" ";
-						whichAction = whichAction + "escape";
-					}
 					Hide();   //建议逃跑后隐藏
 					return true;
 				}
@@ -295,16 +287,11 @@ public class NecessaryAct {
 				}
 			}
 		}
-		if(Va[Xmax][Ymax]==0){
-			action = action + (Math.random()*4+1)+" "+(Math.random()*4+1)+" "+(Math.random()*4+1);
-		}
-		else if(Xmax ==0 ){
+		if(Xmax ==0 ){
 			action = action + (Ymax+1)+" ";
-			whichAction = whichAction + "occupy";
 		}
 		else {
 			action = action + (Xmax+4)+" " + (Ymax+1)+" ";
-			whichAction = whichAction + "Moveoccupy";
 		}
 		
 	}
