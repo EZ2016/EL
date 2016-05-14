@@ -1,4 +1,4 @@
-﻿package EZ;
+package EZ;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,7 +9,7 @@ import Sword.SwordMain;
 
 
 public class AiMain {
-	static File file2 = new File("Swordlog.txt");
+
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
