@@ -59,7 +59,6 @@ public class Log {
 		bw.write("你的操作是:"+result);
 		bw.newLine();
 	}
-
 	
 	public void outputGameInformation() throws IOException{
 		bw.write("回合总数:"+GameIniInformation.totalRounds);

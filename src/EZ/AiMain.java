@@ -144,7 +144,7 @@ public class AiMain {
 			Log log=new Log("Battleax"+GameIniInformation.samuraiID+"log.txt");
 			log.outputGameInformation();
 			TurnInformation.initi();
-			
+
 			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
 			
 				TurnInformationReceive TIR=new TurnInformationReceive();
