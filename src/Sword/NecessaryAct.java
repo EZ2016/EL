@@ -12,7 +12,6 @@ import EZ.TurnInformation;
 //对于棋盘边界对于移动和占领的限制，只使用了if语句进行部分处理，还没有想出很完美的方法
 public class NecessaryAct {
 	public  String action="";  //行动指令
-	public String whichAction = "";
 	public static int strength;   //体力限制
 	Samurai Sword,emSpear; //剑，敌方矛
 	int intiCol;
@@ -38,22 +37,19 @@ public class NecessaryAct {
 		ArrayList<cell> occupyList = new ArrayList<cell>();
 		
 			for(int i=1;i<=3;i++){
-				if(direction==4 || direction == 3){
+				if(direction==1 || direction == 3){
 					cell C = new cell();
 					if(Sword.col-i>=0){
 					C.col = Sword.col - i;
 					C.row = Sword.row;
-					C.setValue();
 					occupyList.add(C);
 					}
 				}
-				else if(direction == 2 || direction == 1){
+				else if(direction == 2 || direction == 4){
 					cell C = new cell();
 					if(Sword.col+i>=0){
 					C.col = Sword.col + i;
 					C.row = Sword.row;
-					C.setValue();
-					if(C.col >=0 && C.col<=14 && C.row>=0 && C.row <=14)
 					occupyList.add(C);
 					}
 				}
@@ -62,8 +58,6 @@ public class NecessaryAct {
 					if(Sword.row+i>=0){
 					C.col = Sword.col;
 					C.row = Sword.row + i;
-					C.setValue();
-					if(C.col >=0 && C.col<=14 && C.row>=0 && C.row <=14)
 					occupyList.add(C);
 					}
 				}
@@ -72,8 +66,6 @@ public class NecessaryAct {
 					if(Sword.row-i>=0){
 					C.col = Sword.col;
 					C.row = Sword.row - i;
-					C.setValue();
-					if(C.col >=0 && C.col<=14 && C.row>=0 && C.row <=14)
 					occupyList.add(C);
 					}
 				}
@@ -82,7 +74,7 @@ public class NecessaryAct {
 				cell C1 = new cell();
 				cell C2 = new cell();
 				cell C3 = new cell();
-				if(direction == 4){
+				if(direction == 1){
 					
 					C1.col = Sword.col-1;
 					C1.row = Sword.row+1;
@@ -107,7 +99,7 @@ public class NecessaryAct {
 					C3.col = Sword.col-2;
 					C3.row = Sword.row-1;
 				}
-				else if(direction == 1){
+				else if(direction == 4){
 					C1.col = Sword.col+1;
 					C1.row = Sword.row+1;
 					C2.col = Sword.col+1;
@@ -115,14 +107,11 @@ public class NecessaryAct {
 					C3.col = Sword.col+2;
 					C3.row = Sword.row+1;
 				}
-				C1.setValue();
-				C2.setValue();
-				C3.setValue();
-				if(C1.col>=0 && C1.row>=0 && C1.col <=14 && C1.row<=14)
+				if(C1.col>=0 && C1.row>=0 && C1.col <=19 && C1.col<=19)
 					occupyList.add(C1);
-				if(C2.col>=0 && C2.row>=0 && C2.col <=14 && C2.row<=14)
+				if(C1.col>=0 && C1.row>=0 && C2.col <=19 && C2.col<=19)
 					occupyList.add(C2);
-				if(C3.col>=0 && C3.row>=0 && C3.col <=14 && C3.row<=14)
+				if(C1.col>=0 && C1.row>=0 && C3.col <=19 && C3.col<=19)
 					occupyList.add(C3);
 				
 			
@@ -133,7 +122,7 @@ public class NecessaryAct {
 	public int ValueOfOccupy(ArrayList<cell> cells){ //占领的棋盘中可以加分的数目
 		int value = 0;
 		for(cell c:cells){
-			if(c.value == 8||c.value == 9||c.value == 5-myTeam || c.value == 4-myTeam || c.value == 3-myTeam){
+			if(c.value == 8||c.value == 9||c.value == 3 || c.value == 4 || c.value == 5){
 			value++;	
 			}
 		}
@@ -145,7 +134,7 @@ public class NecessaryAct {
 		switch (direction) {
 		case 5:
 			
-			Sword.row++;
+			Sword.col--;
 			break;
 		case 6:
 			Sword.col++;
@@ -154,7 +143,7 @@ public class NecessaryAct {
 			Sword.row--;
 			break;
 		case 8:
-			Sword.col--;
+			Sword.row--;
 
 		default:
 			break;
@@ -176,7 +165,7 @@ public class NecessaryAct {
 			ArrayList<cell> temp = this.Occupy(i);
 			for(cell c:temp){
 				for(Samurai s:TurnInformation.nowAllSamurai){
-					if(c.col == s.col && c.row == s.row && s.team != myTeam){
+					if(c.col == s.col && c.row == s.row){
 						return i;
 					}
 				}
@@ -186,28 +175,27 @@ public class NecessaryAct {
 		return 0;
 	}
 	public int MustKill(){//必杀方法，尝试行动一步或者不动的击杀，若能返回true，不能返回false
-		
+		int energy = 0;
 		if(Kill()!=0){  //原地能击杀
 			
 			Occupy(Kill());
 			action = action+Kill()+" ";
-			whichAction = whichAction +"kill";
+			energy = energy + 4;
 			
-			
-			return 1;
+			return energy;
 		}
 		else{  //行动后击杀
 		for(int i=5;i<=8;i++){ 
 				Move(i);  //尝试移动
 				if(Kill()!=0){
-					//energy = energy + Move(i)+4;
+					energy = energy + Move(i)+4;
 					if(Sword.state == 1) //若隐身，首先现身
-						Show();
+						energy = energy+Show();
 					Occupy(Kill());
 					action = action + i+" ";
 					action = action+Kill()+" ";
-					whichAction = whichAction+"movekill";
-					return 1;
+					
+					return energy;
 				
 			}
 			Sword.col = intiCol; //恢复初始位置，重新尝试
@@ -245,18 +233,12 @@ public class NecessaryAct {
 					Move(k);
 				
 				if(!MustEscape()){
-					if(i!=4){
+					if(i!=4)
 					action = action+i+" ";
-					whichAction = whichAction + "escape";
-					}
-					if(k!=4){
+					if(k!=4)
 						action = action+k+" ";
-					    whichAction = whichAction + "escape";
-					}
-					if(j!=4){
+					if(j!=4)
 						action = action +j+" ";
-						whichAction = whichAction + "escape";
-					}
 					Hide();   //建议逃跑后隐藏
 					return true;
 				}
@@ -295,16 +277,11 @@ public class NecessaryAct {
 				}
 			}
 		}
-		if(Va[Xmax][Ymax]==0){
-			action = action + (Math.random()*4+1)+" "+(Math.random()*4+1)+" "+(Math.random()*4+1);
-		}
-		else if(Xmax ==0 ){
-			action = action + (Ymax+1)+" ";
-			whichAction = whichAction + "occupy";
+		if(Xmax ==0 ){
+			action = action + (Ymax+4)+" ";
 		}
 		else {
-			action = action + (Xmax+4)+" " + (Ymax+1)+" ";
-			whichAction = whichAction + "Moveoccupy";
+			action = action + (Xmax)+" " + (Ymax+4)+" ";
 		}
 		
 	}
