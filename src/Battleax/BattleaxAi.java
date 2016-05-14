@@ -245,16 +245,16 @@ public class BattleaxAi extends AI implements Cloneable {
 		if(allSamurai.get(3).row>=0 && allSamurai.get(3).col>=0){
 		    //逃离矛的攻击
 			if(fromEnemySpear[0]==0){
-				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=5) || (fromEnemySpear[1]>=-5 && fromEnemySpear[1]<=-3)){
+				if((fromEnemySpear[1]>=-5 && fromEnemySpear[1]<=5)){
 					return true;
 				}
 			}
 			else if (fromEnemySpear[0]==-1 || fromEnemySpear[0]==1){
-				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=4) || (fromEnemySpear[1]>=-4 && fromEnemySpear[1]<=-3)){
+				if((fromEnemySpear[1]>=-4 && fromEnemySpear[1]<=4)){
 					return true;
 				}
 			}
-			else if((fromEnemySpear[0]>=3 && fromEnemySpear[0]<=4) || (fromEnemySpear[0]>=-4 && fromEnemySpear[1]<=-3)){
+			else if((fromEnemySpear[0]>=2 && fromEnemySpear[0]<=4) || (fromEnemySpear[0]>=-4 && fromEnemySpear[0]<=-2)){
 				if(fromEnemySpear[1]>=-1 || fromEnemySpear[1]<=1){
 					return true;
 				}
@@ -291,7 +291,7 @@ public class BattleaxAi extends AI implements Cloneable {
 		return false;
 	}
 	
-	private void escape() {               //逃跑的方法
+	private boolean escape() {               //逃跑的方法
 		String direction;  //随机产生一个方向逃跑，具体逃跑路径和方法可后续设置;
 		ArrayList<String> directions=new ArrayList<String>();
 		directions.addAll(Arrays.asList("southward","eastward","northward","westward"));
@@ -303,7 +303,7 @@ public class BattleaxAi extends AI implements Cloneable {
 					if(move(direction)){
 						if(!mustEscape()){
 							hide();                  //建议逃跑后隐藏
-							break;
+							return true;
 						}
 						cancelLastMove();
 					}
@@ -312,7 +312,24 @@ public class BattleaxAi extends AI implements Cloneable {
 				cancelLastMove();
 			}
 			directions.remove(direction);
-		}	
+		}
+		if(actions.length()==0){
+			for(int i=5;i<=8;i++){
+				for(int j=5;j<=8;j++){
+					if(move(i)){
+						if(move(j)){
+							if(!mustEscape()){
+								hide();                  //建议逃跑后隐藏
+								return true;
+							}
+							cancelLastMove();
+						}
+						cancelLastMove();
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	public boolean noFieldToOccupy() {

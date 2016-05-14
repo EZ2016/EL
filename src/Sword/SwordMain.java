@@ -1,9 +1,9 @@
 package Sword;
 
 public class SwordMain {
-	public static int energy = 7;
+	
 	public String act="";
-	public String waction = "";
+	public String wAct="";
 	NecessaryAct nAct =new NecessaryAct();
 	public SwordMain(){
 		if(nAct.MustKill()==0){
@@ -13,7 +13,7 @@ public class SwordMain {
 				}
 			}
 		act = nAct.action+"0";
-		waction = nAct.wAction;
+		wAct =nAct.whichAction;
 		System.out.println(act);
 		}
 			

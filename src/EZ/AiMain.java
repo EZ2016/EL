@@ -91,7 +91,7 @@ public class AiMain {
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
 				SwordMain swordMain=new SwordMain();
-				log.outputTurnInformation(swordMain.act+swordMain.waction);
+				log.outputTurnInformation(swordMain.act+swordMain.wAct);
 				/*bw.write("manager的操作:");
 				bw.newLine();
 				bw.write("回合数:"+TurnInformation.turnNum+" ");

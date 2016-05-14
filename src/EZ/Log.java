@@ -27,30 +27,33 @@ public class Log {
 		bw.newLine();
 		bw.write("武士状态:");
 		bw.newLine();
-		bw.write("col"+TurnInformation.nowAllSamurai.get(0).col);
-		bw.write("row"+TurnInformation.nowAllSamurai.get(0).row);
-		bw.write(TurnInformation.nowAllSamurai.get(0).state+" ");
+		for(int i=0;i<TurnInformation.nowAllSamurai.size();i++){
+			
+		bw.write(TurnInformation.nowAllSamurai.get(i).col+" ");
+		bw.write(TurnInformation.nowAllSamurai.get(i).row+" ");
+		bw.write(TurnInformation.nowAllSamurai.get(i).state+"");
 		bw.newLine();
-		bw.write("col"+TurnInformation.nowAllSamurai.get(1).col);
-		bw.write("row"+TurnInformation.nowAllSamurai.get(1).row);
-		bw.write(TurnInformation.nowAllSamurai.get(1).state+" ");
-		bw.newLine();
-		bw.write("col"+TurnInformation.nowAllSamurai.get(2).col);
-		bw.write("row"+TurnInformation.nowAllSamurai.get(2).row);
-		bw.write(TurnInformation.nowAllSamurai.get(2).state+" ");
-		bw.newLine();
-		bw.write("col"+TurnInformation.nowAllSamurai.get(3).col);
-		bw.write("row"+TurnInformation.nowAllSamurai.get(3).row);
-		bw.write(TurnInformation.nowAllSamurai.get(3).state+" ");
-		bw.newLine();
-		bw.write("col"+TurnInformation.nowAllSamurai.get(4).col);
-		bw.write("row"+TurnInformation.nowAllSamurai.get(4).row);
-		bw.write(TurnInformation.nowAllSamurai.get(4).state+" ");
-		bw.newLine();
-		bw.write("col"+TurnInformation.nowAllSamurai.get(5).col);
-		bw.write("row"+TurnInformation.nowAllSamurai.get(5).row);
-		bw.write(TurnInformation.nowAllSamurai.get(5).state+" ");
-		bw.newLine();
+		}
+//		bw.write(TurnInformation.nowAllSamurai.get(1).col);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(1).row);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(1).state);
+//		bw.newLine();
+//		bw.write(TurnInformation.nowAllSamurai.get(2).col);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(2).row);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(2).state);
+//		bw.newLine();
+//		bw.write(TurnInformation.nowAllSamurai.get(3).col);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(3).row);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(3).state);
+//		bw.newLine();
+//		bw.write(TurnInformation.nowAllSamurai.get(4).col);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(4).row);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(4).state);
+//		bw.newLine();
+//		bw.write(TurnInformation.nowAllSamurai.get(5).col);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(5).row);
+//		bw.write(" "+TurnInformation.nowAllSamurai.get(5).state);
+//		bw.newLine();
 		bw.write("战场:");
 		bw.newLine();
 		for(int m=0;m<GameIniInformation.heightOfBf;m++){
@@ -77,8 +80,7 @@ public class Log {
 		bw.write("大本营位置:");
 		bw.newLine();
 		for(int i=0;i<GameIniInformation.home.size();i++){
-			bw.write(GameIniInformation.home.get(i).teamID*3+GameIniInformation.home.get(i).weapon+" ");
-			bw.write("col "+GameIniInformation.home.get(i).colOfHome+" "+"row "+GameIniInformation.home.get(i).rowOfHome);
+			bw.write(GameIniInformation.home.get(i).colOfHome+" "+GameIniInformation.home.get(i).rowOfHome);
 			bw.newLine();
 		}
 	}

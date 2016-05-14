@@ -329,15 +329,25 @@ public class AI {
 		return false;
 	}
 	
-	public boolean cancelLastMove() {              //1.1版修改的部分  //删掉上一个move，成功返回true，否则false
+	public boolean cancelLastMove() {              //2.1版修改的部分  //删掉上一个move，成功返回true，否则false
 		if(actions=="" || actions==" "){
 			return false;
 		}
 		String[] newActions=actions.split(" ");
 		actions="";
-		for(String action:newActions){
-			if(!action.equals(newActions[newActions.length-1])){
-				actions=actions+action+" ";
+		for(int i=0;i<newActions.length;i++){
+			if(i!=newActions.length-1){
+				actions=actions+newActions[i]+" ";
+			}
+			else if (i==newActions.length-1) {
+				switch(newActions[i]){
+					case"5":me.row--;break;
+					case"6":me.col--;break;
+					case"7":me.row++;break;
+					case"8":me.col++;break;
+					default:return false;
+				}
+				
 			}
 		}
 		leftPoint=leftPoint+2;
