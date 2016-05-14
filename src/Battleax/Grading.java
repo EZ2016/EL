@@ -38,6 +38,9 @@ public class Grading {
 		ArrayList<StepAndScore> steps=new ArrayList<StepAndScore>();
 		for(int[] action:allActions){
 			steps.add(new StepAndScore(action,getScore(action)));
+			this.battleaxAi=cloneBattleaxAi(battleaxAi_backup);
+			this.battleaxAi.setBattleField(battleaxAi.getBattleField());
+			this.battleaxAi.setMe(battleaxAi.getMe());
 		}
 		
 		StepAndScore maxStep=steps.get(0);
@@ -260,9 +263,6 @@ public class Grading {
 		if(battleaxAi.getState()==1){
 			score=score+100;                             //暂定回合结束时隐身加100分
 		}
-		this.battleaxAi=cloneBattleaxAi(battleaxAi_backup);
-		this.battleaxAi.setBattleField(battleaxAi.getBattleField());
-		this.battleaxAi.setMe(battleaxAi.getMe());
 		return score;
 	}
 	

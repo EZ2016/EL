@@ -44,6 +44,28 @@ public class BattleaxAi extends AI implements Cloneable {
 			escape();
 		}
 		
+		else if (noFieldToOccupy()) {
+			int fromCentre_row=minusMyCoordinate(7, 7)[0];
+			int fromCentre_col=minusMyCoordinate(7, 7)[1];
+			if(Math.abs(fromCentre_row)>Math.abs(fromCentre_col)){
+				if(fromCentre_row>0){
+					moveTo(me.row+3, me.col);	
+				}
+				else if (fromCentre_row<0) {
+					moveTo(me.row-3, me.col);
+				}
+			}
+			else {
+				if(fromCentre_col>0){
+					moveTo(me.row, me.col+3);
+				}
+				else if(fromCentre_col<0){
+					moveTo(me.row, me.col-3);
+				}
+			}
+			hide();
+		}
+		
 		else{                    //其他情况采用评分算法
 			SimulateActions SA=new SimulateActions();
 			Grading grading=new Grading(this);
@@ -114,9 +136,10 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row-1)&&(col==me.col)){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-						if(!(home.rowOfHome==row && home.colOfHome==col)){
-							battleField[row][col]=samuraiID;
+					battleField[row][col]=samuraiID;
+					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+						if(home.rowOfHome==row && home.colOfHome==col){
+							battleField[row][col]=8;
 						}
 					}
 				}
@@ -132,9 +155,10 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row)&&(col==me.col-1)){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-						if(!(home.rowOfHome==row && home.colOfHome==col)){
-							battleField[row][col]=samuraiID;
+					battleField[row][col]=samuraiID;
+					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+						if(home.rowOfHome==row && home.colOfHome==col){
+							battleField[row][col]=8;
 						}
 					}
 				}
@@ -150,9 +174,10 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row+1)&&(col==me.col)){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-						if(!(home.rowOfHome==row && home.colOfHome==col)){
-							battleField[row][col]=samuraiID;
+					battleField[row][col]=samuraiID;
+					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+						if(home.rowOfHome==row && home.colOfHome==col){
+							battleField[row][col]=8;
 						}
 					}
 				}
@@ -168,9 +193,10 @@ public class BattleaxAi extends AI implements Cloneable {
 					if((row==me.row)&&(col==me.col+1)){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
-						if(!(home.rowOfHome==row && home.colOfHome==col)){
-							battleField[row][col]=samuraiID;
+					battleField[row][col]=samuraiID;
+					for(Home home:GameIniInformation.home){              //如果这个格子是大本营，那么不可以改变所有者
+						if(home.rowOfHome==row && home.colOfHome==col){
+							battleField[row][col]=8;
 						}
 					}
 				}
@@ -267,17 +293,38 @@ public class BattleaxAi extends AI implements Cloneable {
 		while(directions.size()!=0){
 			int i=(int)(Math.random()*directions.size());
 			direction =directions.get(i);
-			if(move(direction) && move(direction) && move(direction)){
-				if(!mustEscape()){
-					hide();                  //建议逃跑后隐藏
-					break;
+			if(move(direction)){
+				if(move(direction)){
+					if(move(direction)){
+						if(!mustEscape()){
+							hide();                  //建议逃跑后隐藏
+							break;
+						}
+						cancelLastMove();
+					}
+					cancelLastMove();
 				}
-				cancelLastMove();
-				cancelLastMove();
 				cancelLastMove();
 			}
 			directions.remove(direction);
 		}	
+	}
+	
+	public boolean noFieldToOccupy() {
+		int myField=0;
+		for(int row=Math.max(me.row-3,0);row<=Math.min(me.row+3,14);row++){
+			for(int col=Math.max(me.col-3,0);col<=Math.min(me.col+3,14);col++){
+				if(distantFromMe(row, col)<=3 && !(Math.abs(row-me.row)==3 || Math.abs(col-me.col)==3)){
+					if(battleField[row][col]>=teamID*3 && battleField[row][col]<=teamID*3+2){
+						myField++;
+					}
+				}
+			}
+		}
+		if(myField>=18){
+			return true;
+		}		
+		return false;
 	}
 	
 	public void setBattleField(int[][]battleField) {
