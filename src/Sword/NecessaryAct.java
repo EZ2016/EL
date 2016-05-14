@@ -312,14 +312,17 @@ public class NecessaryAct {
 			}
 		}
 		if(Va[Xmax][Ymax]==0){
-			action = action + ((int)Math.random()*4+1)+" "+((int)Math.random()*4+1)+" "+((int)Math.random()*4+1)+" ";
+			action = action + ((int)(Math.random()*4)+5)+" "+((int)(Math.random()*4)+5)+" "+((int)(Math.random()*4)+5)+" ";
+			Hide();
 		}
 		else if(Xmax ==0 ){
 			action = action + (Ymax+1)+" ";
+			Hide();
 			whichAction = whichAction + "occupy";
 		}
 		else {
 			action = action + (Xmax+4)+" " + (Ymax+1)+" ";
+			Hide();
 			whichAction = whichAction + "Moveoccupy";
 		}
 		
