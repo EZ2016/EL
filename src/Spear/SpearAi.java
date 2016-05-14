@@ -33,12 +33,12 @@ ZHU YINGSHAN*/
 # <cure period>
 0
 # Samurai states
-6 5 1
+6 5 0
 1 4 1
 0 14 0
--1 -1 1
+1 5 0
 12 12 0
-5 5 0
+0 5 0
 # Battle field states
  8 5 5 9 5 9 5 9 4 4 4 9 4 9 9 
  9 0 0 0 9 0 0 4 9 4 4 5 9 4 9 
@@ -55,7 +55,6 @@ ZHU YINGSHAN*/
  1 9 1 1 1 2 2 2 2 2 3 9 3 3 3 
  1 9 9 1 1 2 2 2 2 8 9 9 9 9 9 
  9 9 9 9 1 9 2 2 2 8 2 9 9 9 9
-
 */
 public class SpearAi {
 	
@@ -99,14 +98,20 @@ public class SpearAi {
 		if (a==14)return 2;
 		if(b==0)return 3;
 		if (b==14)return 1;
-		
 		return 0;
 	}
 	
-	public void  action() {//返回所有行动的字符串
-		String str=cankill();
+	public void  action() {//直接把行动的指令加在order后面
+		String str=canKill();
 		if (str.length()==0) {
-			occupy();//不能杀人，占领
+			str=canKillTwo();
+			if (str.length()==0) {
+				occupy();//不能杀人，占领
+			}else {//能两步杀人
+				order=order+str;
+				energy-=6;
+			}
+			
 		}
         else {//能杀人
 		order=order+str;
@@ -114,7 +119,63 @@ public class SpearAi {
 		}
 	}
 	
-	private String  cankill() {//返回能杀死的字符串
+	/**返回的是走一步杀人的指令如 "5 1 "*/
+	private String canKillTwo() {
+		String killString = "";
+		killString=killTwo(enspear, killString);//
+		if (!(killString.length()==0)) {
+		    if (state==1) {//现形
+				showOrHide();
+				state=0;
+		    }
+			return killString;//先分析矛
+		}else {
+			    killString=killTwo(ensword,killString);
+		        killString=killTwo(enbattleax,killString);
+		        switch (killString.length()) {
+		        case 0://怎么移动也不能杀死
+			          break;
+		        case 4:return killString;
+				case 8:killString=killString.substring(0,4);
+		              return killString;
+		        default:
+			           break;
+		        }        
+		}
+		return killString;
+	}
+	
+	/**往killstring中加入指令*/	
+	String killTwo(Samurai samurai, String killString) {	//走一步杀死 TODO Auto-generated method stub
+		 if (samurai.state==1) {//当武士的状态未知时，不操作
+			 
+			}else if ((Math.abs(samurai.row-row)+Math.abs(samurai.col-col))>5||((Math.abs(samurai.row-row)>2)&&Math.abs(samurai.col-col)>2)) {
+				//在攻击范围之外，不操作
+			      }else {
+				          int i=samurai.row-row;
+				          int j=samurai.col-col;
+				        if (i==0) {
+							killString=killString+(j>0?"6 2 ":"8 4 ");}
+				        else if (j==0) {
+							killString=killString+(i>0?"5 1 ":"7 3 ");}
+				        else if (i==-1) {
+					           if (j<0) killString=killString+"7 4 ";
+					           if(j>0) killString=killString+"7 2 ";}
+				          else if (i==1) {
+					            if(j<0) killString=killString+"5 4 ";
+					            if(j>0)killString=killString+"5 2 ";}
+				          else if(j==-1){
+					            if(i<0) killString=killString+"8 3 ";
+					            if(i>0) killString=killString+"8 1 ";}
+				          else if (j==1) {
+					            if(i>0)killString=killString+"6 1 ";
+					            if(i<0)killString=killString+"6 3 ";}
+				}
+				return killString;
+			}
+	
+	
+	private String  canKill() {//返回能杀死的字符串
 		String killString="";//用killstring表示杀人命令的集合
 		killString=kill(enspear, killString);
 		if (!killString.equals("")) {//先杀矛
@@ -510,16 +571,16 @@ public class SpearAi {
 		// TODO Auto-generated method stub
 
 		String killString="";
-		killString=killCourt(enspear, killString);
+		killString=killTwo(enspear, killString);
 		if (state==1) {//现形
 				showOrHide();
 				state=0;
 		}
 		if (!killString.equals("")) {
-			order=order+killCourt(enspear, killString);//先分析矛
+			order=order+killTwo(enspear, killString);//先分析矛
 		}else {
-			killString=killCourt(ensword,killString);
-		killString=killCourt(enbattleax,killString);
+			killString=killTwo(ensword,killString);
+		killString=killTwo(enbattleax,killString);
 		switch (killString.length()) {
 		case 0://怎么移动也不能杀死，主函数中交给下一步；
 			break;
@@ -540,7 +601,7 @@ public class SpearAi {
 	
 	
 	
-String killCourt(Samurai samurai, String killString) {	//走一步杀死 TODO Auto-generated method stub
+String killTwo(Samurai samurai, String killString) {	//走一步杀死 TODO Auto-generated method stub
 		 if (samurai.state==1) {//当武士的状态未知时，不操作
 			
 			}else if ((Math.abs(samurai.row-row)+Math.abs(samurai.col-col))>5||((Math.abs(samurai.row-row)>2)&&Math.abs(samurai.col-col)>2)) {
