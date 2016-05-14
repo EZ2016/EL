@@ -135,8 +135,17 @@ public class SpearAi {
 		        switch (killString.length()) {
 		        case 0://怎么移动也不能杀死
 			          break;
-		        case 4:return killString;
-				case 8:killString=killString.substring(0,4);
+		        case 4: if (state==1) {//现形
+					showOrHide();
+					state=0;
+			           }
+		        	return killString;
+				case 8:
+					 if (state==1) {//现形
+							showOrHide();
+							state=0;
+					    }
+					killString=killString.substring(0,4);
 		              return killString;
 		        default:
 			           break;
