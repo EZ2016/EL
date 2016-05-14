@@ -14,6 +14,7 @@ public class Log {
 		file=new File(name);
 		fw=new FileWriter(file);
 		bw=new BufferedWriter(fw);
+		
 	}
 	
 	
