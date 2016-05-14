@@ -1,12 +1,10 @@
-package EZ;
+﻿package EZ;
 
 import java.util.ArrayList;
-import java.util.List;
 /* 3个武士AI的父类，包括了一些通用的方法
  * 放在EZ包里
  * Ver1.1:  补上了不能在非自己领地隐身的考虑
  * Ver1.2:  补上了不能移动到敌人所在格子的考虑，修改使用TurnInformation里的信息
- * Ver2.0:  加上了大本营的考虑，调整了一些代码，使得方法里不会直接调用GameIniInformation类和TurnInformation类的数据
  * by 俊毅
  */
 
@@ -16,14 +14,10 @@ public class AI {
 	}
 	
 	protected int samuraiID;//武士ID                                //1.2版本修改的部分
-	protected int teamID;
 	protected int weapon;
 	protected Samurai me;
 	protected String actions="";//最终的武士行为
 	protected int leftPoint=7;  //剩余行动力
-	protected int[][] battleField=TurnInformation.battleField;
-	protected List<Samurai> allSamurai=TurnInformation.nowAllSamurai;
-	protected List<Home> allHome=GameIniInformation.home;
 	
 	public Samurai getMe() {
 		return me;
@@ -40,38 +34,13 @@ public class AI {
 	public int getLeftPoint() {
 		return leftPoint;
 	}
-	public int[][] getBattleField() {
-		return battleField;
-	}
-	public List<Samurai> getAllSamurai() {
-		return allSamurai;
-	}
-	public List<Home> getAllHome() {
-		return allHome;
-	}
 	
 	public void run(){                               //根据不同的子类自己覆盖，AI开始计算的主入口
 		
 	}
 	
-	public boolean occupy(int direction){
-		if(direction==1){
-			return occupy("southward");
-		}
-		else if (direction==2) {
-			return occupy("eastward");
-		}
-		else if (direction==3) {
-			return occupy("northward");
-		}
-		else if (direction==4) {
-			return occupy("westward");
-		}
-		return false;
-	}
-	
 	public boolean occupy(String direction){       //在行动中添加占领，成功就返回true，否则返回false
-		if(leftPoint<4 || me.state!=0){
+		if(leftPoint<4){
 			return false;
 		}
 		if(direction.equals("southward")){
@@ -123,7 +92,7 @@ public class AI {
 			if((battleField[me.row+1][me.col]>2)&&(me.state==1)){//不能隐身时移动到非己方格子
 				return false;
 			}
-			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
 				if((me.row+1)==home.rowOfHome && me.col==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
 					return false;
 				}
@@ -137,7 +106,7 @@ public class AI {
 			if((battleField[me.row][me.col+1]>2)&&(me.state==1)){ //不能隐身时移动到非己方格子
 				return false;
 			}
-			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
 				if(me.row==home.rowOfHome && (me.col+1)==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
 					return false;
 				}
@@ -151,7 +120,7 @@ public class AI {
 			if((battleField[me.row-1][me.col]>2)&&(me.state==1)){//不能隐身时移动到非己方格子
 				return false;
 			}
-			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
 				if((me.row-1)==home.rowOfHome && me.col==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
 					return false;
 				}
@@ -165,7 +134,7 @@ public class AI {
 			if((battleField[me.row][me.col-1]>2)&&(me.state==1)){//不能隐身时移动到非己方格子
 				return false;
 			}
-			for(Home home:allHome){                        //1.2.2新加，不能移动到别人的大本营
+			for(Home home:GameIniInformation.home){                        //1.2.2新加，不能移动到别人的大本营
 				if(me.row==home.rowOfHome && (me.col-1)==home.colOfHome && !(me.team==home.teamID && me.weapon==home.weapon)){
 					return false;
 				}
@@ -181,12 +150,11 @@ public class AI {
 	}
 	
 	public boolean hide(){                         //在行动中添加隐身，成功就返回true，否则返回false
-		if(leftPoint<1 || me.state!=0){
+		if(leftPoint<1){
 			return false;
 		}
 		if(battleField[me.row][me.col]<=2 && !existEnemy(me.row,me.col)){  //2.0版修改的部分
 			actions=actions+"9 ";
-			me.state=1;
 			leftPoint=leftPoint-1;
 			return true;
 		}
@@ -198,7 +166,6 @@ public class AI {
 			return false;
 		}
 		actions=actions+"10 ";
-		me.state=0;
 		leftPoint=leftPoint-1;
 		return true;
 	}
@@ -208,8 +175,8 @@ public class AI {
 		return false;
 	}
 	
-	public boolean existEnemy(){         //己方武士视野中有敌人就返回true，否则false，恢复中的敌人（state==-1）当成没看见
-		for(Samurai enemy:allSamurai){
+	public boolean existEnemy(){         //己方武士视野中有敌人就返回true，否则false，恢复中的敌人（turnInformation[i]==-1）当成没看见
+		for(Samurai enemy:TurnInformation.nowAllSamurai){
 			if(enemy.state==0 && enemy.team!=me.team){
 				return true;
 			}
@@ -217,17 +184,8 @@ public class AI {
 		return false;
 	}
 	public boolean existEnemy (int row,int col) {             //1.2版本添加，(row,col)中有敌人就返回true，否则false
-		for(Samurai enemy:allSamurai){
-			if(enemy.team!=me.team && enemy.row==row && enemy.col==col && enemy.state!=1){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean existSamurai (int row,int col) {       //2.0版本添加
-		for(Samurai samurai:allSamurai){
-			if(samurai.row==row && samurai.col==col && samurai.state!=1){
+		for(Samurai enemy:TurnInformation.nowAllSamurai){
+			if(enemy.team!=me.team && enemy.row==row && enemy.col==col && (enemy.state==0||enemy.state==-1)){
 				return true;
 			}
 		}
@@ -236,8 +194,8 @@ public class AI {
 	
 	public ArrayList<int[]> enemyPosition(){ //将看见的敌人的位置放进positions里传回，int[0]是row，int[1]是col
 		ArrayList<int[]> positions=new ArrayList<int[]>();
-		for(Samurai enemy:allSamurai){
-			if(enemy.state==0 && enemy.team!=me.team){   //恢复中的敌人（state==-1）当成没看见
+		for(Samurai enemy:TurnInformation.nowAllSamurai){
+			if(enemy.state==0 && enemy.team!=me.team){   //恢复中的敌人（turnInformation[i]==-1）当成没看见
 				int[] position ={enemy.row,enemy.col};
 				positions.add(position);
 			}
@@ -260,70 +218,51 @@ public class AI {
 		}
 		
 		if((me.row==row)||(me.col==col)){          //1.1版修改的部分
-			int steps=0;
 			while(me.row>row){
 				move("northward");
-				steps++;
-				if(steps>3){
-					return false;
-				}
 			}
 			while(me.row<row){
 				move("southward");
-				steps++;
-				if(steps>3){
-					return false;
-				}
 			}
 			while(me.col>col){
 				move("westward");
-				steps++;
-				if(steps>3){
-					return false;
-				}
 			}
 			while(me.col<col){
 				move("eastward");
-				steps++;
-				if(steps>3){
-					return false;
-				}
 			}
-			return true;
 		}
 		else if(Math.abs(me.row-row)==1 && Math.abs(me.col-col)==1){
-			String xDirection="";
-			String yDirection="";
+			String aDirection="";
+			String bDirection="";
 			if(me.row==row+1){
-				xDirection="northward";
+				aDirection="northward";
 			}
 			else if(me.row==row-1){
-				xDirection="southward";
+				aDirection="southward";
 			}
 			if(me.col==col+1){
-				yDirection="westward";
+				bDirection="westward";
 			}
 			else if(me.row==row-1){
-				yDirection="eastward";
+				bDirection="eastward";
 			}
 			
-			if(move(xDirection)){
-				if(move(yDirection)){
+			if(move(aDirection)){
+				if(move(bDirection)){
 					return true;
 				}
 				else {
-					cancelLastMove();
+					cancelLastAction();
 				}
 			}
-			if (move(yDirection)) {
-				if(move(xDirection)){
+			if (move(bDirection)) {
+				if(move(aDirection)){
 					return true;
 				}
 				else {
-					cancelLastMove();
+					cancelLastAction();
 				}
 			}
-			return false;
 		}
 		
 		return false;

@@ -24,28 +24,30 @@ public class Log {
 		bw.newLine();
 		bw.write("恢复期:"+TurnInformation.myRecoverRound+" ");
 		bw.newLine();
-		bw.write(TurnInformation.nowAllSamurai.get(0).row+" ");
-		bw.write(TurnInformation.nowAllSamurai.get(0).col+" ");
+		bw.write("武士状态:");
+		bw.newLine();
+		bw.write("col"+TurnInformation.nowAllSamurai.get(0).col);
+		bw.write("row"+TurnInformation.nowAllSamurai.get(0).row);
 		bw.write(TurnInformation.nowAllSamurai.get(0).state+" ");
 		bw.newLine();
-		bw.write(TurnInformation.nowAllSamurai.get(1).row+" ");
-		bw.write(TurnInformation.nowAllSamurai.get(1).col+" ");
+		bw.write("col"+TurnInformation.nowAllSamurai.get(1).col);
+		bw.write("row"+TurnInformation.nowAllSamurai.get(1).row);
 		bw.write(TurnInformation.nowAllSamurai.get(1).state+" ");
 		bw.newLine();
-		bw.write(TurnInformation.nowAllSamurai.get(2).row+" ");
-		bw.write(TurnInformation.nowAllSamurai.get(2).col+" ");
+		bw.write("col"+TurnInformation.nowAllSamurai.get(2).col);
+		bw.write("row"+TurnInformation.nowAllSamurai.get(2).row);
 		bw.write(TurnInformation.nowAllSamurai.get(2).state+" ");
 		bw.newLine();
-		bw.write(TurnInformation.nowAllSamurai.get(3).row+" ");
-		bw.write(TurnInformation.nowAllSamurai.get(3).col+" ");
+		bw.write("col"+TurnInformation.nowAllSamurai.get(3).col);
+		bw.write("row"+TurnInformation.nowAllSamurai.get(3).row);
 		bw.write(TurnInformation.nowAllSamurai.get(3).state+" ");
 		bw.newLine();
-		bw.write(TurnInformation.nowAllSamurai.get(4).row+" ");
-		bw.write(TurnInformation.nowAllSamurai.get(4).col+" ");
+		bw.write("col"+TurnInformation.nowAllSamurai.get(4).col);
+		bw.write("row"+TurnInformation.nowAllSamurai.get(4).row);
 		bw.write(TurnInformation.nowAllSamurai.get(4).state+" ");
 		bw.newLine();
-		bw.write(TurnInformation.nowAllSamurai.get(5).row+" ");
-		bw.write(TurnInformation.nowAllSamurai.get(5).col+" ");
+		bw.write("col"+TurnInformation.nowAllSamurai.get(5).col);
+		bw.write("row"+TurnInformation.nowAllSamurai.get(5).row);
 		bw.write(TurnInformation.nowAllSamurai.get(5).state+" ");
 		bw.newLine();
 		bw.write("战场:");
@@ -59,7 +61,6 @@ public class Log {
 		bw.write("你的操作是:"+result);
 		bw.newLine();
 	}
-
 	
 	public void outputGameInformation() throws IOException{
 		bw.write("回合总数:"+GameIniInformation.totalRounds);

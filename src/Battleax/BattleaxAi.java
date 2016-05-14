@@ -1,26 +1,19 @@
-package Battleax;
+﻿package Battleax;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import EZ.AI;
 import EZ.GameIniInformation;
-import EZ.Home;
-import EZ.Samurai;
-import EZ.SimulateActions;
 import EZ.TurnInformation;
 /*斧头武士AI
  * v1.0
- * v2.0： 修改了逃跑方法和评分系统的接口
  * by 俊毅
  * 备注：尚未考虑有关大本营的所有情况
  */
-public class BattleaxAi extends AI implements Cloneable {
+public class BattleaxAi extends AI {
 	public  BattleaxAi() {
-		samuraiID=GameIniInformation.samuraiID;
-		teamID=GameIniInformation.teamID;
 		weapon=GameIniInformation.weapon;
 		me=TurnInformation.nowAllSamurai.get(weapon);
-		
 	}
 	
 	public void run(){                     //Battleax的AI开始计算
@@ -44,35 +37,13 @@ public class BattleaxAi extends AI implements Cloneable {
 			escape();
 		}
 		
-		else if (noFieldToOccupy()) {
-			int fromCentre_row=minusMyCoordinate(7, 7)[0];
-			int fromCentre_col=minusMyCoordinate(7, 7)[1];
-			if(Math.abs(fromCentre_row)>Math.abs(fromCentre_col)){
-				if(fromCentre_row>0){
-					moveTo(me.row+3, me.col);	
-				}
-				else if (fromCentre_row<0) {
-					moveTo(me.row-3, me.col);
-				}
-			}
-			else {
-				if(fromCentre_col>0){
-					moveTo(me.row, me.col+3);
-				}
-				else if(fromCentre_col<0){
-					moveTo(me.row, me.col-3);
-				}
-			}
-			hide();
-		}
-		
 		else{                    //其他情况采用评分算法
 			SimulateActions SA=new SimulateActions();
-			Grading grading=new Grading(this);
-			int[] step=grading.maxScore(SA.AllActions());
-			for(int i:step){
-				if(i!=0){
-					actions=actions+i+" ";
+			SA.tryAllActions();
+			int[] i=SA.maxScore();
+			for(int j:i){
+				if(j!=0){
+					actions=actions+j+" ";
 				}
 			}
 		}
@@ -95,32 +66,8 @@ public class BattleaxAi extends AI implements Cloneable {
 	}
 	
 	public boolean attact(int row,int col) {                  //攻击(row,col)，成功则返回true，否则false
-		if(minusMyCoordinate(row, col)[0]==1 && minusMyCoordinate(row, col)[1]>=-1 && minusMyCoordinate(row, col)[1]<=1){
-			return attact("southward");
-		}
-		else if(minusMyCoordinate(row, col)[0]==-1 && minusMyCoordinate(row, col)[1]>=-1 && minusMyCoordinate(row, col)[1]<=1){
-			return attact("northward");
-		}
-		else if(minusMyCoordinate(row, col)[1]==1 && minusMyCoordinate(row, col)[0]>=-1 && minusMyCoordinate(row, col)[0]<=1){
-			return attact("eastward");
-		}
-		else if(minusMyCoordinate(row, col)[1]==-1 && minusMyCoordinate(row, col)[0]>=-1 && minusMyCoordinate(row, col)[0]<=1){
-			return attact("westward");
-		}
-		else{
-			return false;
-		}
-	}
-	
-	public boolean attact(int direction) {
-		if(direction==1){
-			return attact("southward");
-		}
-		else if (direction==2) {
-			return attact("eastward");
-		}
-		else if (direction==3) {
-			return attact("northward");
+		if(minusMyCoordinate(row, col)[0]==1){
+			return occupy("southward");
 		}
 		else if (direction==4) {
 			return attact("westward");
@@ -240,35 +187,35 @@ public class BattleaxAi extends AI implements Cloneable {
 	}
 	
 	public boolean mustEscape() {    //如果下一步会被杀，就返回true，否则false
-		int[] fromEnemySpear=minusMyCoordinate(allSamurai.get(3).row,allSamurai.get(3).col);
-		int[] fromEnemySword=minusMyCoordinate(allSamurai.get(4).row,allSamurai.get(4).col);
-		if(allSamurai.get(3).row>=0 && allSamurai.get(3).col>=0){
+		int[] fromEnemySpear=minusMyCoordinate(TurnInformation.nowAllSamurai.get(3).row,TurnInformation.nowAllSamurai.get(3).col);
+		int[] fromEnemySword=minusMyCoordinate(TurnInformation.nowAllSamurai.get(4).row,TurnInformation.nowAllSamurai.get(4).col);
+		if(fromEnemySpear[0]>=0 || fromEnemySpear[1]>=0){
 		    //逃离矛的攻击
 			if(fromEnemySpear[0]==0){
 				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=5) || (fromEnemySpear[1]>=-5 && fromEnemySpear[1]<=-3)){
 					return true;
 				}
 			}
-			else if (fromEnemySpear[0]==-1 || fromEnemySpear[0]==1){
+			if(fromEnemySpear[0]==-1 || fromEnemySpear[0]==1){
 				if((fromEnemySpear[1]>=3 && fromEnemySpear[1]<=4) || (fromEnemySpear[1]>=-4 && fromEnemySpear[1]<=-3)){
 					return true;
 				}
 			}
-			else if((fromEnemySpear[0]>=3 && fromEnemySpear[0]<=4) || (fromEnemySpear[0]>=-4 && fromEnemySpear[1]<=-3)){
+			if((fromEnemySpear[0]>=3 && fromEnemySpear[0]<=4) || (fromEnemySpear[0]>=-4 && fromEnemySpear[1]<=-3)){
 				if(fromEnemySpear[1]>=-1 || fromEnemySpear[1]<=1){
 					return true;
 				}
 			}
-			else if(fromEnemySpear[0]==5 || fromEnemySpear[0]==-5){
+			if(fromEnemySpear[0]==5 || fromEnemySpear[0]==-5){
 				if(fromEnemySpear[1]==0){
 					return true;
 				}
 			}
 		}
-		if(allSamurai.get(4).row>=0 && allSamurai.get(4).col>=0){
+		if(fromEnemySword[0]>=0 || fromEnemySword[1]>=0){
              //逃离剑的攻击
-			if(fromEnemySword[0]==0){
-				if(fromEnemySword[1]==-3 || fromEnemySword[1]==-4 || fromEnemySword[1]==3 || fromEnemySword[1]==4){
+			if(fromEnemySword[0]>=-1 && fromEnemySword[0]<=1){
+				if(fromEnemySword[1]==-3 || fromEnemySword[1]<=-4 || fromEnemySword[1]<=3 || fromEnemySword[1]<=4){
 					return true;
 				}
 			}
@@ -292,7 +239,7 @@ public class BattleaxAi extends AI implements Cloneable {
 	}
 	
 	private void escape() {               //逃跑的方法
-		String direction;  //随机产生一个方向逃跑，具体逃跑路径和方法可后续设置;
+		int i = (int)(Math.random()*4);  //随机产生一个方向逃跑，具体逃跑路径和方法可后续设置;
 		ArrayList<String> directions=new ArrayList<String>();
 		directions.addAll(Arrays.asList("southward","eastward","northward","westward"));
 		while(directions.size()!=0){
@@ -326,26 +273,6 @@ public class BattleaxAi extends AI implements Cloneable {
 				}
 			}
 		}
-		if(myField>=18){
-			return true;
-		}		
-		return false;
+		
 	}
-	
-	public void setBattleField(int[][]battleField) {
-		this.battleField=new int [battleField.length][battleField[0].length];
-		for(int row=0;row<battleField.length;row++){
-			for(int col=0;col<battleField[0].length;col++){
-				this.battleField[row][col]=battleField[row][col];
-			}
-		}
-	}
-	
-	public void setMe(Samurai me) {
-		this.me=new Samurai(me.row, me.col, me.state, me.weapon, me.team);
-	}
-	
-	public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

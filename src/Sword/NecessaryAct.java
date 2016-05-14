@@ -1,4 +1,4 @@
-package Sword;
+﻿package Sword;
 
 import java.util.ArrayList;
 
@@ -37,22 +37,19 @@ public class NecessaryAct {
 		ArrayList<cell> occupyList = new ArrayList<cell>();
 		
 			for(int i=1;i<=3;i++){
-				if(direction==4 || direction == 3){
+				if(direction==1 || direction == 3){
 					cell C = new cell();
 					if(Sword.col-i>=0){
 					C.col = Sword.col - i;
 					C.row = Sword.row;
-					C.setValue();
 					occupyList.add(C);
 					}
 				}
-				else if(direction == 2 || direction == 1){
+				else if(direction == 2 || direction == 4){
 					cell C = new cell();
 					if(Sword.col+i>=0){
 					C.col = Sword.col + i;
 					C.row = Sword.row;
-					C.setValue();
-					if(C.col >=0 && C.col<=14 && C.row>=0 && C.row <=14)
 					occupyList.add(C);
 					}
 				}
@@ -61,8 +58,6 @@ public class NecessaryAct {
 					if(Sword.row+i>=0){
 					C.col = Sword.col;
 					C.row = Sword.row + i;
-					C.setValue();
-					if(C.col >=0 && C.col<=14 && C.row>=0 && C.row <=14)
 					occupyList.add(C);
 					}
 				}
@@ -71,8 +66,6 @@ public class NecessaryAct {
 					if(Sword.row-i>=0){
 					C.col = Sword.col;
 					C.row = Sword.row - i;
-					C.setValue();
-					if(C.col >=0 && C.col<=14 && C.row>=0 && C.row <=14)
 					occupyList.add(C);
 					}
 				}
@@ -81,7 +74,7 @@ public class NecessaryAct {
 				cell C1 = new cell();
 				cell C2 = new cell();
 				cell C3 = new cell();
-				if(direction == 4){
+				if(direction == 1){
 					
 					C1.col = Sword.col-1;
 					C1.row = Sword.row+1;
@@ -106,7 +99,7 @@ public class NecessaryAct {
 					C3.col = Sword.col-2;
 					C3.row = Sword.row-1;
 				}
-				else if(direction == 1){
+				else if(direction == 4){
 					C1.col = Sword.col+1;
 					C1.row = Sword.row+1;
 					C2.col = Sword.col+1;
@@ -114,14 +107,11 @@ public class NecessaryAct {
 					C3.col = Sword.col+2;
 					C3.row = Sword.row+1;
 				}
-				C1.setValue();
-				C2.setValue();
-				C3.setValue();
-				if(C1.col>=0 && C1.row>=0 && C1.col <=14 && C1.row<=14)
+				if(C1.col>=0 && C1.row>=0 && C1.col <=19 && C1.col<=19)
 					occupyList.add(C1);
-				if(C2.col>=0 && C2.row>=0 && C2.col <=14 && C2.row<=14)
+				if(C1.col>=0 && C1.row>=0 && C2.col <=19 && C2.col<=19)
 					occupyList.add(C2);
-				if(C3.col>=0 && C3.row>=0 && C3.col <=14 && C3.row<=14)
+				if(C1.col>=0 && C1.row>=0 && C3.col <=19 && C3.col<=19)
 					occupyList.add(C3);
 				
 			
@@ -132,7 +122,7 @@ public class NecessaryAct {
 	public int ValueOfOccupy(ArrayList<cell> cells){ //占领的棋盘中可以加分的数目
 		int value = 0;
 		for(cell c:cells){
-			if(c.value == 8||c.value == 9||c.value == 5-myTeam || c.value == 4-myTeam || c.value == 3-myTeam){
+			if(c.value == 8||c.value == 9||c.value == 3 || c.value == 4 || c.value == 5){
 			value++;	
 			}
 		}
@@ -144,7 +134,7 @@ public class NecessaryAct {
 		switch (direction) {
 		case 5:
 			
-			Sword.row++;
+			Sword.col--;
 			break;
 		case 6:
 			Sword.col++;
@@ -153,7 +143,7 @@ public class NecessaryAct {
 			Sword.row--;
 			break;
 		case 8:
-			Sword.col--;
+			Sword.row--;
 
 		default:
 			break;
@@ -175,7 +165,7 @@ public class NecessaryAct {
 			ArrayList<cell> temp = this.Occupy(i);
 			for(cell c:temp){
 				for(Samurai s:TurnInformation.nowAllSamurai){
-					if(c.col == s.col && c.row == s.row && s.team != myTeam){
+					if(c.col == s.col && c.row == s.row){
 						return i;
 					}
 				}
