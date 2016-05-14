@@ -16,7 +16,6 @@ public class Spear {
         else {
 			spearAi.type=spearAi.onClothes();//analyse his type1234
 			spearAi.action();
-		   
 			if (spearAi.energy>=1&&spearAi.state==0&&spearAi.canHide()) {
 				spearAi.order=spearAi.order+"9 ";
 				spearAi.energy-=1;

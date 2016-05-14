@@ -5,12 +5,62 @@ import EZ.Home;
 import EZ.Samurai;
 import EZ.TurnInformation;
 
-//关于武士矛的命令分析
-//返回的String order是完整的命令
-//ZHU YINGSHAN
+/**关于武士矛的命令分析
+返回的String order是完整的命令
+ZHU YINGSHAN*/
+/*
+# Game Info
+192 0 0 15 15 24
+# Home positions
+0 5
+0 14
+0 14
+14 9
+14 0
+5 0
+# Ranks and scores of samurai
+3 40
+7 24
+4 31
+1 80
+0 93
+6 28
+
+
+# Turn information
+# <turn>
+0
+# <cure period>
+0
+# Samurai states
+6 5 1
+1 4 1
+0 14 0
+-1 -1 1
+12 12 0
+5 5 0
+# Battle field states
+ 8 5 5 9 5 9 5 9 4 4 4 9 4 9 9 
+ 9 0 0 0 9 0 0 4 9 4 4 5 9 4 9 
+ 9 9 0 0 0 0 4 4 4 9 4 5 4 9 4 
+ 9 9 9 0 0 4 4 4 4 4 9 4 4 4 4 
+ 9 9 0 0 0 0 0 4 4 4 4 9 9 9 9 
+ 9 0 0 0 0 0 0 0 4 4 3 3 9 4 9 
+ 9 9 1 1 0 0 0 8 4 4 3 9 9 9 9 
+ 9 0 1 1 1 0 0 2 2 8 9 9 9 9 9 
+ 0 0 0 1 1 1 0 2 2 8 3 4 9 9 9 
+ 0 0 0 0 0 1 1 3 3 3 3 3 9 3 9 
+ 8 8 1 1 1 8 2 2 2 2 2 2 3 9 3 
+ 9 8 1 1 1 2 2 2 2 2 2 2 9 9 9 
+ 1 9 1 1 1 2 2 2 2 2 3 9 3 3 3 
+ 1 9 9 1 1 2 2 2 2 8 9 9 9 9 9 
+ 9 9 9 9 1 9 2 2 2 8 2 9 9 9 9
+
+*/
 public class SpearAi {
 	
     int teamId;
+    int myID=GameIniInformation.samuraiID;
 	int enspearID,enswordID,enbattleaxID;
 	Samurai me;//对象我
 	Samurai enspear;//敌方矛
@@ -28,7 +78,7 @@ public class SpearAi {
 	public SpearAi(int teamID) {//构造方法
 		// TODO Auto-generated constructor stub  
 		teamId=GameIniInformation.teamID;//0 or 1
-		me=TurnInformation.nowAllSamurai.get(GameIniInformation.weapon);//输入武士中的第一个
+		me=TurnInformation.nowAllSamurai.get(0);//输入武士中的第一个
 	    enspearID=3;
 		enswordID=enspearID+1;
 		enbattleaxID=enswordID+1;
@@ -43,12 +93,13 @@ public class SpearAi {
      }
 	
 	public int  onClothes() {//判断类型1234下右上左
-		int a=GameIniInformation.home.get(teamId).colOfHome;
-		int b=GameIniInformation.home.get(teamId).rowOfHome;
-		if(GameIniInformation.home.get(teamId*3).colOfHome==0)return 4;//根据家的位置判断类型
-		if (GameIniInformation.home.get(teamId*3).colOfHome==14)return 2;
-		if(GameIniInformation.home.get(teamId*3).rowOfHome==0)return 3;
-		if (GameIniInformation.home.get(teamId*3).rowOfHome==14)return 1;
+		int a=GameIniInformation.home.get(GameIniInformation.weapon).colOfHome;
+		int b=GameIniInformation.home.get(GameIniInformation.weapon).rowOfHome;
+		if(a==0)return 4;//根据家的位置判断类型
+		if (a==14)return 2;
+		if(b==0)return 3;
+		if (b==14)return 1;
+		
 		return 0;
 	}
 	
@@ -63,6 +114,38 @@ public class SpearAi {
 		}
 	}
 	
+	private String  cankill() {//返回能杀死的字符串
+		String killString="";//用killstring表示杀人命令的集合
+		killString=kill(enspear, killString);
+		if (!killString.equals("")) {//先杀矛
+			if (state==1) {//假如隐身的话先现身再杀矛
+				showOrHide();
+				state=0;}
+			return killString;
+		}else {//如果不能杀矛，在判断其他的武士
+			killString=kill(ensword, killString);//分析斧子和剑
+			killString=kill(enbattleax, killString);
+			switch (killString.length()) {
+			case 0://此时string中没有值，移动一格后去占领
+				   break;
+			case 1:
+				if (state==1) {//假如隐身的话先现身再杀矛
+					showOrHide();
+					state=0;}
+				return killString+" ";
+			case 2:
+				if (state==1) {//假如隐身的话先现身再杀矛
+					showOrHide();
+					state=0;}
+				killString=""+killString.charAt((int )(0+Math.random()*2));//此处是随机(数据类型)(最小值+Math.random()*(最大值-最小值+1)),随机杀死。
+			       return killString+" ";
+			default:
+				   break;
+				}
+			}
+		return killString;
+	}
+
 	private void showOrHide() {
 		// TODO Auto-generated method stub
 		if (state==1) {//隐身变成不隐身
@@ -99,13 +182,25 @@ public class SpearAi {
 	
 	 //判断是否能隐身&&me.row!=GameIniInformation.home.get(teamId*3).rowOfHome&&me.col!=GameIniInformation.home.get(teamId*3).colOfHome
     public boolean canHide(){
-        if (battlefield[me.row][me.col]>=(teamId*3)&&battlefield[me.row][me.col]<=(teamId*3+2)) {
-	         return false;
+ 
+        if (battlefield[me.row][me.col]>=0&&battlefield[me.row][me.col]<=2&&!inhome()) {
+	         return true;//当处在不在家的位置，和自己占领的
          }
-            return true;
+            return false;
   }
 	
-    public void occupy() {//能量为7
+    private boolean inhome() {
+		// 当在其中的一个武士的家中时，返回true
+    	for (Home home : GameIniInformation.home) {
+			if (home.rowOfHome==me.row&&home.colOfHome==me.col) {
+			return true;
+			}
+    	}
+    	
+		return false;
+	}
+
+	public void occupy() {//能量为7
 		switch (type) {
 		case 1:
 			String s1=type1();
@@ -164,16 +259,16 @@ public class SpearAi {
 				}
 			}
 		  if (bestdirection==0) {//两边都被占领的情况
-			row++;
-			energy-=2;
-			occuString="7 "+type1();
-			return occuString;
+			  row++;
+			  energy-=2;
+			  occuString="7 "+type1();
+			  return occuString;
 		  }else {
 			  if (state==1) {
 				showOrHide();
-			}
-			occuString=bestdirection+" ";
-		    return occuString;
+			  }
+			  occuString=bestdirection+" ";
+			  return occuString;
 		   }
 	    }
 	return occuString;
@@ -289,10 +384,10 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-	    if (inField(1, 0) && battlefield[row][col + 1] == 8
+	    if (inField(1, 0)&&( battlefield[row][col + 1] == 8
 					|| battlefield[row][col + 1] == enbattleaxID
 					|| battlefield[row][col + 1] == enswordID
-					|| battlefield[row][col + 1] == enspearID) {
+					|| battlefield[row][col + 1] == enspearID)) {
 				if (state==1) {
 					showOrHide();
 					energy-=1;
@@ -333,8 +428,6 @@ public class SpearAi {
 						bestdirection = i;
 					}
 				}
-
-			
 			if (bestdirection == 0) {//north and south can not be occupied,east move
 				col++;
 				energy -= 2;
@@ -349,36 +442,12 @@ public class SpearAi {
 				return occuString;
 			}
 		}
+	    
+	    
+	    
 	    return occuString;
 	}
 
-	private String  cankill() {//返回能杀死的字符串
-		String killString="";//用killstring表示杀人命令的集合
-		killString=kill(enspear, killString);
-		if (!killString.equals("")) {//先杀矛
-			if (state==1) {//假如隐身的话先现身再杀矛
-				showOrHide();
-				state=0;}
-			return killString;
-		}else {//如果不能杀矛，在判断其他的武士
-			killString=kill(ensword, killString);//分析斧子和剑
-			killString=kill(enbattleax, killString);
-			switch (killString.length()) {
-			case 0://此时string中没有值，移动一格后去占领
-				   break;
-			case 1:return killString;
-			case 2:killString=""+killString.charAt((int )(0+Math.random()*2));//此处是随机(数据类型)(最小值+Math.random()*(最大值-最小值+1)),随机杀死。
-			       return killString;
-			default:
-				   break;
-				}
-			}
-		return killString;
-	}
- 
-	
-	
-	
 	String kill(Samurai samurai,String killString){//把杀一个武士的字符串加在killstring的后面
 		int a=samurai.row;
 		int b=samurai.col;
@@ -387,13 +456,13 @@ public class SpearAi {
 	    if (samurai.state==1) {//当武士的状态未知时，返回原字符串
 		return killString;}
 	    if (samurai.row==row&&(samurai.col-col)<5&&samurai.col-col>0) {//4231左右上下，一步杀死
-		   killString=killString+2+" ";}
+		   killString=killString+2;}
 	    if (samurai.row==row&&(samurai.col-col)<0&&samurai.col-col>-5) {
-		   killString=killString+4+" ";}
+		   killString=killString+4;}
 	    if (samurai.col==col&&samurai.row-row<0&&samurai.row-row>-5) {
-		   killString=killString+3+" ";}
+		   killString=killString+3;}
 	    if (samurai.col==col&&samurai.row-row<5&&samurai.row-row>0) {
-		   killString=killString+1+" ";	}
+		   killString=killString+1;	}
 		return killString;
 
 	}
