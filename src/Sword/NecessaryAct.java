@@ -134,7 +134,7 @@ public class NecessaryAct {
 	public int ValueOfOccupy(ArrayList<cell> cells){ //占领的棋盘中可以加分的数目
 		int value = 0;
 		for(cell c:cells){
-			if(c.value == 8||c.value == 9||c.value == 5-myTeam || c.value == 4-myTeam || c.value == 3-myTeam){
+			if(c.value == 8||c.value == 9||c.value == 3 || c.value == 4 || c.value ==5){
 			value++;	
 			}
 		}
@@ -174,6 +174,10 @@ public class NecessaryAct {
 				Sword.col = intiCol;
 				break;
 			}
+		}
+		if(MustEscape()){
+			Sword.row = intiRow;
+			Sword.col = intiCol;
 		}
 		return 2;
 	}
@@ -312,7 +316,8 @@ public class NecessaryAct {
 			}
 		}
 		if(Va[Xmax][Ymax]==0){
-			action = action + ((int)(Math.random()*4)+5)+" "+((int)(Math.random()*4)+5)+" "+((int)(Math.random()*4)+5)+" ";
+			//action = action + ((int)(Math.random()*4)+5)+" "+((int)(Math.random()*4)+5)+" "+((int)(Math.random()*4)+5)+" ";
+			moveToCentre();
 			Hide();
 		}
 		else if(Xmax ==0 ){
@@ -326,6 +331,21 @@ public class NecessaryAct {
 			whichAction = whichAction + "Moveoccupy";
 		}
 		
+	}
+	public void moveToCentre(){
+		if(Sword.col<7){
+			action = action + "6 ";
+		}
+		if(Sword.col>=7){
+			action = action + "8 ";
+		}
+		if(Sword.row<7){
+			action = action + "5 ";
+		}
+		if(Sword.row>=7){
+			action = action + "7 ";
+		}
+		action = action +"0";
 	}
 
 }
