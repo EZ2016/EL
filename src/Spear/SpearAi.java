@@ -10,14 +10,14 @@ import EZ.TurnInformation;
 ZHU YINGSHAN*/
 /*
 # Game Info
-192 0 0 15 15 24
+192 1 0 15 15 24
 # Home positions
-0 5
-0 14
-0 14
 14 9
 14 0
 5 0
+14 0
+14 0
+9 14
 # Ranks and scores of samurai
 3 40
 7 24
@@ -33,28 +33,41 @@ ZHU YINGSHAN*/
 # <cure period>
 0
 # Samurai states
-14 10 0
+9 10 0
 1 4 1
 0 14 0
-14 9 0
-12 12 0
-0 5 0
+0 0 0
+0 12 0
+9 14 0
 # Battle field states
- 8 5 5 9 5 9 5 9 4 4 4 9 4 9 9 
- 9 0 0 0 9 0 0 4 9 4 4 5 9 4 9 
- 9 9 0 0 0 0 4 4 4 9 4 5 4 9 4 
- 9 9 9 0 0 4 4 4 4 4 9 4 4 4 4 
- 9 9 0 0 0 0 0 4 4 4 4 9 9 9 9 
- 9 0 0 0 0 0 0 0 4 4 3 3 9 4 9 
- 9 9 1 1 0 0 0 8 4 4 3 9 9 9 9 
- 9 0 1 1 1 0 0 2 2 8 9 9 9 9 9 
- 0 0 0 1 1 1 0 2 2 8 3 4 9 9 9 
- 0 0 0 0 0 1 1 3 3 3 3 3 9 3 9 
- 8 8 1 1 1 8 2 2 2 2 2 2 3 9 3 
- 9 8 1 1 1 2 2 2 2 2 2 2 9 9 9 
- 1 9 1 1 1 2 2 2 2 2 3 9 3 3 3 
- 1 9 9 1 1 2 2 2 2 8 9 9 9 9 9 
- 9 9 9 9 1 9 2 2 2 8 2 9 9 9 9
+# Turn information
+# <turn>
+0
+# <cure period>
+0
+# Samurai states
+2 9 1
+1 4 1
+0 14 0
+-1 -1 1
+0 0 0
+12 10 0
+# Battle field states
+ 8 3 3 3 3 8 2 2 2 2 8 8 1 1 9 
+ 9 3 3 3 3 3 2 2 2 5 5 5 1 1 9 
+ 9 9 3 3 3 3 5 5 1 1 1 5 5 9 5 
+ 9 9 9 9 9 9 3 3 3 3 3 1 1 1 5 
+ 3 9 9 9 3 9 9 1 1 1 1 1 1 1 1 
+ 8 0 9 9 9 3 0 1 1 1 1 1 1 1 1 
+ 3 0 0 9 9 9 9 9 1 1 1 1 1 1 1 
+ 3 0 0 3 9 9 9 1 1 1 1 1 1 1 1 
+ 3 0 0 3 0 9 9 9 1 1 1 1 1 1 0 
+ 0 0 0 0 0 0 9 9 9 0 0 0 0 0 8 
+ 0 0 0 0 0 0 9 9 9 9 5 0 0 0 0 
+ 0 0 0 0 9 9 9 9 9 9 9 0 0 0 9 
+ 0 4 4 9 0 4 0 9 5 9 9 9 0 0 0 
+ 0 4 9 9 9 0 0 5 9 5 9 9 9 9 9 
+ 8 9 9 9 9 9 5 5 5 8 5 9 9 9 9
 */
 public class SpearAi {
 	
@@ -106,6 +119,10 @@ public class SpearAi {
 		if (str.length()==0) {
 			str=canKillTwo();
 			if (str.length()==0) {
+				if (deadCorner().length()!=0) {
+					order=order+deadCorner();
+					
+				}
 				occupy();//不能杀人，占领
 			}else {//能两步杀人
 				order=order+str;
@@ -118,6 +135,58 @@ public class SpearAi {
 		}
 	}
 	
+	/**判断武士是否在死角位置，并返回初步的方法字符串,向相反方向移动*/
+	private  String deadCorner() {
+		String aviodstr="";
+		for (Samurai samurai : TurnInformation.nowAllSamurai.subList(3, 6)) {
+			if (Math.abs(samurai.col-col)==2&&Math.abs(samurai.row-row)==2) {
+				// aviodstr=noMoveOccupy();
+			}
+		}
+		return aviodstr;
+	}
+	
+/**本方法只用于死角位置的原地占领，返回string*/
+	private String noMoveOccupy() {
+		switch (type) {
+		case 1:
+			String s1=noMOveType1();
+			break;
+		case 2:
+			String s2=noMOveType2();
+			break;
+		case 3:
+			String s3=noMOveType3();
+			break;
+		case 4:
+			String s4=noMOveType4();
+			break;
+		default:
+			break;
+		}
+		return null;
+	}
+
+	private String noMOveType4() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+	private String noMOveType3() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+	private String noMOveType2() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+	private String noMOveType1() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
 	/**返回的是走一步杀人的指令如 "5 1 "*/
 	private String canKillTwo() {
 		String killString = "";
@@ -155,7 +224,7 @@ public class SpearAi {
 	
 	/**往killstring中加入指令*/	
 	String killTwo(Samurai samurai, String killString) {	//走一步杀死 TODO Auto-generated method stub
-		 if (samurai.state==1||atHome(samurai)) {//当武士的状态未知时，不操作
+		 if (energy<6||samurai.state==1||inHome(samurai.row,samurai.col)) {//当武士的状态未知时，不操作
 			 
 			}else if ((Math.abs(samurai.row-row)+Math.abs(samurai.col-col))>5||((Math.abs(samurai.row-row)>2)&&Math.abs(samurai.col-col)>2)) {
 				//在攻击范围之外，不操作
@@ -252,23 +321,23 @@ public class SpearAi {
 	 //判断是否能隐身&&me.row!=GameIniInformation.home.get(teamId*3).rowOfHome&&me.col!=GameIniInformation.home.get(teamId*3).colOfHome
     public boolean canHide(){
  
-        if (battlefield[me.row][me.col]>=0&&battlefield[me.row][me.col]<=2&&!inhome()) {
+        if (battlefield[me.row][me.col]>=0&&battlefield[me.row][me.col]<=2&&(!inHome(me.row,me.col))) {
 	         return true;//当处在不在家的位置，和自己占领的
          }
             return false;
   }
 	
-    private boolean inhome() {
-		// 当在其中的一个武士的家中时，返回true
-    	for (Home home : GameIniInformation.home) {
-			if (home.rowOfHome==me.row&&home.colOfHome==me.col) {
-			return true;
-			}
-    	}
-    	
-		return false;
-	}
 
+    boolean inHome(int row,int col){//判断传入的坐标是否是家
+	for (Home home : GameIniInformation.home) {
+		if ((row==home.rowOfHome)&&col==home.colOfHome) {
+			return true;
+		}
+	}
+	return false;
+}
+    
+    
 	public void occupy() {//能量为7
 		switch (type) {
 		case 1:
@@ -296,7 +365,7 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(0, 1)&&battlefield[row-1][col]==8||battlefield[row-1][col]==enbattleaxID||battlefield[row-1][col]==enswordID||battlefield[row-1][col]==enspearID) {
+		if (inField(0, 1)&&(battlefield[row-1][col]==8||battlefield[row-1][col]==enbattleaxID||battlefield[row-1][col]==enswordID||battlefield[row-1][col]==enspearID)) {
 			if (state==1) {
 				showOrHide();
 			}
@@ -307,13 +376,18 @@ public class SpearAi {
 				for (int j = 1; j < 5; j++) {
 					switch (i) {
 					case 4:	if (inField(-j,0)) {//向左占领
-						if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
+						if (!inHome(row, col-j)
+								&&(battlefield[row][col-j]==enbattleaxID
+								||battlefield[row][col-j]==enspearID
+								||battlefield[row][col-j]==enswordID
+								||battlefield[row][col-j]==8)) {
 							score++;
 						}
 					}
 						break;
 					case 2:if (inField(j,0)) {//向右占领
-						if (battlefield[row][col+j]==enbattleaxID||battlefield[row][col+j]==enspearID||battlefield[row][col+j]==enswordID||battlefield[row][col+j]==8) {
+						if (inHome(row, col+j)
+								&&(battlefield[row][col+j]==enbattleaxID||battlefield[row][col+j]==enspearID||battlefield[row][col+j]==enswordID||battlefield[row][col+j]==8)) {
 							score++;
 						}
 					}
@@ -348,7 +422,7 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(0, -1)&&battlefield[row+1][col]==8||battlefield[row+1][col]==enbattleaxID||battlefield[row+1][col]==enswordID||battlefield[row+1][col]==enspearID) {//下一步是未占领的
+		if (inField(0, -1)&&(battlefield[row+1][col]==8||battlefield[row+1][col]==enbattleaxID||battlefield[row+1][col]==enswordID||battlefield[row+1][col]==enspearID)) {//下一步是未占领的
 			if (state==1) {
 				showOrHide();
 			}
@@ -359,13 +433,17 @@ public class SpearAi {
 				for (int j = 1; j < 5; j++) {
 					switch (i) {
 					case 2:	if (inField(j,0)) {
-						if (battlefield[row][col+j]==enbattleaxID||battlefield[row][col+j]==enspearID||battlefield[row][col+j]==enswordID||battlefield[row][col+j]==8) {
+						if (!inHome(row, col+j)
+								&&(battlefield[row][col+j]==enbattleaxID
+								||battlefield[row][col+j]==enspearID
+								||battlefield[row][col+j]==enswordID
+								||battlefield[row][col+j]==8)) {
 							score++;
 						}
 					}
 						break;
 					case 4:if (inField(-j,0)) {
-						if (battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8) {
+						if (!inHome(row, col-j)&&(battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8)) {
 							score++;
 						}
 					}
@@ -400,7 +478,7 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(-1, 0)&&battlefield[row][col-1]==8||battlefield[row][col-1]==enbattleaxID||battlefield[row][col-1]==enswordID||battlefield[row][col-1]==enspearID) {
+		if (inField(-1, 0)&&(battlefield[row][col-1]==8||battlefield[row][col-1]==enbattleaxID||battlefield[row][col-1]==enswordID||battlefield[row][col-1]==enspearID)) {
 			if (state==1) {
 				showOrHide();
 			}
@@ -411,13 +489,13 @@ public class SpearAi {
 				for (int j = 1; j < 5; j++) {
 					switch (i) {
 					case 3:if (inField(0,j)) {//north occupy
-						if (battlefield[row-j][col]==enbattleaxID||battlefield[row-j][col]==enspearID||battlefield[row-j][col]==enswordID||battlefield[row-j][col]==8) {
+						if (!inHome(row-j, col)&&(battlefield[row-j][col]==enbattleaxID||battlefield[row-j][col]==enspearID||battlefield[row-j][col]==enswordID||battlefield[row-j][col]==8)) {
 							score++;
 						}
 					}
 						break;
 					case 1:if (inField(0,-j)) {//south occupy
-						if (battlefield[row+j][col]==enbattleaxID||battlefield[row+j][col]==enspearID||battlefield[row+j][col]==enswordID||battlefield[row+j][col]==8) {
+						if (!inHome(row+j, col)&&(battlefield[row+j][col]==enbattleaxID||battlefield[row+j][col]==enspearID||battlefield[row+j][col]==enswordID||battlefield[row+j][col]==8)) {
 							score++;		
 						}
 					}
@@ -464,26 +542,28 @@ public class SpearAi {
 				occuString = "2 ";
 				energy -= 4;
 			} else {
-				for (int i = 1; i < 5; i += 2) {
+				for (int i = 3; i >0; i -= 2) {
 					score = 0;//每一回合的分数清零
 					for (int j = 1; j < 5; j++) {
 						switch (i) {
 						case 1:
 							if (inField(0, -j)) {//South occupy
-								if (battlefield[row + j][col] == enbattleaxID
+								if (!inHome(row+j, col)
+										&&(battlefield[row + j][col] == enbattleaxID
 										|| battlefield[row + j][col] == enspearID
 										|| battlefield[row + j][col] == enswordID
-										|| battlefield[row + j][col] == 8) {
+										|| battlefield[row + j][col] == 8)) {
 									score++;
 								}
 							}
 							break;
 						case 3:
 							if (inField(0, j)) {//north occupy
-								if (battlefield[row - j][col] == enbattleaxID
+								if (!inHome(row-j, col)
+										&&(battlefield[row - j][col] == enbattleaxID
 										|| battlefield[row - j][col] == enspearID
 										|| battlefield[row - j][col] == enswordID
-										|| battlefield[row - j][col] == 8) {
+										|| battlefield[row - j][col] == 8)) {
 									score++;
 								}
 							}
@@ -521,7 +601,7 @@ public class SpearAi {
 		int a=samurai.row;
 		int b=samurai.col;
 		int c=samurai.col-col;
-	    if (samurai.state==1||atHome(samurai)) {//当武士的状态未知时，返回原字符串
+	    if (samurai.state==1||inHome(a,b)) {//当武士的状态未知时，返回原字符串
 		return killString;}
 	    if (samurai.row==row&&(samurai.col-col)<5&&samurai.col-col>0) {//4231左右上下，一步杀死
 		   killString=killString+2;}
@@ -533,23 +613,6 @@ public class SpearAi {
 		   killString=killString+1;	}
 		return killString;
 
-	}
-	/**判断该武士是否在家中*/
-	private boolean atHome(Samurai samurai) {
-		int ID=0;
-		if (samurai==enspear) {
-			ID=3;
-		}else if(samurai==ensword) {
-			ID=4;
-		}else {
-			ID=5;
-		}
-	    int homerow=GameIniInformation.home.get(ID).rowOfHome;
-	    int homecol=GameIniInformation.home.get(ID).colOfHome;
-		if (samurai.col==homecol&&samurai.row==homerow) {
-			return true;
-		}
-		return false;
 	}
 }
 /*
