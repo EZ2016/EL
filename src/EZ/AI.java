@@ -25,6 +25,9 @@ public class AI {
 	protected List<Samurai> allSamurai=TurnInformation.nowAllSamurai;
 	protected List<Home> allHome=GameIniInformation.home;
 	
+	public int getTeamID() {
+		return teamID;
+	}
 	public Samurai getMe() {
 		return me;
 	}	

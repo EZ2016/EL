@@ -18,7 +18,7 @@ public class Log {
 	}
 	
 	
-	public void outputTurnInformation(String result) throws IOException{
+	public void outputTurnInformation() throws IOException{
 		bw.write("manager的操作:");
 		bw.newLine();
 		bw.write("回合数:"+TurnInformation.turnNum+" ");
@@ -62,7 +62,10 @@ public class Log {
 			}
 			bw.newLine();
 		}
-		bw.write("你的操作是:"+result);
+		
+	}
+	public void outputActions(String actions) throws IOException{
+		bw.write("你的操作是:"+actions);
 		bw.newLine();
 	}
 	

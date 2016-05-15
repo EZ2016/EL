@@ -1,7 +1,5 @@
 package Battleax;
 import java.util.ArrayList;
-
-import EZ.GameIniInformation;
 import EZ.Home;
 import EZ.Samurai;
 /*斧头武士的评分系统
@@ -120,8 +118,52 @@ public class Grading {
 			}
 		}
 		if(battleaxAi.getState()==1){
-			score=score+100;                             //暂定回合结束时隐身加100分
+			score=score+300;                             //暂定回合结束时隐身加300分
 		}
+		if(battleaxAi.mustEscape() && battleaxAi.getState()==0){
+			score=score-9000;                        //暂定回合结束时会被杀减9000分
+		}
+		for(Home home:battleaxAi.getAllHome()){
+			if(home.teamID==battleaxAi.getTeamID()){
+				continue;
+			}
+			if(battleaxAi.distantFromMe(home.rowOfHome, home.colOfHome)<=3){
+				score=score-1000;                  //暂定回合结束时靠近敌方大本营距离3以内减1000分
+				break;
+			}
+		}
+		int riskFactor=0;
+		for(int row=Math.max(battleaxAi.getMyRow()-5, 0);row<=Math.min(battleaxAi.getMyRow()+5, 14);row++){
+			for(int col=Math.max(battleaxAi.getMyCol()-5, 0);col<=Math.min(battleaxAi.getMyCol()+5, 14);col++){
+				if(row==battleaxAi.getMyRow()){
+					if(battleaxAi.getBattleField()[row][col]>=3 && battleaxAi.getBattleField()[row][col]<=5){
+						riskFactor=riskFactor+1;//周围有可能出现原来是隐身的敌人攻击我，这样的可能的敌人所在的格子，每有一个危险系数+1
+					}
+				}
+				else if (row==battleaxAi.getMyRow()-1 || row==battleaxAi.getMyRow()+1){
+					if(col>=battleaxAi.getMyCol()-4 && col<=battleaxAi.getMyCol()+4){
+						if(battleaxAi.getBattleField()[row][col]>=3 && battleaxAi.getBattleField()[row][col]<=5){
+							riskFactor=riskFactor+1;
+						}
+					}
+				}
+				else if((row>=battleaxAi.getMyRow()+2 && row<=battleaxAi.getMyRow()+4) || (row>=battleaxAi.getMyRow()-4 && row<=battleaxAi.getMyRow()-2)){
+					if(col>=battleaxAi.getMyCol()-1 && col<=battleaxAi.getMyCol()+1){
+						if(battleaxAi.getBattleField()[row][col]>=3 && battleaxAi.getBattleField()[row][col]<=5){
+							riskFactor=riskFactor+1;
+						}
+					}
+				}
+				else if(row==battleaxAi.getMyRow()+5 || row==battleaxAi.getMyRow()-5){
+					if(col==battleaxAi.getMyCol()){
+						if(battleaxAi.getBattleField()[row][col]>=3 && battleaxAi.getBattleField()[row][col]<=5){
+							riskFactor=riskFactor+1;
+						}
+					}
+				}
+			}
+		}
+		score=score-riskFactor*50;//暂定回合结束时每个危险系数减50分
 		return score;
 	}
 	
@@ -152,7 +194,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow()-1)&&(col==battleaxAi.getMyCol())){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}
@@ -170,7 +212,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow())&&(col==battleaxAi.getMyCol()-1)){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}
@@ -188,7 +230,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow()+1)&&(col==battleaxAi.getMyCol())){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}
@@ -206,7 +248,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow())&&(col==battleaxAi.getMyCol()+1)){
 						continue;
 					}
-					for(Home home:GameIniInformation.home){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}

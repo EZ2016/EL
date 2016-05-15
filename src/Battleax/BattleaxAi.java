@@ -255,7 +255,7 @@ public class BattleaxAi extends AI implements Cloneable {
 				}
 			}
 			else if((fromEnemySpear[0]>=2 && fromEnemySpear[0]<=4) || (fromEnemySpear[0]>=-4 && fromEnemySpear[0]<=-2)){
-				if(fromEnemySpear[1]>=-1 || fromEnemySpear[1]<=1){
+				if(fromEnemySpear[1]>=-1 && fromEnemySpear[1]<=1){
 					return true;
 				}
 			}
@@ -268,16 +268,16 @@ public class BattleaxAi extends AI implements Cloneable {
 		if(allSamurai.get(4).row>=0 && allSamurai.get(4).col>=0){
              //逃离剑的攻击
 			if(fromEnemySword[0]==0){
-				if(fromEnemySword[1]==-3 || fromEnemySword[1]==-4 || fromEnemySword[1]==3 || fromEnemySword[1]==4){
+				if(fromEnemySword[1]>=-4 && fromEnemySword[1]<=4){
 					return true;
 				}
 			}
 			else if(fromEnemySword[0]==-1 || fromEnemySword[0]==1){
-				if(fromEnemySword[1]==-3 || fromEnemySword[1]==3){
+				if(fromEnemySword[1]>=-3 || fromEnemySword[1]<=3){
 					return true;
 				}
 			}
-			else if(fromEnemySword[0]==-3 || fromEnemySword[0]==3){
+			else if((fromEnemySword[0]>=2 && fromEnemySword[0]<=3) || (fromEnemySword[0]>=-3 && fromEnemySword[0]<=-2)){
 				if(fromEnemySword[1]>=-1 && fromEnemySword[1]<=1){
 					return true;
 				}
@@ -334,16 +334,18 @@ public class BattleaxAi extends AI implements Cloneable {
 	
 	public boolean noFieldToOccupy() {
 		int myField=0;
+		int fieldAround=0;
 		for(int row=Math.max(me.row-3,0);row<=Math.min(me.row+3,14);row++){
 			for(int col=Math.max(me.col-3,0);col<=Math.min(me.col+3,14);col++){
 				if(distantFromMe(row, col)<=3 && !(Math.abs(row-me.row)==3 || Math.abs(col-me.col)==3)){
+					fieldAround++;
 					if(battleField[row][col]>=0 && battleField[row][col]<=2){
 						myField++;
 					}
 				}
 			}
 		}
-		if(myField>=18){
+		if(myField>=fieldAround-2){
 			return true;
 		}		
 		return false;

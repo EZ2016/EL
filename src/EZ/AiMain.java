@@ -33,9 +33,10 @@ public class AiMain {
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());	
+				log.outputTurnInformation();
 					Spear spear=new Spear();
 					spear.spearAiRun();
-					log.outputTurnInformation(" ");
+					log.outputActions(" ");
 					/*bw.write("manager的操作:");
 					bw.newLine();
 					bw.write("回合数:"+TurnInformation.turnNum+" ");
@@ -89,9 +90,10 @@ public class AiMain {
 			for(int i=1;i<GameIniInformation.totalRounds;i+=6){
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
+				log.outputTurnInformation();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());			
 				SwordMain swordMain=new SwordMain();
-				log.outputTurnInformation(swordMain.act+swordMain.wAct);
+				log.outputActions(swordMain.act+swordMain.wAct);
 				/*bw.write("manager的操作:");
 				bw.newLine();
 				bw.write("回合数:"+TurnInformation.turnNum+" ");
@@ -147,6 +149,7 @@ public class AiMain {
 				TurnInformationReceive TIR=new TurnInformationReceive();
 				TIR.tuReceive();
 				TurnInformation.SetTurnInformation(TIR.getTurnInformation(),TIR.getBattleField());	
+				log.outputTurnInformation();
 				
 				Battleax battleax=new Battleax();
 				battleax.battleaxAiRun();
@@ -154,7 +157,7 @@ public class AiMain {
 				System.out.println("# Turn "+TurnInformation.turnNum);
 				System.out.println(battleax.actions);
 				
-				log.outputTurnInformation(battleax.actions);
+				log.outputActions(battleax.actions);
 				
 //				bw.write("manager的操作:");
 //				bw.newLine();
