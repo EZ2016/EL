@@ -15,9 +15,10 @@ public class NecessaryAct {
 	public  String action="";  //行动指令
 	public String whichAction = "";
 	public static int strength;   //体力限制
-	Samurai Sword,emSpear; //剑，敌方矛
+	Samurai Sword,emSpear,emSword,emBattlex; //剑，敌方矛
 	int intiCol;
 	int intiRow;
+	public boolean isKill = true;
 	int myTeam=GameIniInformation.teamID;
 	public NecessaryAct(){ //构造方法，开始时得到剑和敌方矛的信息
 		for(Samurai samurai:TurnInformation.nowAllSamurai){
@@ -27,6 +28,12 @@ public class NecessaryAct {
 			}
 			if(samurai.weapon == 0 && samurai.team!=myTeam){
 				emSpear = samurai;
+			}
+			if(samurai.weapon == 1 && samurai.team!=myTeam){
+				emSword = samurai;
+			}
+			if(samurai.weapon == 2 && samurai.team!=myTeam){
+				emBattlex = samurai;
 			}
 		}
 		 intiCol = Sword.col;  //保存回合开始时的位置
@@ -169,15 +176,26 @@ public class NecessaryAct {
 			}
 		}
 		for(Samurai s:TurnInformation.nowAllSamurai){
-			if(Sword.row == s.row && Sword.col == s.col && Sword.col !=intiCol && Sword.row !=intiRow){
+			if(Sword.row == s.row && Sword.col == s.col && Sword.col !=intiCol && Sword.row !=intiRow && s.state == 0){
 				Sword.row = intiRow;
 				Sword.col = intiCol;
 				break;
 			}
 		}
+		if(!isKill){
 		if(MustEscape()){
 			Sword.row = intiRow;
 			Sword.col = intiCol;
+		}
+		int Swordcol = Math.abs(Sword.col - emSword.col);
+		int Swordrow = Math.abs(Sword.row - emSword.row);
+		int Battlexcol = Math.abs(Sword.col - emBattlex.col);
+		int Battlexrow = Math.abs(Sword.row - emBattlex.row);
+		
+		if((Battlexcol ==2 && Battlexrow == 1) || (Battlexcol == 1 && Battlexrow == 2) || (Swordcol == 2 && Swordrow ==1) || (Swordcol == 1&& Swordrow ==2)|| (Swordcol == 3 &&Swordrow == 0)||(Swordcol == 0 && Swordrow ==3)){
+			Sword.row = intiRow;
+			Sword.col = intiCol;
+		}
 		}
 		return 2;
 	}
@@ -206,7 +224,7 @@ public class NecessaryAct {
 		return 0;
 	}
 	public int MustKill(){//必杀方法，尝试行动一步或者不动的击杀，若能返回true，不能返回false
-		
+		isKill = true;
 		if(Kill()!=0){  //原地能击杀
 			
 			Occupy(Kill());
@@ -286,7 +304,8 @@ public class NecessaryAct {
 		}
 		return false;
 	}
-	public void ShouldOccupy(){  
+	public void ShouldOccupy(){ 
+		isKill = false;
 		if(Sword.state == 1) //若隐身，首先现身
 			Show();//在不需要逃跑和击杀时，发育的方法
 		int [][]Va =new int[5][4];  //Va储存不同行动后的收益，共20种
