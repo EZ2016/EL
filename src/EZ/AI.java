@@ -14,7 +14,8 @@ public class AI {
 	public  AI() {
 		
 	}
-	
+	public int turnNum=TurnInformation.turnNum;
+	public int totalRounds=GameIniInformation.totalRounds;
 	protected int samuraiID;//武士ID                                //1.2版本修改的部分
 	protected int teamID;
 	protected int weapon;

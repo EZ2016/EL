@@ -288,6 +288,12 @@ public class BattleaxAi extends AI implements Cloneable {
 				}
 			}
 		}
+		if(distantFromMe(allSamurai.get(5).row, allSamurai.get(5).col)<=3){
+			if(allSamurai.get(5).row==me.row || allSamurai.get(5).col==me.col){
+				return false;
+			}
+			return true;
+		}
 		return false;
 	}
 	
