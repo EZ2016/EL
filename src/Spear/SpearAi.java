@@ -27,19 +27,7 @@ ZHU YINGSHAN*/
 6 28
 
 
-# Turn information
-# <turn>
-0
-# <cure period>
-0
-# Samurai states
-9 10 0
-1 4 1
-0 14 0
-0 0 0
-0 12 0
-9 14 0
-# Battle field states
+
 # Turn information
 # <turn>
 0
@@ -51,22 +39,22 @@ ZHU YINGSHAN*/
 0 14 0
 -1 -1 1
 0 0 0
-12 10 0
+0 7 0
 # Battle field states
  8 3 3 3 3 8 2 2 2 2 8 8 1 1 9 
  9 3 3 3 3 3 2 2 2 5 5 5 1 1 9 
  9 9 3 3 3 3 5 5 1 1 1 5 5 9 5 
  9 9 9 9 9 9 3 3 3 3 3 1 1 1 5 
  3 9 9 9 3 9 9 1 1 1 1 1 1 1 1 
- 8 0 9 9 9 3 0 1 1 1 1 1 1 1 1 
- 3 0 0 9 9 9 9 9 1 1 1 1 1 1 1 
- 3 0 0 3 9 9 9 1 1 1 1 1 1 1 1 
- 3 0 0 3 0 9 9 9 1 1 1 1 1 1 0 
- 0 0 0 0 0 0 9 9 9 0 0 0 0 0 8 
- 0 0 0 0 0 0 9 9 9 9 5 0 0 0 0 
- 0 0 0 0 9 9 9 9 9 9 9 0 0 0 9 
- 0 4 4 9 0 4 0 9 5 9 9 9 0 0 0 
- 0 4 9 9 9 0 0 5 9 5 9 9 9 9 9 
+ 8 0 8 8 9 3 0 1 1 1 1 1 1 1 1 
+ 3 0 0 8 8 8 9 9 1 1 1 1 1 1 1 
+ 3 0 0 3 8 8 9 1 1 1 1 1 1 1 1 
+ 4 4 0 3 0 8 9 9 1 1 1 1 1 1 0 
+ 0 4 2 4 4 4 8 9 9 0 0 0 0 0 8 
+ 0 4 0 4 4 4 8 9 9 9 5 0 0 0 0 
+ 0 4 0 0 8 8 9 9 9 9 9 0 0 0 9 
+ 0 4 4 8 0 4 0 9 5 9 9 9 0 0 0 
+ 0 4 8 9 9 0 0 5 9 5 9 9 9 9 9 
  8 9 9 9 9 9 5 5 5 8 5 9 9 9 9
 */
 public class SpearAi {
@@ -122,8 +110,10 @@ public class SpearAi {
 				if (deadCorner().length()!=0) {
 					order=order+deadCorner();
 					
+				}else {//energy为7
+					occupy();//不能杀人，占领
 				}
-				occupy();//不能杀人，占领
+				
 			}else {//能两步杀人
 				order=order+str;
 				energy-=6;
@@ -135,57 +125,116 @@ public class SpearAi {
 		}
 	}
 	
-	/**判断武士是否在死角位置，并返回初步的方法字符串,向相反方向移动*/
+	/**判断武士是否在死角位置，并返回命令字符串，选项有原地占领，隐身，或是，直接隐身*/
 	private  String deadCorner() {
 		String aviodstr="";
+		boolean inDeadCorner=false;
 		for (Samurai samurai : TurnInformation.nowAllSamurai.subList(3, 6)) {
 			if (Math.abs(samurai.col-col)==2&&Math.abs(samurai.row-row)==2) {
-				// aviodstr=noMoveOccupy();
+				inDeadCorner=true;
 			}
 		}
+		
+		if (inDeadCorner) {//
+					aviodstr=deadCornerOccupy()+"9 ";
+					state=1;
+					energy--;}
+		else {
+		}
+		
 		return aviodstr;
 	}
+
+	private String deadCornerOccupy() {
+	String noMoveString="";
 	
-/**本方法只用于死角位置的原地占领，返回string*/
-	private String noMoveOccupy() {
-		switch (type) {
-		case 1:
-			String s1=noMOveType1();
-			break;
-		case 2:
-			String s2=noMOveType2();
-			break;
-		case 3:
-			String s3=noMOveType3();
-			break;
-		case 4:
-			String s4=noMOveType4();
-			break;
-		default:
-			break;
+	int bestDirection=0,score=0,maxscore=0;
+	
+		for (int i = 1; i < 5; i++) {//1234下右上左
+			score=0;
+			for (int j = 1; j < 5; j++) {
+				switch (i) {
+				case 3:if (inField(0,j)) {//north occupy
+					if (!inHome(row-j, col)&&(battlefield[row-j][col]==enbattleaxID||battlefield[row-j][col]==enspearID||battlefield[row-j][col]==enswordID||battlefield[row-j][col]==8)) {
+						score++;
+					}
+				}
+					break;
+				case 1:if (inField(0,-j)) {//south occupy
+					if (!inHome(row+j, col)&&(battlefield[row+j][col]==enbattleaxID||battlefield[row+j][col]==enspearID||battlefield[row+j][col]==enswordID||battlefield[row+j][col]==8)) {
+						score++;		
+					}
+				}
+					break;
+				case 2:	if (inField(j,0)) {
+					if (!inHome(row, col+j)
+							&&(battlefield[row][col+j]==enbattleaxID
+							||battlefield[row][col+j]==enspearID
+							||battlefield[row][col+j]==enswordID
+							||battlefield[row][col+j]==8)) {
+						score++;
+					}
+				}
+					break;
+				case 4:if (inField(-j,0)) {
+					if (!inHome(row, col-j)&&(battlefield[row][col-j]==enbattleaxID||battlefield[row][col-j]==enspearID||battlefield[row][col-j]==enswordID||battlefield[row][col-j]==8)) {
+						score++;
+					}
+				}
+					break;
+				
+				}
+			}
+			
+			if(score>maxscore){
+				maxscore=score;
+				bestDirection=i;
+			}
 		}
-		return null;
+	
+		
+		if (bestDirection!=0) {
+			if (state==1) {
+				showOrHide();
+				state=0;
+				energy--;
+			}
+			noMoveString=noMoveString+bestDirection+" ";
+		}
+		return noMoveString;
 	}
 
-	private String noMOveType4() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-	private String noMOveType3() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-	private String noMOveType2() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-	private String noMOveType1() {
-	// TODO Auto-generated method stub
-	return null;
-}
+	private String  canKill() {//返回能杀死的字符串
+		String killString="";//用killstring表示杀人命令的集合
+		killString=kill(enspear, killString);
+		if (!(killString.length()==0)){//先杀矛
+			if (state==1) {//假如隐身的话先现身再杀矛
+				showOrHide();
+				state=0;}
+			return killString+" ";
+		}else {//如果不能杀矛，在判断其他的武士
+			killString=kill(ensword, killString);//分析斧子和剑
+			killString=kill(enbattleax, killString);
+			switch (killString.length()) {
+			case 0://此时string中没有值，移动一格后去占领
+				   break;
+			case 1:
+				if (state==1) {//假如隐身的话先现身再杀矛
+					showOrHide();
+					state=0;}
+				return killString+" ";
+			case 2:
+				if (state==1) {//假如隐身的话先现身再杀矛
+					showOrHide();
+					state=0;}
+				killString=""+killString.charAt((int )(0+Math.random()*2));//此处是随机(数据类型)(最小值+Math.random()*(最大值-最小值+1)),随机杀死。
+			       return killString+" ";
+			default:
+				   break;
+				}
+			}
+		return killString;
+	}
 
 	/**返回的是走一步杀人的指令如 "5 1 "*/
 	private String canKillTwo() {
@@ -221,7 +270,7 @@ public class SpearAi {
 		}
 		return killString;
 	}
-	
+
 	/**往killstring中加入指令*/	
 	String killTwo(Samurai samurai, String killString) {	//走一步杀死 TODO Auto-generated method stub
 		 if (energy<6||samurai.state==1||inHome(samurai.row,samurai.col)) {//当武士的状态未知时，不操作
@@ -252,38 +301,6 @@ public class SpearAi {
 			}
 	
 	
-	private String  canKill() {//返回能杀死的字符串
-		String killString="";//用killstring表示杀人命令的集合
-		killString=kill(enspear, killString);
-		if (!(killString.length()==0)){//先杀矛
-			if (state==1) {//假如隐身的话先现身再杀矛
-				showOrHide();
-				state=0;}
-			return killString+" ";
-		}else {//如果不能杀矛，在判断其他的武士
-			killString=kill(ensword, killString);//分析斧子和剑
-			killString=kill(enbattleax, killString);
-			switch (killString.length()) {
-			case 0://此时string中没有值，移动一格后去占领
-				   break;
-			case 1:
-				if (state==1) {//假如隐身的话先现身再杀矛
-					showOrHide();
-					state=0;}
-				return killString+" ";
-			case 2:
-				if (state==1) {//假如隐身的话先现身再杀矛
-					showOrHide();
-					state=0;}
-				killString=""+killString.charAt((int )(0+Math.random()*2));//此处是随机(数据类型)(最小值+Math.random()*(最大值-最小值+1)),随机杀死。
-			       return killString+" ";
-			default:
-				   break;
-				}
-			}
-		return killString;
-	}
-
 	private void showOrHide() {
 		// TODO Auto-generated method stub
 		if (state==1) {//隐身变成不隐身
@@ -942,4 +959,4 @@ String killTwo(Samurai samurai, String killString) {	//走一步杀死 TODO Auto
 		}
 		return false;
 	}	
-}*/
+}*/ 
