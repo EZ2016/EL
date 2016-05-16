@@ -145,6 +145,17 @@ public class NecessaryAct {
 			value++;	
 			}
 		}
+		if(MustEscape()){
+			value = -1;
+		}
+		int Swordcol = Math.abs(Sword.col - emSword.col);
+		int Swordrow = Math.abs(Sword.row - emSword.row);
+		int Battlexcol = Math.abs(Sword.col - emBattlex.col);
+		int Battlexrow = Math.abs(Sword.row - emBattlex.row);
+		
+		if((Battlexcol <=2 && Battlexrow <= 1) || (Battlexcol <= 1 && Battlexrow <= 2) || (Swordcol <= 2 && Swordrow ==1) || (Swordcol == 1&& Swordrow <=2)|| (Swordcol <= 3 &&Swordrow == 0)||(Swordcol == 0 && Swordrow <=3)){
+			value = -1;
+		}
 		return value;
 	}
 	public int Move(int direction){   //移动方法
@@ -192,7 +203,7 @@ public class NecessaryAct {
 		int Battlexcol = Math.abs(Sword.col - emBattlex.col);
 		int Battlexrow = Math.abs(Sword.row - emBattlex.row);
 		
-		if((Battlexcol ==2 && Battlexrow == 1) || (Battlexcol == 1 && Battlexrow == 2) || (Swordcol == 2 && Swordrow ==1) || (Swordcol == 1&& Swordrow ==2)|| (Swordcol == 3 &&Swordrow == 0)||(Swordcol == 0 && Swordrow ==3)){
+		if((Battlexcol <=2 && Battlexrow <= 1) || (Battlexcol <= 1 && Battlexrow <= 2) || (Swordcol <= 2 && Swordrow ==1) || (Swordcol == 1&& Swordrow <=2)|| (Swordcol <= 3 &&Swordrow == 0)||(Swordcol == 0 && Swordrow <=3)){
 			Sword.row = intiRow;
 			Sword.col = intiCol;
 		}
@@ -259,7 +270,7 @@ public class NecessaryAct {
 		int colDis = Math.abs(Sword.col-emSpear.col);//与敌方矛之间的距离
 		int rowDis = Math.abs(Sword.row-emSpear.row);
 
-		if((colDis==4 && rowDis<=1) || (rowDis==4 && colDis<=1)||(colDis == 5 && rowDis==0)||(rowDis==5 && colDis==0) || (rowDis == 3 && colDis==1) ||(rowDis ==1 && colDis==3)){
+		if((colDis<=4 && rowDis<=1) || (rowDis<=4 && colDis<=1)||(colDis <= 5 && rowDis==0)||(rowDis<=5 && colDis==0) || (rowDis <= 3 && colDis==1) ||(rowDis ==1 && colDis<=3)){
 			return true;
 		}
 		else {
