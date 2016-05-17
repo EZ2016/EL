@@ -121,7 +121,13 @@ public class Grading {
 			}
 		}
 		if(battleaxAi.mustEscape() && battleaxAi.getState()==0){
-			score=score-9000;                        //暂定回合结束时会被杀减9000分
+			if(battleaxAi.getState()==0){
+				score=score-9000;                        //暂定回合结束时会被杀减9000分
+			}
+			else if (battleaxAi.getState()==1) {
+				score=score-600;
+			}
+			
 		}
 		for(Home home:battleaxAi.getAllHome()){
 			if(home.teamID==battleaxAi.getTeamID()){
