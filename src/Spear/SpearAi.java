@@ -383,7 +383,7 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(0, 1)&&(battlefield[row-1][col]==8||battlefield[row-1][col]==enbattleaxID||battlefield[row-1][col]==enswordID||battlefield[row-1][col]==enspearID)) {
+		if (inField(0, 2)&&(battlefield[row-2][col]==8||battlefield[row-2][col]==enbattleaxID||battlefield[row-2][col]==enswordID||battlefield[row-2][col]==enspearID)) {
 			if (state==1) {
 				showOrHide();
 			}
@@ -440,7 +440,7 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(0, -1)&&(battlefield[row+1][col]==8||battlefield[row+1][col]==enbattleaxID||battlefield[row+1][col]==enswordID||battlefield[row+1][col]==enspearID)) {//下一步是未占领的
+		if (inField(0, -2)&&(battlefield[row+2][col]==8||battlefield[row+2][col]==enbattleaxID||battlefield[row+2][col]==enswordID||battlefield[row+2][col]==enspearID)) {//下一步是未占领的
 			if (state==1) {
 				showOrHide();
 			}
@@ -496,7 +496,7 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(-1, 0)&&(battlefield[row][col-1]==8||battlefield[row][col-1]==enbattleaxID||battlefield[row][col-1]==enswordID||battlefield[row][col-1]==enspearID)) {
+		if (inField(-2, 0)&&(battlefield[row][col-2]==8||battlefield[row][col-2]==enbattleaxID||battlefield[row][col-2]==enswordID||battlefield[row][col-2]==enspearID)) {
 			if (state==1) {
 				showOrHide();
 			}
@@ -554,10 +554,10 @@ return occuString;
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-	    if (inField(1, 0)&&( battlefield[row][col + 1] == 8
-					|| battlefield[row][col + 1] == enbattleaxID
-					|| battlefield[row][col + 1] == enswordID
-					|| battlefield[row][col + 1] == enspearID)) {
+	    if (inField(2, 0)&&( battlefield[row][col + 2] == 8
+					|| battlefield[row][col + 2] == enbattleaxID
+					|| battlefield[row][col + 2] == enswordID
+					|| battlefield[row][col + 2] == enspearID)) {
 				if (state==1) {
 					showOrHide();
 					energy-=1;
