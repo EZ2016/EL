@@ -34,28 +34,29 @@ ZHU YINGSHAN*/
 # <cure period>
 0
 # Samurai states
-2 9 1
-1 4 1
-0 14 0
+14 9 0
+13 0 1
+5 0 0
 -1 -1 1
-0 0 0
-0 7 0
+-1 -1 1
+-1 -1 1
 # Battle field states
- 8 3 3 3 3 8 2 2 2 2 8 8 1 1 9 
- 9 3 3 3 3 3 2 2 2 5 5 5 1 1 9 
- 9 9 3 3 3 3 5 5 1 1 1 5 5 9 5 
- 9 9 9 9 9 9 3 3 3 3 3 1 1 1 5 
- 3 9 9 9 3 9 9 1 1 1 1 1 1 1 1 
- 8 0 8 8 9 3 0 1 1 1 1 1 1 1 1 
- 3 0 0 8 8 8 9 9 1 1 1 1 1 1 1 
- 3 0 0 3 8 8 9 1 1 1 1 1 1 1 1 
- 4 4 0 3 0 8 9 9 1 1 1 1 1 1 0 
- 0 4 2 4 4 4 8 9 9 0 0 0 0 0 8 
- 0 4 0 4 4 4 8 9 9 9 5 0 0 0 0 
- 0 4 0 0 8 8 9 9 9 9 9 0 0 0 9 
- 0 4 4 8 0 4 0 9 5 9 9 9 0 0 0 
- 0 4 8 9 9 0 0 5 9 5 9 9 9 9 9 
- 8 9 9 9 9 9 5 5 5 8 5 9 9 9 9
+ 9 2 2 2 2 8 3 2 9 2 2 8 1 1 8 
+ 2 2 2 2 3 2 3 2 2 9 2 8 1 1 1 
+ 2 2 2 2 2 2 3 2 2 2 9 1 1 1 1 
+ 3 3 3 3 3 3 3 3 3 9 9 9 1 1 1 
+ 9 3 3 3 3 3 3 1 9 9 9 9 9 1 1 
+ 9 9 3 3 3 1 3 9 9 9 9 9 9 1 0 
+ 9 9 9 3 1 1 9 9 9 9 9 9 1 0 0 
+ 9 9 9 9 1 9 9 9 9 9 9 1 1 0 0 
+ 9 9 9 9 9 9 9 9 9 9 1 1 0 0 0 
+ 9 9 9 9 9 9 9 9 9 0 0 0 0 0 8 
+ 9 9 9 9 9 9 9 9 9 9 0 0 0 0 0 
+ 9 9 9 9 9 9 9 9 9 9 9 0 0 0 0 
+ 9 9 9 9 9 9 9 9 9 9 9 9 0 0 0 
+ 9 9 9 9 9 9 9 9 9 9 9 9 9 0 0 
+ 9 9 9 9 9 9 9 9 9 9 9 9 9 9 8
+
 */
 public class SpearAi {
 	
@@ -337,8 +338,8 @@ public class SpearAi {
 	
 	 //判断是否能隐身&&me.row!=GameIniInformation.home.get(teamId*3).rowOfHome&&me.col!=GameIniInformation.home.get(teamId*3).colOfHome
     public boolean canHide(){
- 
-        if (battlefield[me.row][me.col]>=0&&battlefield[me.row][me.col]<=2&&(!inHome(me.row,me.col))) {
+    	
+        if (battlefield[row][col]>=0&&battlefield[row][col]<=2&&(!inHome(row,col))) {
 	         return true;//当处在不在家的位置，和自己占领的
          }
             return false;
@@ -526,21 +527,26 @@ public class SpearAi {
 					bestdirection=i;
 				}
 			}	
-		if (bestdirection==0) {//两边都被占领的情况
+		if (bestdirection==0&&energy>2) {//两边都被占领的情况
 			col--;
 			energy-=2;
 			occuString="8 "+type2();//move west
-			return occuString;
+return occuString;
 		}else {
+			if (energy<4) {
+				return occuString;
+			}
 			if (state==1) {
 				showOrHide();
-			}
-			occuString=bestdirection+" ";
-			energy-=4;
-		return occuString;
-		}
+			  }
+			  occuString=bestdirection+" ";
+			  energy-=4;
+return occuString;
 		  }
-		return occuString;
+		  }
+		
+		
+return occuString;
 	}
 
 	private String type4() {//在左边界
