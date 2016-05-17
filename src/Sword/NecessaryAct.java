@@ -55,7 +55,7 @@ public class NecessaryAct {
 					occupyList.add(C);
 					}
 				}
-				else if(direction == 2 || direction == 1){
+				if(direction == 2 || direction == 1){
 					cell C = new cell();
 					if(Sword.col+i>=0){
 					C.col = Sword.col + i;
@@ -65,7 +65,7 @@ public class NecessaryAct {
 					occupyList.add(C);
 					}
 				}
-				else if(direction == 1 || direction == 4){
+				if(direction == 1 || direction == 4){
 					cell C = new cell();
 					if(Sword.row+i>=0){
 					C.col = Sword.col;
@@ -75,7 +75,7 @@ public class NecessaryAct {
 					occupyList.add(C);
 					}
 				}
-				else if(direction == 2 || direction == 3){
+				if(direction == 2 || direction == 3){
 					cell C = new cell();
 					if(Sword.row-i>=0){
 					C.col = Sword.col;
@@ -240,6 +240,7 @@ public class NecessaryAct {
 			
 			Occupy(Kill());
 			action = action+Kill()+" ";
+			Hide();
 			whichAction = whichAction +"kill";
 			
 			
@@ -255,6 +256,7 @@ public class NecessaryAct {
 					Occupy(Kill());
 					action = action + i+" ";
 					action = action+Kill()+" ";
+					Hide();
 					whichAction = whichAction+"movekill";
 					return 1;
 				
@@ -317,13 +319,22 @@ public class NecessaryAct {
 	}
 	public void ShouldOccupy(){ 
 		isKill = false;
-		if(Sword.state == 1) //若隐身，首先现身
-			Show();//在不需要逃跑和击杀时，发育的方法
+		boolean notMove = false;
+		for(Samurai s:TurnInformation.nowAllSamurai){
+			if(Math.abs(s.col-Sword.col) == 2 && Math.abs(s.row - Sword.row)==2){
+				notMove = true;
+				break;
+			}
+		}
+		
 		int [][]Va =new int[5][4];  //Va储存不同行动后的收益，共20种
 		for(int i=0;i<=4;i++){
 			for(int j=0;j<=3;j++){
 				if(i==0){  //不移动，直接占领的收益
 					Va[0][j]=ValueOfOccupy(Occupy(j+1));
+				}
+				else if(notMove){
+					Va[i][j] =-1;
 				}
 				else{
 					Move(i+4);  //移动后占领的收益
@@ -351,11 +362,15 @@ public class NecessaryAct {
 			Hide();
 		}
 		else if(Xmax ==0 ){
+			if(Sword.state == 1) //若隐身，首先现身
+				Show();//在不需要逃跑和击杀时，发育的方法
 			action = action + (Ymax+1)+" ";
 			Hide();
 			whichAction = whichAction + "occupy";
 		}
 		else {
+			if(Sword.state == 1) //若隐身，首先现身
+				Show();//在不需要逃跑和击杀时，发育的方法
 			action = action + (Xmax+4)+" " + (Ymax+1)+" ";
 			Hide();
 			whichAction = whichAction + "Moveoccupy";
@@ -363,6 +378,8 @@ public class NecessaryAct {
 		
 	}
 	public void moveToCentre(){
+		
+		
 		if(Sword.col<7){
 			action = action + "6 ";
 		}
@@ -375,7 +392,19 @@ public class NecessaryAct {
 		if(Sword.row>=7){
 			action = action + "7 ";
 		}
-		action = action +"0";
+		if(Sword.col<7){
+			action = action + "6 ";
+		}
+		else if(Sword.col>=7){
+			action = action + "8 ";
+		}
+		else if(Sword.row<7){
+			action = action + "5 ";
+		}
+		else if(Sword.row>=7){
+			action = action + "7 ";
+		}
+		
 	}
 
 }
