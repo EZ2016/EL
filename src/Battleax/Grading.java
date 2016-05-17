@@ -107,7 +107,7 @@ public class Grading {
 			for(int j:i){
 				if(j>=0 && j<=2){
 					score=score+500;                      //暂定每有一块地加500分
-					if(battleaxAi.turnNum<battleaxAi.totalRounds){
+					if(battleaxAi.turnNum>battleaxAi.totalRounds-6){
 						score=score+1000;                //暂定最后一回合每有一块地再加1000分
 					}
 				}
@@ -165,7 +165,7 @@ public class Grading {
 		}
 		score=score-riskFactor*50;//暂定回合结束时每个危险系数减50分
 		if(battleaxAi.getState()==1){
-			score=score+riskFactor*100;                             //暂定回合结束时隐身加分策略
+			score=score+100+riskFactor*100;                             //暂定回合结束时隐身加分策略
 		}
 		return score;
 	}
