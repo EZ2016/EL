@@ -12,12 +12,12 @@ ZHU YINGSHAN*/
 # Game Info
 192 1 0 15 15 24
 # Home positions
-14 9
-14 0
-5 0
-14 0
-14 0
+0 14
+0 5
 9 14
+14 0
+14 9
+5 0
 # Ranks and scores of samurai
 3 40
 7 24
@@ -34,28 +34,29 @@ ZHU YINGSHAN*/
 # <cure period>
 0
 # Samurai states
-14 9 0
-13 0 1
-5 0 0
+0 14 0
+0 4 0
+9 13 0
 -1 -1 1
--1 -1 1
+14 10 0
 -1 -1 1
 # Battle field states
- 9 2 2 2 2 8 3 2 9 2 2 8 1 1 8 
- 2 2 2 2 3 2 3 2 2 9 2 8 1 1 1 
- 2 2 2 2 2 2 3 2 2 2 9 1 1 1 1 
- 3 3 3 3 3 3 3 3 3 9 9 9 1 1 1 
- 9 3 3 3 3 3 3 1 9 9 9 9 9 1 1 
- 9 9 3 3 3 1 3 9 9 9 9 9 9 1 0 
- 9 9 9 3 1 1 9 9 9 9 9 9 1 0 0 
- 9 9 9 9 1 9 9 9 9 9 9 1 1 0 0 
- 9 9 9 9 9 9 9 9 9 9 1 1 0 0 0 
- 9 9 9 9 9 9 9 9 9 0 0 0 0 0 8 
- 9 9 9 9 9 9 9 9 9 9 0 0 0 0 0 
- 9 9 9 9 9 9 9 9 9 9 9 0 0 0 0 
- 9 9 9 9 9 9 9 9 9 9 9 9 0 0 0 
- 9 9 9 9 9 9 9 9 9 9 9 9 9 0 0 
- 9 9 9 9 9 9 9 9 9 9 9 9 9 9 8
+ 8 8 8 9 5 9 9 9 8 8 3 9 3 9 9 
+8 8 8 8 9 5 9 9 9 8 8 8 9 8 9 
+1 8 8 8 5 9 5 9 9 9 8 8 8 9 3 
+1 1 8 8 5 9 9 9 9 9 9 8 8 8 3 
+8 1 1 8 8 8 9 9 9 9 9 9 9 9 9 
+8 1 1 8 8 8 8 8 8 9 9 9 9 8 9 
+1 1 8 8 9 9 9 9 9 9 9 9 9 9 9 
+1 8 8 9 9 9 9 9 9 9 9 9 9 9 9 
+8 8 8 8 8 9 9 9 8 8 8 8 9 9 9 
+8 8 8 8 9 8 9 9 8 8 8 8 9 4 9 
+0 8 8 8 8 8 9 8 8 8 8 8 4 9 8 
+0 8 8 8 9 9 8 8 8 8 8 8 8 9 9 
+0 8 8 8 8 8 8 8 2 2 2 8 8 8 4 
+0 8 8 8 8 8 8 8 2 8 2 8 8 8 8 
+8 0 0 0 0 8 8 8 2 8 2 8 8 8 9 
+
 
 */
 public class SpearAi {
@@ -96,6 +97,8 @@ public class SpearAi {
 	public int  onClothes() {//判断类型1234下右上左
 		int a=GameIniInformation.home.get(GameIniInformation.weapon).colOfHome;
 		int b=GameIniInformation.home.get(GameIniInformation.weapon).rowOfHome;
+		if(a==0&&b==14)return 5;
+		if(a==14&&b==0)return 6;
 		if(a==0)return 4;//根据家的位置判断类型
 		if (a==14)return 2;
 		if(b==0)return 3;
@@ -103,6 +106,147 @@ public class SpearAi {
 		return 0;
 	}
 	
+	public void occupy() {//能量为7
+		switch (type) {
+		case 1:
+			String s1=type1();
+			order=order+s1;
+			break;
+		case 2:
+			String s2=type2();
+			order=order+s2;
+			break;
+		case 3:
+			String s3=type3();
+			order=order+s3;
+			break;
+		case 4:
+			String s4=type4();
+			order=order+s4;
+			break;
+		case 5:
+			String s5=type5();
+			order=order+s5;
+			break;
+		case 6:
+			String s6=type6();
+		default:
+			break;
+		}
+	}
+
+	
+	
+	private String type1() {//在下边界的时候
+		String occuString="";
+		int score;
+		int bestdirection=0;
+		int maxscore=0;
+		if (inField(0, 2)&&!inHome(row-2, col)&&(battlefield[row-2][col]==8||battlefield[row-2][col]==enbattleaxID||battlefield[row-2][col]==enswordID||battlefield[row-2][col]==enspearID)) {
+			if (state==1) {
+				showOrHide();
+			}
+			occuString="3 ";//north
+		  }else {
+			for (int i = 1; i < 3; i+=2) {//4231左右上下
+				score=0;
+				for (int j = 1; j < 5; j++) {
+					switch (i) {
+					case 4:	if (inField(-j,0)) {//向左占领
+						if (!inHome(row, col-j)
+								&&(battlefield[row][col-j]==enbattleaxID
+								||battlefield[row][col-j]==enspearID
+								||battlefield[row][col-j]==enswordID
+								||battlefield[row][col-j]==8)) {
+							score++;
+						}
+					}
+						break;
+					case 2:if (inField(j,0)) {//向右占领
+						if (inHome(row, col+j)
+								&&(battlefield[row][col+j]==enbattleaxID||battlefield[row][col+j]==enspearID||battlefield[row][col+j]==enswordID||battlefield[row][col+j]==8)) {
+							score++;
+						}
+					}
+						break;
+					
+					}
+				}
+				
+				if(score>maxscore){
+					maxscore=score;
+					bestdirection=i;
+				}
+			}
+		  if (bestdirection==0) {//两边都被占领的情况
+			  row++;
+			  energy-=2;
+			  occuString="7 "+type1();
+			  return occuString;
+		  }else {
+			  if (state==1) {
+				showOrHide();
+			  }
+			  occuString=bestdirection+" ";
+			  return occuString;
+		   }
+	    }
+	return occuString;
+	}
+
+	
+	private String type5() {
+		String occupyString="";
+		int score=0,maxscore=0,bestdirection=2;
+		if (row<9) {
+			occupyString=type4();
+		}else {
+			if (inField(0, 2)&&(!inHome(row-2, col))&&(battlefield[row-2][col]==8||battlefield[row-2][col]==enbattleaxID||battlefield[row-2][col]==enswordID||battlefield[row-2][col]==enspearID)) {
+				if (state==1) {
+					showOrHide();
+				}
+				occupyString="3 ";//north
+			 }else {
+		    if (score==0) {
+					  row--;
+					  energy-=2;
+					  occupyString="7 "+type5();
+					  return occupyString;
+		    }
+			    }
+			
+			
+			}
+			return occupyString;
+			}
+	
+	
+	
+	private String type6() {
+		String occupyString="";
+		int score=0,maxscore=0,bestdirection=4;
+		if (row>6) {
+			occupyString=type2();
+		}else {
+			if (inField(0, -2)&&!inHome(row+2, col)&&(battlefield[row+2][col]==8||battlefield[row+2][col]==enbattleaxID||battlefield[row+2][col]==enswordID||battlefield[row+2][col]==enspearID)) {
+				if (state==1) {
+					showOrHide();
+				}
+				occupyString="1 ";//north
+			 }else {
+		    if (score==0) {
+					  row++;
+					  energy-=2;
+					  occupyString="5 "+type5();
+					  return occupyString;
+		    }
+			    }
+			}
+			return occupyString;
+	}
+
+	
+
 	public void  action() {//直接把行动的指令加在order后面
 		String str=canKill();
 		if (str.length()==0) {
@@ -356,91 +500,12 @@ public class SpearAi {
 }
     
     
-	public void occupy() {//能量为7
-		switch (type) {
-		case 1:
-			String s1=type1();
-			order=order+s1;
-			break;
-		case 2:
-			String s2=type2();
-			order=order+s2;
-			break;
-		case 3:
-			String s3=type3();
-			order=order+s3;
-			break;
-		case 4:
-			String s4=type4();
-			order=order+s4;
-			break;
-		default:
-			break;
-		}
-	}
-	private String type1() {//在下边界的时候
-		String occuString="";
-		int score;
-		int bestdirection=0;
-		int maxscore=0;
-		if (inField(0, 2)&&(battlefield[row-2][col]==8||battlefield[row-2][col]==enbattleaxID||battlefield[row-2][col]==enswordID||battlefield[row-2][col]==enspearID)) {
-			if (state==1) {
-				showOrHide();
-			}
-			occuString="3 ";//north
-		  }else {
-			for (int i = 1; i < 3; i+=2) {//4231左右上下
-				score=0;
-				for (int j = 1; j < 5; j++) {
-					switch (i) {
-					case 4:	if (inField(-j,0)) {//向左占领
-						if (!inHome(row, col-j)
-								&&(battlefield[row][col-j]==enbattleaxID
-								||battlefield[row][col-j]==enspearID
-								||battlefield[row][col-j]==enswordID
-								||battlefield[row][col-j]==8)) {
-							score++;
-						}
-					}
-						break;
-					case 2:if (inField(j,0)) {//向右占领
-						if (inHome(row, col+j)
-								&&(battlefield[row][col+j]==enbattleaxID||battlefield[row][col+j]==enspearID||battlefield[row][col+j]==enswordID||battlefield[row][col+j]==8)) {
-							score++;
-						}
-					}
-						break;
-					
-					}
-				}
-				
-				if(score>maxscore){
-					maxscore=score;
-					bestdirection=i;
-				}
-			}
-		  if (bestdirection==0) {//两边都被占领的情况
-			  row++;
-			  energy-=2;
-			  occuString="7 "+type1();
-			  return occuString;
-		  }else {
-			  if (state==1) {
-				showOrHide();
-			  }
-			  occuString=bestdirection+" ";
-			  return occuString;
-		   }
-	    }
-	return occuString;
-	}
-
 	private String type3() {//在上边界的时候
 		String occuString="";
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(0, -2)&&(battlefield[row+2][col]==8||battlefield[row+2][col]==enbattleaxID||battlefield[row+2][col]==enswordID||battlefield[row+2][col]==enspearID)) {//下一步是未占领的
+		if (inField(0, -2)&&!inHome(row+2, col)&&(battlefield[row+2][col]==8||battlefield[row+2][col]==enbattleaxID||battlefield[row+2][col]==enswordID||battlefield[row+2][col]==enspearID)) {//下一步是未占领的
 			if (state==1) {
 				showOrHide();
 			}
@@ -496,7 +561,7 @@ public class SpearAi {
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-		if (inField(-2, 0)&&(battlefield[row][col-2]==8||battlefield[row][col-2]==enbattleaxID||battlefield[row][col-2]==enswordID||battlefield[row][col-2]==enspearID)) {
+		if (inField(-2, 0)&&!inHome(row, col-2)&&(battlefield[row][col-2]==8||battlefield[row][col-2]==enbattleaxID||battlefield[row][col-2]==enswordID||battlefield[row][col-2]==enspearID)) {
 			if (state==1) {
 				showOrHide();
 			}
@@ -554,7 +619,7 @@ return occuString;
 		int score;
 		int bestdirection=0;
 		int maxscore=0;
-	    if (inField(2, 0)&&( battlefield[row][col + 2] == 8
+	    if (inField(2, 0)&&!inHome(row, col+2)&&( battlefield[row][col + 2] == 8
 					|| battlefield[row][col + 2] == enbattleaxID
 					|| battlefield[row][col + 2] == enswordID
 					|| battlefield[row][col + 2] == enspearID)) {
