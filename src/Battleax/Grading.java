@@ -120,7 +120,7 @@ public class Grading {
 				}
 			}
 		}
-		if(battleaxAi.mustEscape() && battleaxAi.getState()==0){
+		if(battleaxAi.mustEscape()){
 			if(battleaxAi.getState()==0){
 				score=score-9000;                        //暂定回合结束时会被杀减9000分
 			}
@@ -169,9 +169,9 @@ public class Grading {
 				}
 			}
 		}
-		score=score-riskFactor*50;//暂定回合结束时每个危险系数减50分
+		score=score-riskFactor*40;//暂定回合结束时每个危险系数减50分
 		if(battleaxAi.getState()==1){
-			score=score+100+riskFactor*100;                             //暂定回合结束时隐身加分策略
+			score=score+100+riskFactor*30;                             //暂定回合结束时隐身加分策略
 		}
 		return score;
 	}
