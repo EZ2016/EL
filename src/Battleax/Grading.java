@@ -40,6 +40,9 @@ public class Grading {
 			this.battleaxAi.setMe(battleaxAi_backup.getMe());
 		}
 		
+		if(steps.size()==0){
+			return new int[]{0};
+		}
 		StepAndScore maxStep=steps.get(0);
 		for(StepAndScore step:steps){
 			if(step.score>maxStep.score){
@@ -107,7 +110,7 @@ public class Grading {
 			for(int j:i){
 				if(j>=0 && j<=2){
 					score=score+500;                      //暂定每有一块地加500分
-					if(battleaxAi.turnNum>battleaxAi.totalRounds-6){
+					if(battleaxAi.turnNum>=battleaxAi.totalRounds-6){
 						score=score+1000;                //暂定最后一回合每有一块地再加1000分
 					}
 				}

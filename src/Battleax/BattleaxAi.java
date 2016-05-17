@@ -66,7 +66,22 @@ public class BattleaxAi extends AI implements Cloneable {
 			hide();
 		}
 		
-		else{                    //其他情况采用评分算法
+		else if (canDoubleMove()) {
+			SimulateActions SA=new SimulateActions();
+			DoubleMove doubleMove=new DoubleMove(this);
+			int[] step=doubleMove.bestMove(SA.AllActions());
+			for(int i:step){
+				if(i!=0){
+					actions=actions+i+" ";
+				}
+			}
+		}
+		
+		if(turnNum>=totalRounds-6){//如果是最后一轮，强制执行评分算法
+			actions="";
+		}
+		
+		if(actions.length()==0){                    //其他情况采用评分算法
 			SimulateActions SA=new SimulateActions();
 			Grading grading=new Grading(this);
 			int[] step=grading.maxScore(SA.AllActions());
@@ -358,6 +373,33 @@ public class BattleaxAi extends AI implements Cloneable {
 			return true;
 		}		
 		return false;
+	}
+	
+	public boolean canDoubleMove(){//能对对方斧头二连动并杀掉它就返回true，否则false
+		int turn=turnNum;
+		while(turn>11){ //先判断是不是二连动允许回合
+			turn=turn-12;
+		}
+		if(turn<=5 && samuraiID==2){
+			return false;
+		}
+		else if (turn>=6 && samuraiID==5) {
+			return false;
+		}
+		
+		if(allSamurai.get(5).row<0 || allSamurai.get(5).col<0){//再判断敌方斧头在不在我自己一个人视野内
+			return false;
+		}
+		else if (allSamurai.get(5).row==allHome.get(5).rowOfHome && allSamurai.get(5).col==allHome.get(5).colOfHome) {
+			return false;
+		}
+		else if (distantFromMe(allSamurai.get(5).row, allSamurai.get(5).col)>5) {
+			return false;
+		}
+		else {
+			return true;
+		}
+		
 	}
 	
 	public void setBattleField(int[][]battleField) {
