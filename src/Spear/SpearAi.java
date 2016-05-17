@@ -12,12 +12,12 @@ ZHU YINGSHAN*/
 # Game Info
 192 1 0 15 15 24
 # Home positions
-0 14
-0 5
-9 14
 14 0
 14 9
 5 0
+0 14
+0 5
+9 14
 # Ranks and scores of samurai
 3 40
 7 24
@@ -34,28 +34,29 @@ ZHU YINGSHAN*/
 # <cure period>
 0
 # Samurai states
-0 14 0
-0 4 0
-9 13 0
--1 -1 1
+14 0 0
 14 10 0
+5 2 1
 -1 -1 1
+-1 -1 1
+6 13 0
 # Battle field states
- 8 8 8 9 5 9 9 9 8 8 3 9 3 9 9 
-8 8 8 8 9 5 9 9 9 8 8 8 9 8 9 
-1 8 8 8 5 9 5 9 9 9 8 8 8 9 3 
-1 1 8 8 5 9 9 9 9 9 9 8 8 8 3 
-8 1 1 8 8 8 9 9 9 9 9 9 9 9 9 
-8 1 1 8 8 8 8 8 8 9 9 9 9 8 9 
-1 1 8 8 9 9 9 9 9 9 9 9 9 9 9 
-1 8 8 9 9 9 9 9 9 9 9 9 9 9 9 
-8 8 8 8 8 9 9 9 8 8 8 8 9 9 9 
-8 8 8 8 9 8 9 9 8 8 8 8 9 4 9 
-0 8 8 8 8 8 9 8 8 8 8 8 4 9 8 
-0 8 8 8 9 9 8 8 8 8 8 8 8 9 9 
-0 8 8 8 8 8 8 8 2 2 2 8 8 8 4 
-0 8 8 8 8 8 8 8 2 8 2 8 8 8 8 
-8 0 0 0 0 8 8 8 2 8 2 8 8 8 9 
+ 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
+9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
+9 9 8 8 8 8 8 8 8 9 8 8 8 8 8 
+9 9 9 8 8 8 8 8 9 9 9 8 8 8 8 
+9 9 9 9 8 8 8 9 9 9 9 9 9 8 8 
+9 9 9 9 9 8 8 8 8 9 9 9 9 8 8 
+9 9 9 9 9 9 9 9 9 9 9 9 8 8 8 
+9 9 9 9 9 9 9 9 9 9 9 8 8 8 8 
+8 8 8 8 8 9 9 9 8 8 8 8 8 8 8 
+9 8 8 8 9 8 9 9 9 8 8 8 8 8 8 
+9 9 8 8 8 8 9 9 9 9 8 8 8 8 8 
+9 9 9 8 9 9 9 9 9 9 9 8 8 8 8 
+3 9 9 9 8 8 8 9 8 9 9 9 8 8 8 
+3 9 9 9 9 8 8 8 9 8 9 9 9 8 8 
+9 9 9 9 9 9 8 8 8 8 8 9 9 9 8 
+
 
 
 */
@@ -130,6 +131,7 @@ public class SpearAi {
 			break;
 		case 6:
 			String s6=type6();
+			order=order+s6;
 		default:
 			break;
 		}
@@ -212,10 +214,7 @@ public class SpearAi {
 					  energy-=2;
 					  occupyString="7 "+type5();
 					  return occupyString;
-		    }
-			    }
-			
-			
+		    } }
 			}
 			return occupyString;
 			}
@@ -228,7 +227,7 @@ public class SpearAi {
 		if (row>6) {
 			occupyString=type2();
 		}else {
-			if (inField(0, -2)&&!inHome(row+2, col)&&(battlefield[row+2][col]==8||battlefield[row+2][col]==enbattleaxID||battlefield[row+2][col]==enswordID||battlefield[row+2][col]==enspearID)) {
+			if (inField(0, -2)&&(!inHome(row+2, col))&&(battlefield[row+2][col]==8||battlefield[row+2][col]==enbattleaxID||battlefield[row+2][col]==enswordID||battlefield[row+2][col]==enspearID)) {
 				if (state==1) {
 					showOrHide();
 				}
@@ -237,7 +236,7 @@ public class SpearAi {
 		    if (score==0) {
 					  row++;
 					  energy-=2;
-					  occupyString="5 "+type5();
+					  occupyString="5 "+type6();
 					  return occupyString;
 		    }
 			    }
