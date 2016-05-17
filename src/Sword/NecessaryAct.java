@@ -23,7 +23,7 @@ public class NecessaryAct {
 	public NecessaryAct(){ //构造方法，开始时得到剑和敌方矛的信息
 		for(Samurai samurai:TurnInformation.nowAllSamurai){
 			if(samurai.weapon == 1 && samurai.team==myTeam){  //我自行在Samurai里添加的ID，便于区分武士
-				Sword = samurai;
+				Sword=samurai;
 			    
 			}
 			if(samurai.weapon == 0 && samurai.team!=myTeam){
@@ -225,7 +225,7 @@ public class NecessaryAct {
 			ArrayList<cell> temp = this.Occupy(i);
 			for(cell c:temp){
 				for(Samurai s:TurnInformation.nowAllSamurai){
-					if(c.col == s.col && c.row == s.row && s.team != myTeam && s.state !=-1){
+					if(c.col == s.col && c.row == s.row && s.team != myTeam && !isHome(s)){
 						return i;
 					}
 				}
@@ -405,6 +405,14 @@ public class NecessaryAct {
 			action = action + "7 ";
 		}
 		
+	}
+	public boolean isHome(Samurai sa){
+		for(Home h:GameIniInformation.home){
+			if(sa.col == h.colOfHome && sa.row == h.rowOfHome){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
