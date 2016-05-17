@@ -273,7 +273,7 @@ public class BattleaxAi extends AI implements Cloneable {
 				}
 			}
 			else if(fromEnemySword[0]==-1 || fromEnemySword[0]==1){
-				if(fromEnemySword[1]>=-2 || fromEnemySword[1]<=2){
+				if(fromEnemySword[1]>=-2 && fromEnemySword[1]<=2){
 					return true;
 				}
 			}
