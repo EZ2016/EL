@@ -203,7 +203,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow()-1)&&(col==battleaxAi.getMyCol())){
 						continue;
 					}
-					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){              
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}
@@ -221,7 +221,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow())&&(col==battleaxAi.getMyCol()-1)){
 						continue;
 					}
-					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){              
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}
@@ -239,7 +239,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow()+1)&&(col==battleaxAi.getMyCol())){
 						continue;
 					}
-					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){             
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}
@@ -257,7 +257,7 @@ public class Grading {
 					if((row==battleaxAi.getMyRow())&&(col==battleaxAi.getMyCol()+1)){
 						continue;
 					}
-					for(Home home:battleaxAi.getAllHome()){              //如果这个格子不是大本营，那么可以改变所有者
+					for(Home home:battleaxAi.getAllHome()){              
 						if(home.rowOfHome==row && home.colOfHome==col){
 							continue;
 						}
@@ -277,14 +277,5 @@ public class Grading {
 		}
 		return 0;
 	}
-/*	
-	public boolean existEnemy (int row,int col) {       //若(i,j)有敌人，则返回true，否则false
-		for(Samurai enemy:TurnInformation.nowAllSamurai){
-			if(enemy.team!=myTeam && enemy.row==row && enemy.col==col ){
-				return true;
-			}
-		}
-		return false;
-	}
-*/
+
 }

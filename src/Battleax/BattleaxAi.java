@@ -268,27 +268,28 @@ public class BattleaxAi extends AI implements Cloneable {
 		if(allSamurai.get(4).row>=0 && allSamurai.get(4).col>=0){
              //逃离剑的攻击
 			if(fromEnemySword[0]==0){
-				if(fromEnemySword[1]>=-4 && fromEnemySword[1]<=4){
+				if(fromEnemySword[1]>=-3 && fromEnemySword[1]<=3){
 					return true;
 				}
 			}
 			else if(fromEnemySword[0]==-1 || fromEnemySword[0]==1){
-				if(fromEnemySword[1]>=-3 || fromEnemySword[1]<=3){
+				if(fromEnemySword[1]>=-2 || fromEnemySword[1]<=2){
 					return true;
 				}
 			}
-			else if((fromEnemySword[0]>=2 && fromEnemySword[0]<=3) || (fromEnemySword[0]>=-3 && fromEnemySword[0]<=-2)){
+			else if(fromEnemySword[0]==2 || fromEnemySword[0]==-2){
 				if(fromEnemySword[1]>=-1 && fromEnemySword[1]<=1){
 					return true;
 				}
 			}
-			else if (fromEnemySword[0]==-4 || fromEnemySword[0]==4) {
+			else if (fromEnemySword[0]==-3 || fromEnemySword[0]==3) {
 				if(fromEnemySword[1]==0){
 					return true;
 				}
 			}
 		}
 		if(distantFromMe(allSamurai.get(5).row, allSamurai.get(5).col)<=3){
+			//逃离斧头的攻击
 			if(allSamurai.get(5).row==me.row || allSamurai.get(5).col==me.col){
 				if(Math.abs(allSamurai.get(5).row-me.row)==3 || Math.abs(allSamurai.get(5).col-me.col)==3){
 					return false;
