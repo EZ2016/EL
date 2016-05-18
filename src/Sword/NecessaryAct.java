@@ -237,7 +237,7 @@ public class NecessaryAct {
 	public int MustKill(){//必杀方法，尝试行动一步或者不动的击杀，若能返回true，不能返回false
 		isKill = true;
 		if(Kill()!=0){  //原地能击杀
-			
+			Show();
 			Occupy(Kill());
 			action = action+Kill()+" ";
 			Hide();
