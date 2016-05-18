@@ -109,7 +109,7 @@ public class Grading {
 		for(int[] i:battleaxAi.getBattleField()){
 			for(int j:i){
 				if(j>=0 && j<=2){
-					score=score+500;                      //暂定每有一块地加500分
+					score=score+600;                      //暂定每有一块地加600分
 					if(battleaxAi.turnNum>=battleaxAi.totalRounds-6){
 						score=score+1000;                //暂定最后一回合每有一块地再加1000分
 					}
@@ -128,7 +128,7 @@ public class Grading {
 				score=score-9000;                        //暂定回合结束时会被杀减9000分
 			}
 			else if (battleaxAi.getState()==1) {
-				score=score-600;
+				score=score-700;
 			}
 			
 		}
@@ -172,9 +172,9 @@ public class Grading {
 				}
 			}
 		}
-		score=score-riskFactor*40;//暂定回合结束时每个危险系数减50分
+		score=score-riskFactor*30;//暂定回合结束时每个危险系数减50分
 		if(battleaxAi.getState()==1){
-			score=score+100+riskFactor*30;                             //暂定回合结束时隐身加分策略
+			score=score+100+riskFactor*40;                             //暂定回合结束时隐身加分策略
 		}
 		return score;
 	}
