@@ -145,7 +145,7 @@ public class NecessaryAct {
 			value++;	
 			}
 		}
-		if(MustEscape()){
+		if(MustEscape() && TurnInformation.turnNum<185){
 			value = -1;
 		}
 		int Swordcol = Math.abs(Sword.col - emSword.col);
@@ -154,6 +154,7 @@ public class NecessaryAct {
 		int Battlexrow = Math.abs(Sword.row - emBattlex.row);
 		
 		if((Battlexcol <=2 && Battlexrow <= 1) || (Battlexcol <= 1 && Battlexrow <= 2) || (Swordcol <= 2 && Swordrow ==1) || (Swordcol == 1&& Swordrow <=2)|| (Swordcol <= 3 &&Swordrow == 0)||(Swordcol == 0 && Swordrow <=3)){
+			if(TurnInformation.turnNum<185)
 			value = -1;
 		}
 		return value;
@@ -279,7 +280,9 @@ public class NecessaryAct {
 			return false;
 		}
 	}
-	public boolean Escape(){  //逃跑方法
+	public boolean Escape(){
+		if(TurnInformation.turnNum >=185)
+			return false;//逃跑方法
 		if(MustEscape()){
 			int i;
 			int j;
