@@ -24,7 +24,11 @@ public class BattleaxAi extends AI implements Cloneable {
 	}
 	
 	public void run(){                     //Battleax的AI开始计算
-		if(canAttactEnemy()){   //如果能杀人，就杀
+		if(turnNum>=totalRounds-6){//如果是最后一轮，强制执行评分算法
+			actions="";
+		}
+		
+		else if(canAttactEnemy()){   //如果能杀人，就杀
 			if(me.state==1){  //如果隐身了，就先现形
 				show();
 			}
@@ -75,10 +79,6 @@ public class BattleaxAi extends AI implements Cloneable {
 					actions=actions+i+" ";
 				}
 			}
-		}
-		
-		if(turnNum>=totalRounds-6){//如果是最后一轮，强制执行评分算法
-			actions="";
 		}
 		
 		if(actions.length()==0){                    //其他情况采用评分算法
