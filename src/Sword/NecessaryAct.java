@@ -1,10 +1,6 @@
 package Sword;
 
 import java.util.ArrayList;
-
-import com.sun.corba.se.spi.orbutil.fsm.Action;
-import com.sun.xml.internal.ws.org.objectweb.asm.Label;
-
 import EZ.GameIniInformation;
 import EZ.Home;
 import EZ.Samurai;

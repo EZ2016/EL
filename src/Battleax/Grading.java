@@ -1,5 +1,7 @@
 package Battleax;
 import java.util.ArrayList;
+
+import EZ.GameIniInformation;
 import EZ.Home;
 import EZ.Samurai;
 /*斧头武士的评分系统
@@ -105,6 +107,9 @@ public class Grading {
 			
 		}
 		
+		int riskFromEnemyHome=1000;    //暂定回合结束时靠近敌方大本营距离3以内减1000分
+		int riskFactor=0;//危险系数：周围有可能出现原来是隐身的敌人攻击我，这样的可能的敌人所在的格子，每有一个危险系数+1
+		
 		score=score+kill*10000;                            //暂定杀人加10000分
 		for(int[] i:battleaxAi.getBattleField()){
 			for(int j:i){
@@ -132,16 +137,28 @@ public class Grading {
 			}
 			
 		}
+		if(battleaxAi.turnNum>GameIniInformation.totalRounds*2/3){//后期偷家加分
+			if(distanceFromHome(battleaxAi.getAllSamurai().get(0))<=4 && distanceFromHome(battleaxAi.getAllSamurai().get(1))<=8){
+				int x=Math.abs((battleaxAi.getTeamID()==0?0:14)-battleaxAi.getMyRow());//南北方向上与边界的差
+				int y=Math.abs((battleaxAi.getTeamID()==0?14:0)-battleaxAi.getMyCol());//东西方向上与边界的差
+				if(x<=5){
+					score=score+160*x*(5-x);//加分函数为f(x)=160x(5-x)
+				}
+				else if(y<=5){
+					score=score+160*y*(5-y);//加分函数为f(x)=160x(5-x)
+				}
+				riskFromEnemyHome=0;
+			}
+		}
 		for(Home home:battleaxAi.getAllHome()){
 			if(home.teamID==battleaxAi.getTeamID()){
 				continue;
 			}
 			if(battleaxAi.distantFromMe(home.rowOfHome, home.colOfHome)<=3){
-				score=score-1000;                  //暂定回合结束时靠近敌方大本营距离3以内减1000分
+				score=score-riskFromEnemyHome;        //暂定回合结束时靠近敌方大本营距离3以内减1000分
 				break;
 			}
 		}
-		int riskFactor=0;
 		for(int row=Math.max(battleaxAi.getMyRow()-5, 0);row<=Math.min(battleaxAi.getMyRow()+5, 14);row++){
 			for(int col=Math.max(battleaxAi.getMyCol()-5, 0);col<=Math.min(battleaxAi.getMyCol()+5, 14);col++){
 				if(row==battleaxAi.getMyRow()){
@@ -281,4 +298,8 @@ public class Grading {
 		return 0;
 	}
 
+	public int distanceFromHome(Samurai samurai) {//返回该武士距离自己大本营的距离
+		Home home=battleaxAi.getAllHome().get(samurai.weapon+(samurai.team==battleaxAi.getTeamID()?0:3));
+		return Math.abs(home.rowOfHome-samurai.row)+Math.abs(home.colOfHome-samurai.col);
+	}
 }
