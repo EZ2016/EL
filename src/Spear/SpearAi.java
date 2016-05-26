@@ -1,5 +1,7 @@
 package Spear;
 
+import java.net.CookieHandler;
+
 import EZ.GameIniInformation;
 import EZ.Home;
 import EZ.Samurai;
@@ -12,12 +14,12 @@ ZHU YINGSHAN*/
 # Game Info
 192 1 0 15 15 24
 # Home positions
-14 0
-14 9
-5 0
-0 14
 0 5
+0 14
 9 14
+14 9
+14 0
+5 0
 # Ranks and scores of samurai
 3 40
 7 24
@@ -30,33 +32,32 @@ ZHU YINGSHAN*/
 
 # Turn information
 # <turn>
-0
+174
 # <cure period>
 0
 # Samurai states
-14 0 0
-14 10 0
-5 2 1
+0 4 0
+0 14 0
+13 5 1
 -1 -1 1
+3 8 0
 -1 -1 1
-6 13 0
 # Battle field states
- 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
-9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
-9 9 8 8 8 8 8 8 8 9 8 8 8 8 8 
-9 9 9 8 8 8 8 8 9 9 9 8 8 8 8 
-9 9 9 9 8 8 8 9 9 9 9 9 9 8 8 
-9 9 9 9 9 8 8 8 8 9 9 9 9 8 8 
-9 9 9 9 9 9 9 9 9 9 9 9 8 8 8 
-9 9 9 9 9 9 9 9 9 9 9 8 8 8 8 
-8 8 8 8 8 9 9 9 8 8 8 8 8 8 8 
-9 8 8 8 9 8 9 9 9 8 8 8 8 8 8 
-9 9 8 8 8 8 9 9 9 9 8 8 8 8 8 
-9 9 9 8 9 9 9 9 9 9 9 8 8 8 8 
-3 9 9 9 8 8 8 9 8 9 9 9 8 8 8 
-3 9 9 9 9 8 8 8 9 8 9 9 9 8 8 
-9 9 9 9 9 9 8 8 8 8 8 9 9 9 8 
-
+ 0 5 5 9 5 9 9 9 5 5 4 9 4 4 9 
+0 5 5 5 9 5 9 9 9 5 5 4 4 4 4 
+0 5 5 5 5 9 5 9 9 9 5 4 4 4 4 
+0 5 5 5 5 9 9 9 9 9 4 4 4 4 4 
+0 0 0 0 0 5 9 9 9 4 4 4 4 4 4 
+8 0 0 5 4 5 3 3 5 2 2 2 2 2 2 
+0 8 8 4 9 9 9 9 9 5 5 5 4 4 2 
+0 8 4 9 9 9 9 9 9 9 2 2 2 2 2 
+0 4 4 4 3 9 9 9 5 5 5 5 4 4 4 
+3 3 4 4 9 3 9 9 9 2 2 2 2 4 8 
+8 1 1 4 3 3 9 9 9 9 9 9 9 4 9 
+1 1 1 1 9 9 9 9 9 9 9 2 9 9 9 
+1 1 1 1 3 3 1 9 1 9 9 9 2 2 3 
+1 1 1 1 3 3 1 1 9 1 9 9 9 9 9 
+8 1 1 1 1 2 2 2 2 8 2 9 9 9 9
 
 
 */
@@ -139,6 +140,268 @@ public class SpearAi {
 
 	
 	
+	private void iniOccupy() {
+		String str;
+		if (type==2) {
+			str =iniType2();
+		}else {
+			str =iniType4();
+		}
+		order=order +str ;
+	}
+
+	private String iniType4() {//占领北侧
+		String occuString="";
+		if (energy<2) {
+			return "";
+		}
+		if (row==4) {
+			if (inField(2, 0)&&!inHome(row, col+2)&&( battlefield[row][col + 2] == 8
+					|| battlefield[row][col + 2] == enbattleaxID
+					|| battlefield[row][col + 2] == enswordID
+					|| battlefield[row][col + 2] == enspearID)&&energy>3) {
+				if (state==1) {
+					showOrHide();
+					energy-=1;
+				}
+				occuString = "2 ";
+				energy -= 4;
+			} else {
+				boolean canOccupy=false;
+				for (int j= 1; j < 5; j++) {
+					if (inField(0, j)&&(!inHome(row-j, col)
+							&&(battlefield[row - j][col] == enbattleaxID
+							|| battlefield[row - j][col] == enspearID
+							|| battlefield[row - j][col] == enswordID
+							|| battlefield[row - j][col] == 8)) ){
+                           canOccupy=true;
+					}
+				} 
+				if (canOccupy) {
+					if (state==1) {
+						showOrHide();
+						energy-=1;
+					}
+					occuString="3 ";
+					energy-=4;
+				}else {
+					col++;
+					energy -= 2;
+					occuString = "6 " + type4();//only east move
+					return occuString;
+				}
+			}
+	    }else {//回到row=4的地方
+		     int a=row-4;
+		     do {
+		    	if (a<0) {
+				    occuString=occuString+"5 ";
+				    row++;
+				    a++;
+				    energy-=2;
+			    }else{
+			    	occuString=occuString+"7 ";
+			    	a--;
+			    	row--;
+			    	energy-=2;
+			    } 
+			} while (a!=0);
+		     if (energy>3) {
+				occuString=occuString+iniType4();
+			}
+	    }
+		return occuString;
+	}
+
+	private String iniType2() {
+		String occuString="";
+		if (energy<2) {
+			return "";
+		}
+		if (row==10) {
+			if (inField(-2, 0)&&!inHome(row, col-2)&&(battlefield[row][col-2]==8||battlefield[row][col-2]==enbattleaxID||battlefield[row][col-2]==enswordID||battlefield[row][col-2]==enspearID)) {
+				if (state==1) {
+					showOrHide();
+				}
+				occuString="4 ";
+				energy -= 4;
+			} else {
+				boolean canOccupy=false;
+				for (int j= 1; j < 5; j++) {
+					if (inField(0, -j)&&(!inHome(row+j, col)
+							&&(battlefield[row + j][col] == enbattleaxID
+							|| battlefield[row + j][col] == enspearID
+							|| battlefield[row + j][col] == enswordID
+							|| battlefield[row + j][col] == 8) )){
+	                       canOccupy=true;
+					}
+				} 
+				if (canOccupy) {
+					if (state==1) {
+						showOrHide();
+						energy-=1;
+					}
+					occuString="1 ";
+					energy-=4;
+				}else {
+					col--;
+					energy -= 2;
+					occuString = "8 " + iniType2();//only east move
+					return occuString;
+				}
+			}
+	    }else {//回到row=4的地方
+		     int a=row-10;
+		     do {
+		    	if (a<0) {
+				    occuString=occuString+"5 ";
+				    energy-=2;
+				    row++;
+				    a++;
+			    }else{
+			    	occuString=occuString+"7 ";
+			    	a--;
+			    	row--;
+			    	 energy-=2;
+			    } 
+			} while (a!=0);
+		     if (energy>3) {
+				occuString=occuString+iniType2();
+			}
+	    }
+		return occuString;
+	}
+
+	private String type4() {//在左边界
+		String occuString="";
+		int score;
+		int bestdirection=0;
+		int maxscore=0;
+	    if (inField(2, 0)&&!inHome(row, col+2)&&( battlefield[row][col + 2] == 8
+					|| battlefield[row][col + 2] == enbattleaxID
+					|| battlefield[row][col + 2] == enswordID
+					|| battlefield[row][col + 2] == enspearID)) {
+				if (state==1) {
+					showOrHide();
+					energy-=1;
+				}
+				occuString = "2 ";
+				energy -= 4;
+			} else {
+				for (int i = 3; i >0; i -= 2) {
+					score = 0;//每一回合的分数清零
+					for (int j = 1; j < 5; j++) {
+						switch (i) {
+						case 1:
+							if (inField(0, -j)) {//South occupy
+								int a=battlefield[row + j][col];
+								if (!inHome(row+j, col)
+										&&(battlefield[row + j][col] == enbattleaxID
+										|| battlefield[row + j][col] == enspearID
+										|| battlefield[row + j][col] == enswordID
+										|| battlefield[row + j][col] == 8)) {
+									score++;
+								}
+							}
+							break;
+						case 3:
+							if (inField(0, j)) {//north occupy
+								if (!inHome(row-j, col)
+										&&(battlefield[row - j][col] == enbattleaxID
+										|| battlefield[row - j][col] == enspearID
+										|| battlefield[row - j][col] == enswordID
+										|| battlefield[row - j][col] == 8)) {
+									score++;
+								}
+							}
+							break;
+	
+						}
+					}
+	
+					if (score > maxscore) {
+						maxscore = score;
+						bestdirection = i;
+					}
+				}
+			if (bestdirection == 0&&energy>2&&inField(1, 0)) {//north and south can not be occupied,east move
+				col++;
+				energy -= 2;
+				occuString = "6 " + type4();//only east move
+				return occuString;
+			} else {
+				if (state==1) {
+					showOrHide();
+					energy-=1;}
+				occuString = bestdirection + " ";
+				energy -= 4;
+				return occuString;
+			}
+		}
+	    
+	    
+	    
+	    return occuString;
+	}
+
+	private String type2() {//in the east bord
+			String occuString="";
+			int score;
+			int bestdirection=0;
+			int maxscore=0;
+			if (inField(-2, 0)&&!inHome(row, col-2)&&(battlefield[row][col-2]==8||battlefield[row][col-2]==enbattleaxID||battlefield[row][col-2]==enswordID||battlefield[row][col-2]==enspearID)) {
+				if (state==1) {
+					showOrHide();
+				}
+				occuString="4 ";
+			  }else {
+				for (int i = 1; i < 5; i+=2) {//1234左右上下
+					score=0;
+					for (int j = 1; j < 5; j++) {
+						switch (i) {
+						case 3:if (inField(0,j)) {//north occupy
+							if (!inHome(row-j, col)&&(battlefield[row-j][col]==enbattleaxID||battlefield[row-j][col]==enspearID||battlefield[row-j][col]==enswordID||battlefield[row-j][col]==8)) {
+								score++;
+							}
+						}
+							break;
+						case 1:if (inField(0,-j)) {//south occupy
+							if (!inHome(row+j, col)&&(battlefield[row+j][col]==enbattleaxID||battlefield[row+j][col]==enspearID||battlefield[row+j][col]==enswordID||battlefield[row+j][col]==8)) {
+								score++;		
+							}
+						}
+							break;
+						
+						}
+					}
+					
+					if(score>maxscore){
+						maxscore=score;
+						bestdirection=i;
+					}
+				}	
+			if (bestdirection==0&&energy>2&&inField(-1, 0)) {//两边都被占领的情况
+				col--;
+				energy-=2;
+				occuString="8 "+type2();//move west
+	return occuString;
+			}else {
+				if (energy<4) {
+					return occuString;
+				}
+				if (state==1) {
+					showOrHide();
+				  }
+				  occuString=bestdirection+" ";
+				  energy-=4;
+	return occuString;
+			  }
+			  }
+			
+			
+	return occuString;
+		}
+
 	private String type1() {//在下边界的时候
 		String occuString="";
 		int score;
@@ -245,6 +508,31 @@ public class SpearAi {
 	}
 
 	
+
+	/**这是用于当回合在一开始的时候用的行动*/
+	public void iniAction() {
+		String str=canKill();
+		if (str.length()==0) {
+			str=canKillTwo();
+			if (str.length()==0) {
+				if (deadCorner().length()!=0) {
+					order=order+deadCorner();
+					
+				}else {//energy为7
+					iniOccupy();//不能杀人，占领
+				}
+				
+			}else {//能两步杀人
+				order=order+str;
+				energy-=6;
+			}
+		}
+        else {//能杀人
+		order=order+str;
+		energy-=4;
+		}
+		
+	}
 
 	public void  action() {//直接把行动的指令加在order后面
 		String str=canKill();
@@ -555,135 +843,6 @@ public class SpearAi {
 	}
 
 	
-	private String type2() {//in the east bord
-		String occuString="";
-		int score;
-		int bestdirection=0;
-		int maxscore=0;
-		if (inField(-2, 0)&&!inHome(row, col-2)&&(battlefield[row][col-2]==8||battlefield[row][col-2]==enbattleaxID||battlefield[row][col-2]==enswordID||battlefield[row][col-2]==enspearID)) {
-			if (state==1) {
-				showOrHide();
-			}
-			occuString="4 ";
-		  }else {
-			for (int i = 1; i < 5; i+=2) {//1234左右上下
-				score=0;
-				for (int j = 1; j < 5; j++) {
-					switch (i) {
-					case 3:if (inField(0,j)) {//north occupy
-						if (!inHome(row-j, col)&&(battlefield[row-j][col]==enbattleaxID||battlefield[row-j][col]==enspearID||battlefield[row-j][col]==enswordID||battlefield[row-j][col]==8)) {
-							score++;
-						}
-					}
-						break;
-					case 1:if (inField(0,-j)) {//south occupy
-						if (!inHome(row+j, col)&&(battlefield[row+j][col]==enbattleaxID||battlefield[row+j][col]==enspearID||battlefield[row+j][col]==enswordID||battlefield[row+j][col]==8)) {
-							score++;		
-						}
-					}
-						break;
-					
-					}
-				}
-				
-				if(score>maxscore){
-					maxscore=score;
-					bestdirection=i;
-				}
-			}	
-		if (bestdirection==0&&energy>2) {//两边都被占领的情况
-			col--;
-			energy-=2;
-			occuString="8 "+type2();//move west
-return occuString;
-		}else {
-			if (energy<4) {
-				return occuString;
-			}
-			if (state==1) {
-				showOrHide();
-			  }
-			  occuString=bestdirection+" ";
-			  energy-=4;
-return occuString;
-		  }
-		  }
-		
-		
-return occuString;
-	}
-
-	private String type4() {//在左边界
-		String occuString="";
-		int score;
-		int bestdirection=0;
-		int maxscore=0;
-	    if (inField(2, 0)&&!inHome(row, col+2)&&( battlefield[row][col + 2] == 8
-					|| battlefield[row][col + 2] == enbattleaxID
-					|| battlefield[row][col + 2] == enswordID
-					|| battlefield[row][col + 2] == enspearID)) {
-				if (state==1) {
-					showOrHide();
-					energy-=1;
-				}
-				occuString = "2 ";
-				energy -= 4;
-			} else {
-				for (int i = 3; i >0; i -= 2) {
-					score = 0;//每一回合的分数清零
-					for (int j = 1; j < 5; j++) {
-						switch (i) {
-						case 1:
-							if (inField(0, -j)) {//South occupy
-								if (!inHome(row+j, col)
-										&&(battlefield[row + j][col] == enbattleaxID
-										|| battlefield[row + j][col] == enspearID
-										|| battlefield[row + j][col] == enswordID
-										|| battlefield[row + j][col] == 8)) {
-									score++;
-								}
-							}
-							break;
-						case 3:
-							if (inField(0, j)) {//north occupy
-								if (!inHome(row-j, col)
-										&&(battlefield[row - j][col] == enbattleaxID
-										|| battlefield[row - j][col] == enspearID
-										|| battlefield[row - j][col] == enswordID
-										|| battlefield[row - j][col] == 8)) {
-									score++;
-								}
-							}
-							break;
-
-						}
-					}
-
-					if (score > maxscore) {
-						maxscore = score;
-						bestdirection = i;
-					}
-				}
-			if (bestdirection == 0) {//north and south can not be occupied,east move
-				col++;
-				energy -= 2;
-				occuString = "6 " + type4();//only east move
-				return occuString;
-			} else {
-				if (state==1) {
-					showOrHide();
-					energy-=1;}
-				occuString = bestdirection + " ";
-				energy -= 4;
-				return occuString;
-			}
-		}
-	    
-	    
-	    
-	    return occuString;
-	}
-
 	String kill(Samurai samurai,String killString){//把杀一个武士的字符串加在killstring的后面
 		int a=samurai.row;
 		int b=samurai.col;
