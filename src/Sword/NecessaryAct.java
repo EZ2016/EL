@@ -2,6 +2,9 @@ package Sword;
 
 import java.util.ArrayList;
 
+import com.sun.corba.se.spi.orbutil.fsm.Action;
+import com.sun.xml.internal.ws.org.objectweb.asm.Label;
+
 import EZ.GameIniInformation;
 import EZ.Home;
 import EZ.Samurai;
@@ -20,6 +23,7 @@ public class NecessaryAct {
 	int intiRow;
 	public boolean isKill = true;
 	int myTeam=GameIniInformation.teamID;
+	boolean canKill = false;
 	public NecessaryAct(){ //构造方法，开始时得到剑和敌方矛的信息
 		for(Samurai samurai:TurnInformation.nowAllSamurai){
 			if(samurai.weapon == 1 && samurai.team==myTeam){  //我自行在Samurai里添加的ID，便于区分武士
@@ -153,10 +157,10 @@ public class NecessaryAct {
 		int Battlexcol = Math.abs(Sword.col - emBattlex.col);
 		int Battlexrow = Math.abs(Sword.row - emBattlex.row);
 		
-		if((Battlexcol <=2 && Battlexrow <= 1) || (Battlexcol <= 1 && Battlexrow <= 2) || (Swordcol <= 2 && Swordrow ==1) || (Swordcol == 1&& Swordrow <=2)|| (Swordcol <= 3 &&Swordrow == 0)||(Swordcol == 0 && Swordrow <=3)){
-			if(TurnInformation.turnNum<185)
-			value = -1;
-		}
+		//if((Battlexcol <=2 && Battlexrow <= 1) || (Battlexcol <= 1 && Battlexrow <= 2) || (Swordcol <= 2 && Swordrow ==1) || (Swordcol == 1&& Swordrow <=2)|| (Swordcol <= 3 &&Swordrow == 0)||(Swordcol == 0 && Swordrow <=3)){
+			//if(TurnInformation.turnNum<185)
+			//value = -1;
+		//}
 		return value;
 	}
 	public int Move(int direction){   //移动方法
@@ -272,6 +276,7 @@ public class NecessaryAct {
 	public boolean MustEscape(){  //判断是否会被敌方矛击杀
 		int colDis = Math.abs(Sword.col-emSpear.col);//与敌方矛之间的距离
 		int rowDis = Math.abs(Sword.row-emSpear.row);
+		
 
 		if((colDis<=4 && rowDis<=1) || (rowDis<=4 && colDis<=1)||(colDis <= 5 && rowDis==0)||(rowDis<=5 && colDis==0) || (rowDis <= 3 && colDis==1) ||(rowDis ==1 && colDis<=3)){
 			return true;
@@ -281,13 +286,19 @@ public class NecessaryAct {
 		}
 	}
 	public boolean Escape(){
+		isKill=true;
 		if(TurnInformation.turnNum >=185)
 			return false;//逃跑方法
 		if(MustEscape()){
+			
+			moveToKill();
+			
+			if(!canKill){
 			int i;
 			int j;
 			int k;
 			for(;;){
+				
 				j = (int)(4+Math.random()*5);//随机产生三个4——8的整数，4表示不走，4——8表示方向，从而达到走一到三步的目的。
 				k = (int)(4+Math.random()*5);
 				i = (int)(4+Math.random()*5); 
@@ -317,9 +328,13 @@ public class NecessaryAct {
 				Sword.col=intiCol;
 				Sword.row=intiRow;
 			}
+			}
 		}
+		if(canKill)
+			return true;
 		return false;
 	}
+	
 	public void ShouldOccupy(){ 
 		isKill = false;
 		boolean notMove = false;
@@ -335,6 +350,9 @@ public class NecessaryAct {
 			for(int j=0;j<=3;j++){
 				if(i==0){  //不移动，直接占领的收益
 					Va[0][j]=ValueOfOccupy(Occupy(j+1));
+					if(notMove){
+						Va[0][j] = Va[0][j] +1;
+					}
 				}
 				else if(notMove){
 					Va[i][j] =-1;
@@ -416,6 +434,46 @@ public class NecessaryAct {
 			}
 		}
 		return false;
+	}
+	public void moveToKill(){
+		int i=0,j = 0,k = 0;
+		labela:
+		for(i=4;i<=8;i++){
+			for(j=4;j<=8;j++){
+				for(k=4;k<=8;k++){
+					if(i!=4)
+						Move(i);
+					if(j!=4)
+						Move(j);
+					if(k!=4)
+						Move(k);
+					int colDis = Math.abs(Sword.col-emSpear.col);//与敌方矛之间的距离
+					int rowDis = Math.abs(Sword.row-emSpear.row);
+
+					if(colDis == 2 && rowDis == 2){
+						canKill = true;
+						break labela;
+					}
+					Sword.col = intiCol; //恢复初始位置，重新尝试
+					Sword.row = intiRow;
+				}
+			}
+		}
+		if(canKill){
+		if(i!=4){
+			action = action+i+" ";
+			whichAction = whichAction + "escape";
+			}
+			if(k!=4){
+				action = action+k+" ";
+			    whichAction = whichAction + "escape";
+			}
+			if(j!=4){
+				action = action +j+" ";
+				whichAction = whichAction + "escape";
+			}
+			Hide();
+		}
 	}
 
 }
