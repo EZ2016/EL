@@ -32,32 +32,34 @@ ZHU YINGSHAN*/
 
 # Turn information
 # <turn>
-174
+25
 # <cure period>
 0
 # Samurai states
-6 10 1
-6 12 0
-6 4 0
+12 10 0
+14 3 1
+10 1 0
 -1 -1 1
 -1 -1 1
 -1 -1 1
 # Battle field states
-3 2 2 9 2 8 2 3 3 2 2 9 2 9 9 
-9 2 2 2 2 2 2 3 3 2 2 2 9 1 9 
-9 9 2 2 2 2 2 3 3 2 2 2 2 9 1 
-9 9 2 2 2 2 2 3 3 2 2 2 2 1 1 
-9 3 3 3 2 2 2 3 4 3 3 3 9 9 9 
-9 9 4 4 2 2 2 3 4 4 3 9 9 3 9 
-9 9 9 4 4 4 0 0 0 0 9 9 9 9 9 
-9 9 9 9 4 4 0 0 0 9 9 9 9 9 9 
-4 4 4 4 4 4 0 0 0 0 0 1 9 9 9 
-9 4 4 4 4 5 0 0 0 1 1 1 9 1 9 
-9 4 4 4 0 0 0 0 1 1 1 0 1 9 0 
-9 9 4 4 4 4 1 1 1 1 0 5 9 9 9 
-4 4 4 4 1 1 1 1 1 1 0 5 5 5 0 
-4 9 4 4 4 1 1 1 1 5 5 9 9 9 9 
-9 9 9 4 4 5 1 1 1 8 5 9 9 9 9 
+ 3 3 3 9 2 9 2 2 2 2 2 8 1 1 8 
+9 3 3 8 9 8 2 2 2 2 2 8 1 1 1 
+9 9 3 8 2 9 2 2 2 2 2 8 1 1 1 
+9 9 9 9 9 9 9 8 8 8 8 8 1 1 1 
+9 9 9 9 3 9 9 9 8 8 8 8 8 1 1 
+9 9 9 9 9 8 8 8 8 8 8 8 8 8 1 
+9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 
+9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 
+8 8 8 8 8 9 9 9 8 8 8 8 8 8 8 
+9 9 8 8 9 8 9 9 8 8 8 8 8 8 8 
+9 9 8 8 8 8 9 8 8 8 0 0 0 0 8 
+9 9 9 8 9 9 9 9 8 8 8 8 0 0 0 
+4 9 9 9 8 5 5 9 5 5 5 8 0 0 0 
+4 9 9 9 9 5 5 5 9 8 5 8 0 0 0 
+9 9 9 9 9 9 5 5 5 8 5 8 0 0 9
+
+
 */
 public class SpearAi {
 	
@@ -113,12 +115,7 @@ public class SpearAi {
 			order=order+s1;
 			break;
 		case 2:
-			String s2;
-			if (col<7) {
-				 s2=type1(); 
-			}else {
-			     s2=type2();	
-			}
+			String s2=type2();
 			order=order+s2;
 			break;
 		case 3:
@@ -126,12 +123,7 @@ public class SpearAi {
 			order=order+s3;
 			break;
 		case 4:
-			String s4;
-			if (col>8) {
-				 s4=type3(); 
-			}else {
-			    s4=type4();	
-			}
+			String s4=type4();
 			order=order+s4;
 			break;
 		case 5:
@@ -421,7 +413,7 @@ public class SpearAi {
 			}
 			occuString="3 ";//north
 		  }else {
-			for (int i = 2; i < 5; i+=2) {//4231左右上下
+			for (int i = 1; i < 3; i+=2) {//4231左右上下
 				score=0;
 				for (int j = 1; j < 5; j++) {
 					switch (i) {
